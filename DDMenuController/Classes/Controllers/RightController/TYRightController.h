@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+
+
 @interface  TYRightController: UIViewController<UITableViewDelegate,UITableViewDataSource>
 {
     NSArray * iconArray;
     NSArray * dataArray;
 }
 
-@property(nonatomic,strong) UITableView *tableView;
+@property(nonatomic,strong) UITableView *mytable;
 
 @end

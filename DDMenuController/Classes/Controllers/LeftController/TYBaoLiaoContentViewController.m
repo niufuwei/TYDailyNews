@@ -1,57 +1,51 @@
 //
-//  TYBaoLiaoViewController.m
+//  TYBaoLiaoContentViewController.m
 //  TYDaily
 //
-//  Created by laoniu on 14-10-14.
+//  Created by laoniu on 14/11/5.
 //
 //
 
-#import "TYBaoLiaoViewController.h"
+#import "TYBaoLiaoContentViewController.h"
 #import "TYBaoLiaoCell.h"
 #import "TYBaoLiaoInformationViewController.h"
-#import "UIBaoLiaoPostInforViewController.h"
 #import "MJRefresh.h"
 
-@interface TYBaoLiaoViewController ()
+@interface TYBaoLiaoContentViewController ()
 {
     TYHttpRequest * httpRequest;
     NSMutableArray * dataArray;
     NSInteger indexPage;
-    NavCustom * custom;
 }
 
 @end
 
-@implementation TYBaoLiaoViewController
+@implementation TYBaoLiaoContentViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    
-    custom = [[NavCustom alloc] init];
-    [custom setNavWithText:@"爆料台" mySelf:self];
-    [custom setNavLeftBtnImage:@"left_ios.png" LeftBtnSelectedImage:@"" mySelf:self width:18 height:15];
-    [custom setNavRightBtnImage:@"USER_ios.png" RightBtnSelectedImage:@"" mySelf:self width:18 height:20];
-    custom.NavDelegate = self;
+-(id)initWithFrame:(CGRect)frame withUrl:(NSString *)withUrl
+{
+    if(self = [super initWithFrame:frame])
+    {
+        [self setBackgroundColor:[UIColor whiteColor]];
+        
+        _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        _table.delegate =self;
+        _table.dataSource =self;
+        _table.tableFooterView = [[UIView alloc] init];
+        [self addSubview:_table];
+        
+        dataArray = [[NSMutableArray alloc] init];
+        
+        //加载数据
+        //    [self loadlayoutView];
+        
+        [self setupRefresh];
 
-    _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64-40)];
-    _table.delegate =self;
-    _table.dataSource =self;
-    _table.tableFooterView = [[UIView alloc] init];
-    [self.view addSubview:_table];
+    }
+    return self;
     
-    dataArray = [[NSMutableArray alloc] init];
-    
-    //加载数据
-//    [self loadlayoutView];
-
-    [self loadBottomView];
-    
-    [self setupRefresh];
     // Do any additional setup after loading the view.
 }
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [dataArray count];
@@ -72,7 +66,7 @@
     cell.titleLabel.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"Title"];
     
     cell.nameWithTimer.text = [[[[dataArray objectAtIndex:indexPath.row] objectForKey:@"author"] stringByAppendingString:@"   "] stringByAppendingString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Create_time"]];
-
+    
     return cell;
 }
 
@@ -83,9 +77,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TYBaoLiaoInformationViewController * infor = [[TYBaoLiaoInformationViewController alloc] init];
-    infor.newsID =[[dataArray objectAtIndex:indexPath.row] objectForKey:@"id"];
-    [self.navigationController pushViewController:infor animated:YES];
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"baoliaoinfo" object:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"id"]];
 }
 -(void)loadlayoutView
 {
@@ -109,47 +103,8 @@
     } Failure:^(NSError *error) {
         NSLog(@"error==>%@",error);
         
-    } view:self.view isPost:NO];
+    } view:self isPost:NO];
 }
-
--(void)loadBottomView{
-    
-//    UIView * view =[[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-50-64, self.view.frame.size.width, self.view.frame.size.height-50)];
-//    
-//    [view setBackgroundColor:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:0.5]];
-//    [self.view addSubview:view];
-//    
-//    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-//    button.frame = CGRectMake(40, 10, self.view.frame.size.width-80, 30);
-//    [button setTitle:@"我要爆料" forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//    button.layer.borderColor = [UIColor grayColor].CGColor;
-//    [button addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
-//    button.layer.borderWidth = 0.3;
-//    [view addSubview:button];
-    
-    UIView * buttomView= [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-40-64, self.view.frame.size.width, 40)];
-    buttomView.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:228.0/255.0 blue:229.0/255.0 alpha:1];
-    [self.view addSubview:buttomView];
-    
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(self.view.frame.size.width-90, 0, 90, 40);
-    [button setBackgroundImage:[UIImage imageNamed:@"guanzhu"] forState:UIControlStateNormal];
-    [button setTitle:@"我要爆料" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
-    [buttomView addSubview:button];
-    
-    [buttomView bringSubviewToFront:self.view];
-
-}
-
--(void)onClick:(id)sender
-{
-    UIBaoLiaoPostInforViewController * baoliao = [[UIBaoLiaoPostInforViewController alloc] init];
-    [self.navigationController pushViewController:baoliao animated:YES];
-}
-
 
 /**
  *  集成刷新控件
@@ -192,21 +147,6 @@
     {
         [self.table footerBeginRefreshing];
     }
-}
-
--(void)NavLeftButtononClick
-{
-    [appDelegate showLeftView];
-}
-
--(void)NavRightButtononClick
-{
-    [appDelegate showRightView];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 /*

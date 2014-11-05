@@ -93,7 +93,7 @@
     }
     else
     {
-        return [[[dataArray objectAtIndex:section] objectForKey:@"Articles"] count];
+        return [[[dataArray objectAtIndex:section] objectForKey:@"articles"] count];
 
     }
 }
@@ -114,7 +114,7 @@
             cell = [[TYDayDireetiorySingleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
         }
         
-        NSLog(@"%@",[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"Articles"] objectAtIndex:indexPath.row] objectForKey:@"Title"]);
+        NSLog(@"%@",[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"title"]);
     
         if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
         {
@@ -125,11 +125,11 @@
             cell.isDayShow = false;
         }
     
-        cell.myTitle.text = [CS DealWithString:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"Articles"] objectAtIndex:indexPath.row] objectForKey:@"Title"]];
+        cell.myTitle.text = [CS DealWithString:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"title"]];
         
         NSNumberFormatter* numberFormatter = [[NSNumberFormatter alloc] init];
         
-        cell.num.text = [numberFormatter stringFromNumber:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"Articles"] objectAtIndex:indexPath.row] objectForKey:@"Ccount"]];
+        cell.num.text = [numberFormatter stringFromNumber:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"ccount"]];
 //        cell.num.text = [[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"Articles"] objectAtIndex:indexPath.row] objectForKey:@"Ccount"];
     
         cell.backgroundColor = myWhiteColor;
@@ -158,8 +158,8 @@
 
    [view HeadViewLoad];
     
-    view.value.text = [[dataArray objectAtIndex:section] objectForKey:@"PageNo"];
-    view.type.text =[[dataArray objectAtIndex:section] objectForKey:@"PageName"];
+    view.value.text = [[dataArray objectAtIndex:section] objectForKey:@"pageNo"];
+    view.type.text =[[dataArray objectAtIndex:section] objectForKey:@"pageName"];
     return view;
 }
 
@@ -183,7 +183,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushNewsWithID" object:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"Articles"] objectAtIndex:indexPath.row] objectForKey:@"id"]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"pushNewsWithID" object:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"id"]];
     
 }
 
@@ -196,7 +196,7 @@
         
         NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dic = (NSDictionary*)[jsonData objectFromJSONData];
-        dataArray = [dic objectForKey:@"Pages"];
+        dataArray = [dic objectForKey:@"pages"];
         
 //        for(int i= 0;i <[arr count];i++)
 //        {

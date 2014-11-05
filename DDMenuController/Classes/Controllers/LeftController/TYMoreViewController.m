@@ -80,9 +80,9 @@
     
     tishiYY = tishi.frame.size.height+tishi.frame.origin.y;
   
-    bottomUrlArr = [[NSMutableArray alloc] initWithObjects:@"qx/list",@"ds/list",@"jj/list",@"gn/list",@"gj/list",@"wt/list",@"sh/list",@"jy/list", nil];
+    bottomUrlArr = [[NSMutableArray alloc] initWithObjects:@"yw/list",@"jj/list",@"sh/list",@"sy/list",@"gj/list",@"wt/list", @"jk/list",@"tp/list",@"yd/list",@"jy/list",nil];
 
-    dataArrayButtom = [NSMutableArray arrayWithObjects:@"区县",@"都市",@"经济",@"国内",@"国际",@"文娱", @"生活",@"晋韵",nil];
+    dataArrayButtom = [NSMutableArray arrayWithObjects:@"要闻",@"经济",@"社会",@"声音",@"国际",@"文体",@"健康",@"图片",@"悦读",@"教育",nil];
     
     NSLog(@"%@",dataArrayHead);
     for(int i=0;i<[dataArrayHead count];i++)

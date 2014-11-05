@@ -227,7 +227,7 @@ NSString * appid = @"1103377162";
         case 103:
         {
             //qq
-            appDelegate.indexShare = 1;
+            appDelegate.indexShare = 3;
             [_tencentOAuth authorize:_permissions inSafari:YES];
         }
             break;
@@ -291,7 +291,8 @@ NSString * appid = @"1103377162";
             indicator.mode = MBProgressHUDModeText;
             [window addSubview:indicator];
             [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isLogin"];
-            [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"SessionId"] forKey:@"userID"];
+            [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"account_id"] forKey:@"userID"];
+            [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"nick"] forKey:@"userName"];
             
             [indicator showAnimated:YES whileExecutingBlock:^{
                 sleep(1.2);
@@ -307,7 +308,7 @@ NSString * appid = @"1103377162";
         {
             UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
             CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
-            indicator.labelText = @"登陆失败";
+            indicator.labelText = @"账号或密码错误";
             
             indicator.mode = MBProgressHUDModeText;
             [window addSubview:indicator];
@@ -388,7 +389,6 @@ NSString * appid = @"1103377162";
     }];
 
 }
-
 
 - (void)tencentDidLogin {
     // 登录成功

@@ -55,6 +55,8 @@
 		1815D66D19E53BCD00B93F96 /* TYNewsCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1815D66C19E53BCD00B93F96 /* TYNewsCommentViewController.m */; };
 		1815D66F19E5428100B93F96 /* post.png in Resources */ = {isa = PBXBuildFile; fileRef = 1815D66E19E5428100B93F96 /* post.png */; };
 		1815D67219E5435F00B93F96 /* TYCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1815D67119E5435F00B93F96 /* TYCommentView.m */; };
+		1815F6A61A07C4C30032B388 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1815F6A51A07C4C30032B388 /* CoreLocation.framework */; };
+		1815F6A91A07D7970032B388 /* TYGetCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1815F6A81A07D7970032B388 /* TYGetCode.m */; };
 		18352A2F1A0618A7005DF047 /* nan.png in Resources */ = {isa = PBXBuildFile; fileRef = 18352A2E1A0618A7005DF047 /* nan.png */; };
 		18352A311A0618B1005DF047 /* nv.png in Resources */ = {isa = PBXBuildFile; fileRef = 18352A301A0618B1005DF047 /* nv.png */; };
 		18352A351A061C8D005DF047 /* baoliao-n.png in Resources */ = {isa = PBXBuildFile; fileRef = 18352A331A061C8D005DF047 /* baoliao-n.png */; };
@@ -166,6 +168,21 @@
 		18BD1DA019ED77010096E9A7 /* collect.png in Resources */ = {isa = PBXBuildFile; fileRef = 18BD1D9D19ED77010096E9A7 /* collect.png */; };
 		18BD1DA119ED77010096E9A7 /* nocollect.png in Resources */ = {isa = PBXBuildFile; fileRef = 18BD1D9E19ED77010096E9A7 /* nocollect.png */; };
 		18BD1DA219ED77010096E9A7 /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = 18BD1D9F19ED77010096E9A7 /* share.png */; };
+		18BE17CF1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BE17CE1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.m */; };
+		18C9D86C1A0882A5005FB1D0 /* cityname.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 18C9D86B1A0882A5005FB1D0 /* cityname.sqlite */; };
+		18C9D86E1A0884F3005FB1D0 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C9D86D1A0884F3005FB1D0 /* libsqlite3.0.dylib */; };
+		18C9D8711A089FA7005FB1D0 /* db.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C9D8701A089FA7005FB1D0 /* db.m */; };
+		18D0685D1A0906D200CACC70 /* 多云.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068531A0906D200CACC70 /* 多云.png */; };
+		18D0685E1A0906D200CACC70 /* 大雨.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068541A0906D200CACC70 /* 大雨.png */; };
+		18D0685F1A0906D200CACC70 /* 小雨.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068551A0906D200CACC70 /* 小雨.png */; };
+		18D068601A0906D200CACC70 /* 小雪.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068561A0906D200CACC70 /* 小雪.png */; };
+		18D068611A0906D200CACC70 /* 晴.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068571A0906D200CACC70 /* 晴.png */; };
+		18D068621A0906D200CACC70 /* 阴 in Resources */ = {isa = PBXBuildFile; fileRef = 18D068581A0906D200CACC70 /* 阴 */; };
+		18D068631A0906D200CACC70 /* 雨.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068591A0906D200CACC70 /* 雨.png */; };
+		18D068641A0906D200CACC70 /* 雨夹雪.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D0685A1A0906D200CACC70 /* 雨夹雪.png */; };
+		18D068651A0906D200CACC70 /* 雷阵雨.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D0685B1A0906D200CACC70 /* 雷阵雨.png */; };
+		18D068661A0906D200CACC70 /* 雾.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D0685C1A0906D200CACC70 /* 雾.png */; };
+		18D0686A1A09115C00CACC70 /* 度.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D068691A09115C00CACC70 /* 度.png */; };
 		18DA102519E155A1004CCA14 /* TYNewsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DA102419E155A1004CCA14 /* TYNewsView.m */; };
 		18DA102A19E155C2004CCA14 /* TYNewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DA102919E155C2004CCA14 /* TYNewsViewController.m */; };
 		18DA102C19E18406004CCA14 /* leftImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 18DA102B19E18406004CCA14 /* leftImage.png */; };
@@ -368,6 +385,9 @@
 		1815D66E19E5428100B93F96 /* post.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = post.png; sourceTree = "<group>"; };
 		1815D67019E5435F00B93F96 /* TYCommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCommentView.h; sourceTree = "<group>"; };
 		1815D67119E5435F00B93F96 /* TYCommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCommentView.m; sourceTree = "<group>"; };
+		1815F6A51A07C4C30032B388 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		1815F6A71A07D7970032B388 /* TYGetCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYGetCode.h; sourceTree = "<group>"; };
+		1815F6A81A07D7970032B388 /* TYGetCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYGetCode.m; sourceTree = "<group>"; };
 		18352A2E1A0618A7005DF047 /* nan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nan.png; sourceTree = "<group>"; };
 		18352A301A0618B1005DF047 /* nv.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nv.png; sourceTree = "<group>"; };
 		18352A331A061C8D005DF047 /* baoliao-n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "baoliao-n.png"; sourceTree = "<group>"; };
@@ -522,6 +542,23 @@
 		18BD1D9D19ED77010096E9A7 /* collect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = collect.png; sourceTree = "<group>"; };
 		18BD1D9E19ED77010096E9A7 /* nocollect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nocollect.png; sourceTree = "<group>"; };
 		18BD1D9F19ED77010096E9A7 /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share.png; sourceTree = "<group>"; };
+		18BE17CD1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYBaoLiaoContentViewController.h; sourceTree = "<group>"; };
+		18BE17CE1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYBaoLiaoContentViewController.m; sourceTree = "<group>"; };
+		18C9D86B1A0882A5005FB1D0 /* cityname.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = cityname.sqlite; path = DDMenuController/cityname.sqlite; sourceTree = SOURCE_ROOT; };
+		18C9D86D1A0884F3005FB1D0 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		18C9D86F1A089FA7005FB1D0 /* db.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = db.h; path = DDMenuController/db.h; sourceTree = SOURCE_ROOT; };
+		18C9D8701A089FA7005FB1D0 /* db.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = db.m; path = DDMenuController/db.m; sourceTree = SOURCE_ROOT; };
+		18D068531A0906D200CACC70 /* 多云.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "多云.png"; sourceTree = "<group>"; };
+		18D068541A0906D200CACC70 /* 大雨.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "大雨.png"; sourceTree = "<group>"; };
+		18D068551A0906D200CACC70 /* 小雨.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "小雨.png"; sourceTree = "<group>"; };
+		18D068561A0906D200CACC70 /* 小雪.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "小雪.png"; sourceTree = "<group>"; };
+		18D068571A0906D200CACC70 /* 晴.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "晴.png"; sourceTree = "<group>"; };
+		18D068581A0906D200CACC70 /* 阴 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "阴"; sourceTree = "<group>"; };
+		18D068591A0906D200CACC70 /* 雨.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "雨.png"; sourceTree = "<group>"; };
+		18D0685A1A0906D200CACC70 /* 雨夹雪.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "雨夹雪.png"; sourceTree = "<group>"; };
+		18D0685B1A0906D200CACC70 /* 雷阵雨.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "雷阵雨.png"; sourceTree = "<group>"; };
+		18D0685C1A0906D200CACC70 /* 雾.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "雾.png"; sourceTree = "<group>"; };
+		18D068691A09115C00CACC70 /* 度.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "度.png"; sourceTree = "<group>"; };
 		18DA102319E155A1004CCA14 /* TYNewsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYNewsView.h; sourceTree = "<group>"; };
 		18DA102419E155A1004CCA14 /* TYNewsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYNewsView.m; sourceTree = "<group>"; };
 		18DA102819E155C2004CCA14 /* TYNewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYNewsViewController.h; sourceTree = "<group>"; };
@@ -726,6 +763,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18C9D86E1A0884F3005FB1D0 /* libsqlite3.0.dylib in Frameworks */,
+				1815F6A61A07C4C30032B388 /* CoreLocation.framework in Frameworks */,
 				18E21BE619DEE4D600CA182D /* SystemConfiguration.framework in Frameworks */,
 				18352A5C1A071B36005DF047 /* TencentOpenAPI.framework in Frameworks */,
 				033A462A148691F6002014C7 /* CoreGraphics.framework in Frameworks */,
@@ -778,6 +817,8 @@
 		033A4624148691F6002014C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18C9D86D1A0884F3005FB1D0 /* libsqlite3.0.dylib */,
+				1815F6A51A07C4C30032B388 /* CoreLocation.framework */,
 				18DAF25019F6B29B00013953 /* AVFoundation.framework */,
 				185310B219F569C80024A965 /* MediaPlayer.framework */,
 				185310B019F569660024A965 /* CoreVideo.framework */,
@@ -848,6 +889,9 @@
 		033A463D14869372002014C7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				18C9D86B1A0882A5005FB1D0 /* cityname.sqlite */,
+				18C9D86F1A089FA7005FB1D0 /* db.h */,
+				18C9D8701A089FA7005FB1D0 /* db.m */,
 				1815D65319E5055100B93F96 /* TYDefine.h */,
 				1815D65419E5055100B93F96 /* TYHttpRequest.h */,
 				1815D65519E5055100B93F96 /* TYHttpRequest.m */,
@@ -891,6 +935,8 @@
 				18DD86CD19EAC4C6009795F2 /* TYLongCell.m */,
 				1860E3AC19ECFC8D0022DDB0 /* TYBaoLiaoCell.h */,
 				1860E3AD19ECFC8D0022DDB0 /* TYBaoLiaoCell.m */,
+				18BE17CD1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.h */,
+				18BE17CE1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.m */,
 				1860E3A919ECF0560022DDB0 /* TYBaoLiaoViewController.h */,
 				1860E3AA19ECF0560022DDB0 /* TYBaoLiaoViewController.m */,
 				1860E3B419ED2C4E0022DDB0 /* UIBaoLiaoPostInforViewController.h */,
@@ -1123,6 +1169,8 @@
 				1814C3D319E2557D00CF1863 /* CS.m */,
 				180EDF241A07569A00F1B54D /* TYShareManager.h */,
 				180EDF251A07569A00F1B54D /* TYShareManager.m */,
+				1815F6A71A07D7970032B388 /* TYGetCode.h */,
+				1815F6A81A07D7970032B388 /* TYGetCode.m */,
 			);
 			name = itool;
 			sourceTree = "<group>";
@@ -1130,6 +1178,7 @@
 		1886446919DD24BA0041BC63 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				18D068521A0906D200CACC70 /* weather */,
 				180EDF191A07326700F1B54D /* share */,
 				18352A461A062AED005DF047 /* 龙城纵览图.png */,
 				18352A381A061D4A005DF047 /* zhuanti-n.png */,
@@ -1233,6 +1282,24 @@
 				18B4746319EB7DF2005EEB26 /* CBMBProgressHUD.m */,
 			);
 			path = Mbhud;
+			sourceTree = "<group>";
+		};
+		18D068521A0906D200CACC70 /* weather */ = {
+			isa = PBXGroup;
+			children = (
+				18D068691A09115C00CACC70 /* 度.png */,
+				18D068531A0906D200CACC70 /* 多云.png */,
+				18D068541A0906D200CACC70 /* 大雨.png */,
+				18D068551A0906D200CACC70 /* 小雨.png */,
+				18D068561A0906D200CACC70 /* 小雪.png */,
+				18D068571A0906D200CACC70 /* 晴.png */,
+				18D068581A0906D200CACC70 /* 阴 */,
+				18D068591A0906D200CACC70 /* 雨.png */,
+				18D0685A1A0906D200CACC70 /* 雨夹雪.png */,
+				18D0685B1A0906D200CACC70 /* 雷阵雨.png */,
+				18D0685C1A0906D200CACC70 /* 雾.png */,
+			);
+			path = weather;
 			sourceTree = "<group>";
 		};
 		18DA102019E14B7F004CCA14 /* feat */ = {
@@ -1613,12 +1680,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D068661A0906D200CACC70 /* 雾.png in Resources */,
 				18BD1D9819ED5D3A0096E9A7 /* bg2.png in Resources */,
 				18DD86DB19EACF89009795F2 /* Icon@2x.png in Resources */,
 				1860E3B019ED02B00022DDB0 /* 爆料.jpg in Resources */,
 				18BD1DA019ED77010096E9A7 /* collect.png in Resources */,
 				18352A471A062AED005DF047 /* 龙城纵览图.png in Resources */,
 				18B4745E19EB759F005EEB26 /* bgDefault@2x.png in Resources */,
+				18D068651A0906D200CACC70 /* 雷阵雨.png in Resources */,
 				18DD86C919EABE0A009795F2 /* 晋韵.jpg in Resources */,
 				186DB1F319E826AF00C024D4 /* bgborderbg.png in Resources */,
 				186DB1F119E826AF00C024D4 /* add.png in Resources */,
@@ -1633,6 +1702,7 @@
 				186DB1F419E826AF00C024D4 /* bgImage.png in Resources */,
 				18352A5A1A0718CB005DF047 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				1886447019DD25A20041BC63 /* left_ios.png in Resources */,
+				18D0685D1A0906D200CACC70 /* 多云.png in Resources */,
 				18DD86D919EACF89009795F2 /* Icon-Small.png in Resources */,
 				18B4746819EB8F58005EEB26 /* user.png in Resources */,
 				180EDF1F1A07326700F1B54D /* QQ@2x.png in Resources */,
@@ -1648,13 +1718,17 @@
 				18B832E819F1570C00F61F34 /* guanzhu.png in Resources */,
 				186DB1F619E826C900C024D4 /* bgborderdel.png in Resources */,
 				183FD00019F3BCD7002E915E /* noselect.png in Resources */,
+				18D0686A1A09115C00CACC70 /* 度.png in Resources */,
 				18B832ED19F15DA800F61F34 /* TIME.png in Resources */,
 				1886448319DD32150041BC63 /* long-n.png in Resources */,
 				18E21B5D19DE8F2C00CA182D /* password.png in Resources */,
 				18B4746719EB8F58005EEB26 /* button-ios.png in Resources */,
+				18D068631A0906D200CACC70 /* 雨.png in Resources */,
 				183FD00119F3BCD7002E915E /* selected.png in Resources */,
 				185310A219F4B5200024A965 /* weiboICon.jpg in Resources */,
+				18D0685E1A0906D200CACC70 /* 大雨.png in Resources */,
 				18E6716219E1397400C523FD /* KV图片.png in Resources */,
+				18D068611A0906D200CACC70 /* 晴.png in Resources */,
 				18DAF22819F6AFB000013953 /* 按钮-暂停.png in Resources */,
 				18B832EC19F15DA800F61F34 /* pinglun.png in Resources */,
 				18DD86D819EACF89009795F2 /* Icon-72.png in Resources */,
@@ -1666,12 +1740,15 @@
 				18E21B5B19DE8F2C00CA182D /* ID.png in Resources */,
 				18DD86CB19EABE0A009795F2 /* 生活.jpg in Resources */,
 				188644AE19DD4A960041BC63 /* buy.png in Resources */,
+				18D068641A0906D200CACC70 /* 雨夹雪.png in Resources */,
+				18D068601A0906D200CACC70 /* 小雪.png in Resources */,
 				18B4746019EB764A005EEB26 /* NewIcon.png in Resources */,
 				1815D66F19E5428100B93F96 /* post.png in Resources */,
 				18BD1D9A19ED61430096E9A7 /* picture.png in Resources */,
 				18DD86D719EACF89009795F2 /* Icon.png in Resources */,
 				18E21B6319DE93FD00CA182D /* weibo.png in Resources */,
 				18DD86CA19EABE0A009795F2 /* 美食.jpg in Resources */,
+				18D068621A0906D200CACC70 /* 阴 in Resources */,
 				033A4630148691F6002014C7 /* InfoPlist.strings in Resources */,
 				180EDF231A07326700F1B54D /* share_weixin@2x.png in Resources */,
 				18DAF22719F6AFB000013953 /* 按钮-播放@2x.png in Resources */,
@@ -1715,8 +1792,10 @@
 				18FB081919F74DB400BF23E4 /* 娱乐.jpg in Resources */,
 				18DD86E219EAD597009795F2 /* top@2x.png in Resources */,
 				18352A3B1A061D4A005DF047 /* zhuanti-s.png in Resources */,
+				18D0685F1A0906D200CACC70 /* 小雨.png in Resources */,
 				18352A451A06216B005DF047 /* OLD-S.png in Resources */,
 				18BD1DA119ED77010096E9A7 /* nocollect.png in Resources */,
+				18C9D86C1A0882A5005FB1D0 /* cityname.sqlite in Resources */,
 				1886447119DD25A20041BC63 /* USER_ios.png in Resources */,
 				18FB081719F742AA00BF23E4 /* 支付宝ios.png in Resources */,
 				18B4745D19EB759F005EEB26 /* bgDefault.png in Resources */,
@@ -1823,7 +1902,9 @@
 				18DAF24E19F6B1FE00013953 /* AFXMLRequestOperation.m in Sources */,
 				18E6714319E1295500C523FD /* UIImageView+WebCache.m in Sources */,
 				18E6713F19E1295500C523FD /* UIButton+WebCache.m in Sources */,
+				1815F6A91A07D7970032B388 /* TYGetCode.m in Sources */,
 				180FED1D19EF9B0F0074A2CF /* UIScrollView+MJExtension.m in Sources */,
+				18C9D8711A089FA7005FB1D0 /* db.m in Sources */,
 				18E6713919E1295500C523FD /* SDWebImageCompat.m in Sources */,
 				18625BCF19DE4B610063C99E /* TYDayFeaturedView.m in Sources */,
 				18DAF22519F6AFB000013953 /* Mp3PlayerButton.m in Sources */,
@@ -1849,6 +1930,7 @@
 				18DAF24719F6B1FE00013953 /* AFHTTPRequestOperation.m in Sources */,
 				18DD86BB19EA7882009795F2 /* NSDate+Helpers.m in Sources */,
 				180FED1E19EF9B0F0074A2CF /* UIScrollView+MJRefresh.m in Sources */,
+				18BE17CF1A0A6A8A00DFC3D2 /* TYBaoLiaoContentViewController.m in Sources */,
 				183FD00C19F3F512002E915E /* TYSuggestViewController.m in Sources */,
 				18E21BCB19DEE3D600CA182D /* ASICloudFilesContainerRequest.m in Sources */,
 				18E21BD219DEE3D600CA182D /* ASIS3BucketRequest.m in Sources */,
@@ -1917,7 +1999,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
+				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
 				SDKROOT = iphoneos8.0;
 			};
 			name = Debug;
@@ -1944,7 +2026,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
+				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
 				SDKROOT = iphoneos8.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1981,7 +2063,7 @@
 				);
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_NAME = TYDaily;
-				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
+				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -2019,7 +2101,7 @@
 				);
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_NAME = TYDaily;
-				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
+				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = /usr/include/libxml2;

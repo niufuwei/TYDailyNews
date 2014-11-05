@@ -72,69 +72,80 @@
 
 -(void)onClick:(id)sender
 {
-    
-    if(_textField.text.length ==0)
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isLogin"] isEqualToString:@"1"])
     {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"" message:@"评论不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    else
-    {
-        httpRequest = [[TYHttpRequest alloc] init];
-        
-        NSDictionary * dic = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:_textField.text,@"匿名",NEWSID, nil] forKeys:[NSArray arrayWithObjects:@"content",@"author",@"id", nil]];
-        
-        NSString * strURL = @"";
-        if(_isNesCenter)
+        if(_textField.text.length ==0)
         {
-            strURL = [_address stringByReplacingOccurrencesOfString:@"view" withString:@"cc"];
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"" message:@"评论不能为空" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
         }
         else
         {
-            strURL = @"comment/create";
+            httpRequest = [[TYHttpRequest alloc] init];
+            
+            NSDictionary * dic = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"userName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],NEWSID,_textField.text, nil] forKeys:[NSArray arrayWithObjects:@"nick",@"author_id",@"article_id",@"content", nil]];
+            
+            NSString * strURL = @"";
+            if(_isNesCenter)
+            {
+                strURL = [_address stringByReplacingOccurrencesOfString:@"view" withString:@"cc"];
+            }
+            else
+            {
+                strURL = @"comment/cc";
+            }
+            
+            NSLog(@"%@",strURL);
+            [httpRequest httpRequest:strURL parameter:dic Success:^(id result) {
+                
+                _textField.text = @"";
+                
+                NSLog(@"评论成功-->%@",result);
+                
+                UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                indicator.labelText = @"评论成功";
+                
+                indicator.mode = MBProgressHUDModeText;
+                [window addSubview:indicator];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"updateComment" object:nil];
+                
+                [indicator showAnimated:YES whileExecutingBlock:^{
+                    sleep(1.2);
+                } completionBlock:^{
+                    [indicator removeFromSuperview];
+                    
+                }];
+                
+                
+            } Failure:^(NSError *error) {
+                
+                NSLog(@"ERROR＝＝>%@",error);
+                UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                indicator.labelText = @"评论失败";
+                
+                indicator.mode = MBProgressHUDModeText;
+                [window addSubview:indicator];
+                [indicator showAnimated:YES whileExecutingBlock:^{
+                    sleep(1.2);
+                } completionBlock:^{
+                    [indicator removeFromSuperview];
+                    
+                }];
+            } view:self isPost:TRUE];
+            
+            [self endEditing:YES];
+            
         }
-        
-        [httpRequest httpRequest:strURL parameter:dic Success:^(id result) {
-            
-            _textField.text = @"";
-            
-            NSLog(@"评论成功-->%@",result);
-            
-            UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
-            CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
-            indicator.labelText = @"评论成功";
-            
-            indicator.mode = MBProgressHUDModeText;
-            [window addSubview:indicator];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"updateComment" object:nil];
-            
-            [indicator showAnimated:YES whileExecutingBlock:^{
-                sleep(1.2);
-            } completionBlock:^{
-                [indicator removeFromSuperview];
-                
-            }];
-            
-            
-        } Failure:^(NSError *error) {
-            
-            NSLog(@"ERROR＝＝>%@",error);
-            UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
-            CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
-            indicator.labelText = @"评论失败";
-            
-            indicator.mode = MBProgressHUDModeText;
-            [window addSubview:indicator];
-            [indicator showAnimated:YES whileExecutingBlock:^{
-                sleep(1.2);
-            } completionBlock:^{
-                [indicator removeFromSuperview];
-                
-            }];
-        } view:self isPost:TRUE];
-        
-        [self endEditing:YES];
+
+    }
+    else
+    {
+        UIAlertView * alert =[[UIAlertView alloc] initWithTitle:nil message:@"需要登陆才能发表评论" delegate:self cancelButtonTitle:@"去登陆" otherButtonTitles:@"离开", nil];
+        alert.delegate = self;
+        [alert show];
 
     }
     

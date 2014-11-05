@@ -35,30 +35,32 @@
         }
 
         
-        mytitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width-80, 20)];
+        mytitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, self.frame.size.width-80, 60)];
         mytitle.backgroundColor =[ UIColor clearColor];
         mytitle.textColor = myBlackColor;
         mytitle.font = [UIFont systemFontOfSize:14];
         mytitle.textAlignment = NSTextAlignmentLeft;
-//        mytitle.numberOfLines = 0;//表示label可以多行显示
-//        mytitle.lineBreakMode = NSLineBreakByCharWrapping;
+        mytitle.numberOfLines = 0;//表示label可以多行显示
+        mytitle.lineBreakMode = NSLineBreakByCharWrapping;
+        mytitle.textAlignment = NSTextAlignmentCenter;
+
         [self.contentView addSubview:mytitle];
         
-        content = [[UILabel alloc] initWithFrame:CGRectMake(10, mytitle.frame.size.height+mytitle.frame.origin.y, self.frame.size.width-80, 40)];
-        content.backgroundColor =[ UIColor clearColor];
-        if(_isDayShow)
-        {
-            content.textColor = [UIColor whiteColor];
-            
-        }
-        else
-        {
-            content.textColor = [UIColor grayColor];
-            
-        }//        content.font = [UIFont systemFontOfSize:13];
-//        content.numberOfLines = 0;//表示label可以多行显示
-        content.lineBreakMode = NSLineBreakByCharWrapping;
-        [self.contentView addSubview:content];
+//        content = [[UILabel alloc] initWithFrame:CGRectMake(10, mytitle.frame.size.height+mytitle.frame.origin.y, self.frame.size.width-80, 40)];
+//        content.backgroundColor =[ UIColor clearColor];
+//        if(_isDayShow)
+//        {
+//            content.textColor = [UIColor whiteColor];
+//            
+//        }
+//        else
+//        {
+//            content.textColor = [UIColor grayColor];
+//            
+//        }//        content.font = [UIFont systemFontOfSize:13];
+////        content.numberOfLines = 0;//表示label可以多行显示
+//        content.lineBreakMode = NSLineBreakByCharWrapping;
+//        [self.contentView addSubview:content];
         
         type = [UIButton buttonWithType:UIButtonTypeCustom];
         type.frame = CGRectMake(self.frame.size.width-50, 10, 40, 20);

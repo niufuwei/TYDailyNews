@@ -14,6 +14,7 @@
 #import "DDMenuController.h"
 #import "Reachability.h"
 #import "WZGuideViewController.h"
+#import "db.h"
 
 @implementation AppDelegate
 {
@@ -79,8 +80,107 @@
                                                object: nil];
     hostReach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
     [hostReach startNotifier];
+    
+    
+    //定位
+    [self Loaction];
+    
     return YES;
 }
+
+-(void)Loaction
+{
+    //开始定位
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = 1000.0f;
+    [self.locationManager startUpdatingLocation];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    [self.locationManager requestAlwaysAuthorization];        //NSLocationAlwaysUsageDescription
+    [self.locationManager requestWhenInUseAuthorization];     //NSLocationWhenInUseDescription
+    
+    self.locationManager.desiredAccuracy =kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+}
+
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    switch (status) {
+        case kCLAuthorizationStatusNotDetermined:
+        {
+            if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)])
+            {
+                [self.locationManager requestWhenInUseAuthorization];
+            }
+        }
+            
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation {
+    //存到本地
+    
+    [self.locationManager stopUpdatingLocation];
+    
+    __block NSString * city;
+    
+    // 获取当前所在的城市名
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+//    double lon = newLocation.coordinate.longitude;
+//    double lat = newLocation.coordinate.latitude;
+    
+    [geocoder reverseGeocodeLocation:newLocation completionHandler:^(NSArray *array, NSError *error)
+     {
+      
+        if (array.count > 0)
+         {
+             CLPlacemark *placemark = [array objectAtIndex:0];
+             
+             city = [[placemark.addressDictionary objectForKey:@"State"] stringByReplacingOccurrencesOfString:@"市" withString:@""];
+             
+         }
+         else if (error == nil && [array count] == 0)
+         {
+             NSLog(@"No results were returned.");
+         }
+         else if (error != nil)
+         {
+             NSLog(@"An error occurred = %@", error);
+         }
+         
+         //查询数据库
+         sqlite3 * my_db = [db openDB];
+         
+         NSString *sqlQuery =[NSString stringWithFormat:@"SELECT city_num FROM citys where name like '%%%@'",city];
+         
+         
+         
+         NSLog(@"%@",sqlQuery);
+         
+         sqlite3_stmt * statement;
+         if (sqlite3_prepare_v2(my_db, [sqlQuery UTF8String], -1, &statement, nil) == SQLITE_OK) {
+             while (sqlite3_step(statement) == SQLITE_ROW) {
+                 char *name_db = (char*)sqlite3_column_text(statement, 0);
+                 NSString *nsNameStr = [NSString stringWithUTF8String:name_db];
+                 [[NSUserDefaults standardUserDefaults] setObject:nsNameStr forKey:@"cityNumber"];
+             }
+         }
+
+        
+     }];
+
+    
+    
+    NSLog(@"location ok");
+}
+
+
 
 -(void)reachabilityChanged:(NSNotification *)note {
     Reachability* curReach = [note object];
@@ -101,7 +201,7 @@
     }
     else if(status == kReachableViaWiFi)
     {
-       
+        [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"showImage"];
     }
     else
     {

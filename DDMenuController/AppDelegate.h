@@ -16,15 +16,17 @@
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/QQApiInterfaceObject.h>
 #import <TencentOpenAPI/QQApi.h>
+#import <CoreLocation/CoreLocation.h>
 
 
 @class DDMenuController;
-@interface AppDelegate : UIResponder <UIApplicationDelegate,WeiboSDKDelegate,WXApiDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,WeiboSDKDelegate,WXApiDelegate,CLLocationManagerDelegate>
 
 @property (strong, nonatomic) DDMenuController *menuController;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) NSString *wbtoken;
 @property (assign, nonatomic) int indexShare;
+@property (nonatomic,strong) CLLocationManager * locationManager;
 
 -(void)showLeftView;
 -(void)showRightView;

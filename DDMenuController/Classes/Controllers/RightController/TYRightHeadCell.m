@@ -26,16 +26,21 @@
         _Avatar.layer.cornerRadius = 40.0; //设置图片圆角的尺度
         [self.contentView addSubview:_Avatar];
         
-        _weather = [[UILabel alloc] initWithFrame:CGRectMake(95, _Avatar.frame.size.height+_Avatar.frame.origin.y+50, 45, 45)];
-        _weather.font = [UIFont systemFontOfSize:40];
+        _weather = [[UILabel alloc] initWithFrame:CGRectMake(65, _Avatar.frame.size.height+_Avatar.frame.origin.y+30, 70, 70)];
+        _weather.font = [UIFont systemFontOfSize:50];
         _weather.textColor = [UIColor whiteColor];
         _weather.backgroundColor = [UIColor clearColor];
+        _weather.textAlignment = NSTextAlignmentRight;
         [self.contentView addSubview:_weather];
         
-        _weatherImage = [[UIImageView alloc] initWithFrame:CGRectMake(_weather.frame.size.width+_weather.frame.origin.x, _Avatar.frame.size.height+_Avatar.frame.origin.y+20, 25, 25)];
+        UIImageView * img = [[UIImageView alloc] initWithFrame:CGRectMake(135, _Avatar.frame.size.height+_Avatar.frame.origin.y+30, 30, 30)];
+        [img setImage:[UIImage imageNamed:@"度"]];
+        [self.contentView addSubview:img];
+        
+        _weatherImage = [[UIImageView alloc] initWithFrame:CGRectMake(140, _Avatar.frame.size.height+_Avatar.frame.origin.y+60, 40, 40)];
         [self.contentView addSubview:_weatherImage];
         
-        _userName = [[UILabel alloc] initWithFrame:CGRectMake(_weatherImage.frame.size.width+_weatherImage.frame.origin.x+5, _Avatar.frame.size.height+_Avatar.frame.origin.y+20, 80, 40)];
+        _userName = [[UILabel alloc] initWithFrame:CGRectMake(185, _Avatar.frame.size.height+_Avatar.frame.origin.y+20, 80, 40)];
         _userName.font = [UIFont systemFontOfSize:16];
         _userName.textColor = [UIColor whiteColor];
         _userName.backgroundColor = [UIColor clearColor];
@@ -44,7 +49,7 @@
         _userName.lineBreakMode = NSLineBreakByWordWrapping;
         [self.contentView addSubview:_userName];
         
-        _money = [[UILabel alloc] initWithFrame:CGRectMake(_weatherImage.frame.size.width+_weatherImage.frame.origin.x+5, _userName.frame.size.height+_userName.frame.origin.y, 80, 35)];
+        _money = [[UILabel alloc] initWithFrame:CGRectMake(185, _userName.frame.size.height+_userName.frame.origin.y, 80, 35)];
         _money.font = [UIFont systemFontOfSize:14];
         _money.textColor = [UIColor whiteColor];
         _money.backgroundColor = [UIColor clearColor];

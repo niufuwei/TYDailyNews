@@ -33,6 +33,11 @@
 
 -(void)fillDataWithView:(NSDictionary *)dic
 {
+    NSLog(@"%@",dic);
+    NSDictionary * tempDic =[[NSDictionary alloc] init];
+    tempDic = dic;
+    dic = [dic objectForKey:@"article"];
+    
     NSArray *  dataArr = [NSArray arrayWithObjects:@"超大字体",@"大字体",@"中字体",@"小字体", nil];
 
     NSInteger textFont;
@@ -71,7 +76,7 @@
     [backScrollview addSubview:leftImage];
     
     UILabel * typeValue = [[UILabel alloc] initWithFrame:CGRectMake(20, 15, 30, 15)];
-    typeValue.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"PageNo"]];
+    typeValue.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"pageNo"]];
     typeValue.textColor =RedColor;
     typeValue.backgroundColor = [UIColor clearColor];
     typeValue.font = [UIFont systemFontOfSize:11];
@@ -85,10 +90,18 @@
     [backScrollview addSubview:type2];
     
     UILabel * PageName = [[UILabel alloc] initWithFrame:CGRectMake(45, 15, 30, 15)];
-    PageName.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"PageName"]];
+    PageName.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"pageName"]];
     PageName.textColor =RedColor;
     PageName.backgroundColor = [UIColor clearColor];
     PageName.font = [UIFont systemFontOfSize:11];
+    
+    NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
+    CGSize size = [[dic objectForKey:@"pageName"] boundingRectWithSize:CGSizeMake(MAXFLOAT, PageName.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
+    //根据计算结果重新设置UILabel的尺寸
+   
+    [PageName setFrame:CGRectMake(45, 15, size.width+5, 15)];
+        
+    
     [backScrollview addSubview:PageName];
     
     UIImageView * rightimage =[[UIImageView alloc] initWithFrame:CGRectMake(PageName.frame.size.width+PageName.frame.origin.x, 20, self.frame.size.width-PageName.frame.size.width+PageName.frame.origin.x-5-10, 5)];
@@ -113,7 +126,7 @@
     
     
     UILabel * PageTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, yyyy, self.frame.size.width-20, 20)];
-    PageTitle.text = [CS DealWithString: [dic objectForKey:@"Title"]];
+    PageTitle.text = [CS DealWithString: [dic objectForKey:@"title"]];
     PageTitle.textAlignment = NSTextAlignmentLeft;
     PageTitle.textColor =[UIColor blackColor];
     PageTitle.backgroundColor = [UIColor clearColor];
@@ -154,7 +167,7 @@
     [backScrollview addSubview:create_time];
     
     UILabel * type = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-150, SubTitle.frame.size.height+SubTitle.frame.origin.y+5, 130, 20)];
-    type.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"Src"]];
+    type.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"src"]];
     type.textAlignment = NSTextAlignmentRight;
     type.textColor =[UIColor grayColor];
     type.backgroundColor = [UIColor clearColor];
@@ -171,16 +184,16 @@
     
     //加载图片
  
-    NSLog(@"%@",dic);
+    NSLog(@"%@",tempDic);
     
     NSInteger myYY = imageHeng.frame.size.height+imageHeng.frame.origin.y+10;
     
     if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"ok"])
     {
-        for(int i = 0; i < [[dic objectForKey:@"Images"] count];i++)
+        for(int i = 0; i < [[tempDic objectForKey:@"imgs"] count];i++)
         {
             UIImageView * image =[[ UIImageView alloc] initWithFrame:CGRectMake(20, myYY, self.frame.size.width-40, 200)];
-            [image setImageWithURL:[NSURL URLWithString:[[[dic objectForKey:@"Images"] objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
+            [image setImageWithURL:[NSURL URLWithString:[[[tempDic objectForKey:@"imgs"] objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
             [backScrollview addSubview:image];
             
             myYY = image.frame.size.height+image.frame.origin.y+10;
@@ -239,7 +252,7 @@
     CGSize labelSize = {0, 0};
     
     
-    NSString * strContent = [[dic objectForKey:@"Content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
+    NSString * strContent = [[dic objectForKey:@"content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
     
@@ -279,14 +292,14 @@
     addr.textAlignment = NSTextAlignmentLeft;
     addr.textColor = [UIColor grayColor];
     addr.font = [UIFont systemFontOfSize:13];
-    addr.text = [[dic objectForKey:@"Comment"] objectForKey:@"author"];
+    addr.text = [[tempDic objectForKey:@"comment"] objectForKey:@"nick"];
     [backScrollview addSubview:addr];
     
     time = [[UILabel alloc] initWithFrame:CGRectMake(addr.frame.size.width+addr.frame.origin.x+10, my_yyyyy, 150, 20)];
     time.textAlignment = NSTextAlignmentLeft;
     time.textColor = [UIColor grayColor];
     time.font = [UIFont systemFontOfSize:13];
-    time.text =  [[dic objectForKey:@"Comment"] objectForKey:@"create_time"];
+    time.text =  [[tempDic objectForKey:@"comment"] objectForKey:@"create_time"];
     [backScrollview addSubview:time];
     
 //        UIButton * zan = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -302,7 +315,7 @@
     TTcontent.font = [UIFont systemFontOfSize:14];
     TTcontent.lineBreakMode = NSLineBreakByCharWrapping;
     TTcontent.numberOfLines = 0;
-    TTcontent.text = [CS DealWithString:[[dic objectForKey:@"Comment"] objectForKey:@"content"]];
+    TTcontent.text = [CS DealWithString:[[tempDic objectForKey:@"comment"] objectForKey:@"content"]];
     TTcontent.userInteractionEnabled = YES;
     
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(onTap:)];
@@ -312,7 +325,7 @@
     
     [backScrollview addSubview:TTcontent];
     
-    if([[CS DealWithString:[[dic objectForKey:@"Comment"] objectForKey:@"content"]] length]==0)
+    if([[CS DealWithString:[[tempDic objectForKey:@"comment"] objectForKey:@"content"]] length]==0)
     {
         TTcontent.text = @"暂无评论";
         TTcontent.textAlignment = NSTextAlignmentCenter;
@@ -407,7 +420,7 @@
     }
     else
     {
-        strURL = @"comment/list";
+        strURL = @"comment/cs";
     }
     
     [myHttp httpRequest:strURL parameter:[NSString stringWithFormat:@"id=%@&pageSize=%@&pageNo=%@",newsID,@"1",@"0"] Success:^(id result) {
@@ -417,7 +430,7 @@
         
         NSLog(@"%@",dic);
         
-        addr.text = [[[dic objectForKey:@"comments"] objectAtIndex:0] objectForKey:@"author"];
+        addr.text = [[[dic objectForKey:@"comments"] objectAtIndex:0] objectForKey:@"nick"];
         time.text =  [[[dic objectForKey:@"comments"] objectAtIndex:0] objectForKey:@"create_time"];
         TTcontent.text = [CS DealWithString:[[[dic objectForKey:@"comments"] objectAtIndex:0] objectForKey:@"content"]];
 

@@ -17,8 +17,14 @@
 #import "TYRightMenuPayViewController.h"
 
 @implementation TYRightController
+{
+    TYHttpRequest * myHttp;
+    NSString * wendu;
+    NSString * tianqi;
+    NSArray * imageArr;
+}
 
-@synthesize tableView=_tableView;
+@synthesize mytable;
 
 - (id)init {
     if ((self = [super init])) {
@@ -40,41 +46,67 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    if (!_tableView) {
-        
-        CGRect frame = self.view.bounds;
-        frame.origin.x = 40.0f;
-        frame.size.width -= 40.0f;
-        
-        UITableView *tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
-        tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        tableView.delegate = (id<UITableViewDelegate>)self;
-        tableView.dataSource = (id<UITableViewDataSource>)self;
-//        tableView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
-        [self.view addSubview:tableView];
-        [tableView setBackgroundColor:[UIColor clearColor]];
-        self.tableView = tableView;
-        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        
-    }
     
     [self.view setBackgroundColor:[UIColor colorWithRed:28.0/255.0 green:30.0/255.0 blue:37.0/255.0 alpha:1]];
-
+    imageArr = [NSArray arrayWithObjects:@"多云",@"大雨",@"小雨",@"小雪",@"晴",@"阴",@"雪",@"雨夹雪",@"雷阵雨",@"雾", nil];
     
+
     iconArray = [[NSArray alloc] initWithObjects:@"download",@"like",@"set", nil];
     dataArray = [[NSArray alloc] initWithObjects:@"我的下载",@"我的收藏",@"个人设置", nil];
-
+   
+    CGRect frame = self.view.bounds;
+    frame.origin.x = 40.0f;
+    frame.size.width -= 40.0f;
     
+    mytable = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+    mytable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    mytable.delegate = (id<UITableViewDelegate>)self;
+    mytable.dataSource = (id<UITableViewDataSource>)self;
+    //        tableView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    [mytable setBackgroundColor:[UIColor clearColor]];
+    mytable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:mytable];
+
+}
+
+-(void)getWeather
+{
+    myHttp = [[TYHttpRequest alloc] init];
+    
+    NSString * addr = [NSString stringWithFormat:@"http://www.weather.com.cn/data/cityinfo/%@.html",[[NSUserDefaults standardUserDefaults] objectForKey:@"cityNumber"]];
+    [myHttp httpRequestWeiBo:addr parameter:nil Success:^(id result) {
+        
+        NSLog(@"%@",result);
+        NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary * dic = (NSDictionary*)[jsonData objectFromJSONData];
+        tianqi =  [[dic objectForKey:@"weatherinfo"] objectForKey:@"weather"];
+        wendu =[[dic objectForKey:@"weatherinfo"] objectForKey:@"temp1"];
+        
+        [mytable reloadData];
+    } Failure:^(NSError *error) {
+        
+        NSLog(@"%@",error);
+        
+    } view:self.view isPost:NO];
 }
 
 - (void)viewDidUnload {
     [super viewDidUnload];
-    self.tableView = nil;
+    mytable = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
+    [mytable deselectRowAtIndexPath:mytable.indexPathForSelectedRow animated:YES];
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"cityNumber"])
+    {
+        //去获取当前位置天气
+        [self getWeather];
+    }
+    else
+    {
+        
+    }
 }
 
 
@@ -96,9 +128,33 @@
         
         cell.backgroundColor = [UIColor clearColor];
         [cell.Avatar setImage:[UIImage imageNamed:@"user.png"]];
-        cell.weather.text = @"25";
-        [cell.weatherImage setImage:[UIImage imageNamed:@""]];
-        cell.userName.text = @"高山流水总是情";
+        if(!wendu)
+        {
+            cell.weather.text = @"0";
+        }
+        else
+        {
+            wendu = [wendu substringToIndex:[wendu length]-1];
+            cell.weather.text = wendu;
+
+        }
+        if(!tianqi)
+        {
+            
+        }
+        else
+        {
+            for(NSString * str in imageArr)
+            {
+                NSRange range = [str rangeOfString:tianqi];
+                if(range.location != NSNotFound)
+                {
+                    [cell.weatherImage setImage:[UIImage imageNamed:str]];
+                }
+            }
+        }
+       
+        cell.userName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
         cell.money.text = @"我的资金 12009000元";
         
         if(![[[NSUserDefaults standardUserDefaults] objectForKey:@"isLogin"] isEqualToString:@"1"])

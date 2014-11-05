@@ -68,9 +68,10 @@
 {
     httpRequest = [[TYHttpRequest alloc] init];
     [httpRequest httpRequest:_requestUrl parameter:[NSString stringWithFormat:@"pageSize=%@&pageNo=%d",@"14",pageIndex] Success:^(id result) {
+        NSLog(@"%@",result);
         NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dic = (NSDictionary*)[jsonData objectFromJSONData];
-        for(NSDictionary * tempDic in [dic objectForKey:@"Articles"])
+        for(NSDictionary * tempDic in [dic objectForKey:@"articles"])
         {
             [dataArray addObject:tempDic];
         }
@@ -94,18 +95,18 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
  
-    if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] count] == 0)
-    {
-        return 50;
-    }
-    else if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] count] == 1)
-    {
+//    if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] count] == 0)
+//    {
+//        return 50;
+//    }
+//    else if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] count] == 1)
+//    {
         return 80;
-    }
-    else
-    {
-        return 110;
-    }
+//    }
+//    else
+//    {
+//        return 110;
+//    }
 }
 
 //-(NSArray*)getImageNumber:(NSString *)imageID
@@ -132,7 +133,7 @@
     }
     else
     {
-        if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] count] == 0)
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
         {
             static NSString * strID = @"cell1";
             TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
@@ -142,16 +143,15 @@
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Title"]];
-            cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
-            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"PageName"] forState:UIControlStateNormal];
-            
+            cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+//            cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
+            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
             cell.type.hidden = YES;
             
             return cell;
             
         }
-        else if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] count] == 1)
+        else
         {
             static NSString * strID = @"cell2";
             TYDayFeatSingleImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
@@ -160,36 +160,50 @@
                 cell = [[TYDayFeatSingleImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"PageName"] forState:UIControlStateNormal];
+            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
             
-            cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Title"]];
-            [cell.image setImageWithURL:[NSURL URLWithString:[[[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"] objectAtIndex:0] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
-            
-            cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
-           
-            cell.type.hidden = YES;
-            
-            return cell;
-        }
-        else
-        {
-            static NSString * strID = @"cell3";
-            TYDayFeatMutableImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
-            if(!cell)
+            NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
+            CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
+            //根据计算结果重新设置UILabel的尺寸
+            if(size.width > 40)
             {
-                cell = [[TYDayFeatMutableImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+                [cell.type setFrame:CGRectMake(self.view.frame.size.width-size.width - 20, cell.type.frame.origin.y, size.width+10, cell.type.frame.size.height)];
+                
             }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            else
+            {
+                [cell.type setFrame:CGRectMake(self.view.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
+            }
+
             
-            [cell setImageArray:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"]];
+            cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+            [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
             
-            cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Title"]];
-            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"PageName"] forState:UIControlStateNormal];
-            
-            cell.type.hidden = YES;
+//            cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
+           
+//            cell.type.hidden = YES;
             
             return cell;
         }
+//        else
+//        {
+//            static NSString * strID = @"cell3";
+//            TYDayFeatMutableImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
+//            if(!cell)
+//            {
+//                cell = [[TYDayFeatMutableImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+//            }
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            
+//            [cell setImageArray:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Images"]];
+//            
+//            cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Title"]];
+//            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"PageName"] forState:UIControlStateNormal];
+//            
+//            cell.type.hidden = YES;
+//            
+//            return cell;
+//        }
         
     }
 }

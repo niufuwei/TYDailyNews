@@ -163,9 +163,21 @@
             
             cell.Content.text = [[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"description"];
             cell.URL.text = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"user"] objectForKey:@"url"];
+            
+            NSString * tempString = @"";
+            
             cell.ButtomLabel.text = [NSString stringWithFormat:@"%@关注 | %@粉丝 | %@微博 ", [numberFormatter stringFromNumber:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"friends_count"] ],[numberFormatter stringFromNumber:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"followers_count"] ],[numberFormatter stringFromNumber:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"statuses_count"] ]];
             [cell.btnAttention addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
            
+            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"guanzhu"] isEqualToString:@"ok"])
+            {
+                tempString = @"已关注";
+            }
+            else
+            {
+                tempString = @"关注";
+            }
+            [cell.btnAttention setTitle:tempString forState:UIControlStateNormal];
             return cell;
         }
         else
@@ -263,44 +275,55 @@
 
 -(void)onClick:(id)sender
 {
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"])
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"guanzhu"] isEqualToString:@"ok"])
     {
-        NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"],@"3766677022229351",@"太原日报",@"211.156.0.1", nil] forKeys:[NSArray arrayWithObjects:@"access_token",@"uid",@"screen_name",@"rip" ,nil]];
-        
-        [httpRequest httpRequestWeiBo:@"https://api.weibo.com/2/friendships/create.json" parameter:dic Success:^(id result) {
-            
-            NSLog(@"%@",result);
-            UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
-            CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
-            indicator.labelText = @"关注成功";
-            
-            NSIndexPath * index = [NSIndexPath indexPathForRow:0 inSection:0];
-            TYWeiboHeadCell * head = (TYWeiboHeadCell*)[_table cellForRowAtIndexPath:index];
-            [head.btnAttention setTitle:@"已关注" forState:UIControlStateNormal];
-            
-            indicator.mode = MBProgressHUDModeText;
-            [window addSubview:indicator];
-            
-            //[[NSNotificationCenter defaultCenter] postNotificationName:@"updateComment" object:nil];
-            
-            [indicator showAnimated:YES whileExecutingBlock:^{
-                sleep(1.2);
-            } completionBlock:^{
-                [indicator removeFromSuperview];
-                
-            }];
-            
-        } Failure:^(NSError *error) {
-            NSLog(@"%@",error);
-        } view:self.view isPost:YES];
+        UIAlertView * alert =[[UIAlertView alloc] initWithTitle:nil message:@"您已关注此微博" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+
     }
     else
     {
-        UIAlertView * alert =[[UIAlertView alloc] initWithTitle:nil message:@"需要授权才能授权" delegate:self cancelButtonTitle:@"去授权" otherButtonTitles:@"离开", nil];
-        alert.delegate = self;
-        [alert show];
-    }
+        [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"guanzhu"];
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"])
+        {
+            NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"],@"3766677022229351",@"太原日报",@"211.156.0.1", nil] forKeys:[NSArray arrayWithObjects:@"access_token",@"uid",@"screen_name",@"rip" ,nil]];
+            
+            [httpRequest httpRequestWeiBo:@"https://api.weibo.com/2/friendships/create.json" parameter:dic Success:^(id result) {
+                
+                NSLog(@"%@",result);
+                UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                indicator.labelText = @"关注成功";
+                
+                NSIndexPath * index = [NSIndexPath indexPathForRow:0 inSection:0];
+                TYWeiboHeadCell * head = (TYWeiboHeadCell*)[_table cellForRowAtIndexPath:index];
+                [head.btnAttention setTitle:@"已关注" forState:UIControlStateNormal];
+                
+                indicator.mode = MBProgressHUDModeText;
+                [window addSubview:indicator];
+                
+                //[[NSNotificationCenter defaultCenter] postNotificationName:@"updateComment" object:nil];
+                
+                [indicator showAnimated:YES whileExecutingBlock:^{
+                    sleep(1.2);
+                } completionBlock:^{
+                    [indicator removeFromSuperview];
+                    
+                }];
+                
+            } Failure:^(NSError *error) {
+                NSLog(@"%@",error);
+            } view:self.view isPost:YES];
+        }
+        else
+        {
+            UIAlertView * alert =[[UIAlertView alloc] initWithTitle:nil message:@"需要授权才能授权" delegate:self cancelButtonTitle:@"去授权" otherButtonTitles:@"离开", nil];
+            alert.delegate = self;
+            [alert show];
+        }
 
+    }
+    
 }
 
 

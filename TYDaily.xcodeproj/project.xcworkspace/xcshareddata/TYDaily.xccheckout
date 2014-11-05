@@ -10,31 +10,31 @@
 	<string>TYDaily</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>8CFAF2113D40839CB6785CD4385A4147DE3627A6</key>
-		<string>https://github.com/niufuwei/TYDaily.git</string>
+		<key>244F6DD932DFFD56DD69B9043C8AD3455083730B</key>
+		<string>https://github.com/niufuwei/TYDailyNews.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>TYDaily/TYDaily.xcodeproj</string>
+	<string>TYDaily.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>8CFAF2113D40839CB6785CD4385A4147DE3627A6</key>
-		<string>../../..</string>
+		<key>244F6DD932DFFD56DD69B9043C8AD3455083730B</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/niufuwei/TYDaily.git</string>
+	<string>https://github.com/niufuwei/TYDailyNews.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>8CFAF2113D40839CB6785CD4385A4147DE3627A6</string>
+	<string>244F6DD932DFFD56DD69B9043C8AD3455083730B</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>8CFAF2113D40839CB6785CD4385A4147DE3627A6</string>
+			<string>244F6DD932DFFD56DD69B9043C8AD3455083730B</string>
 			<key>IDESourceControlWCCName</key>
-			<string>TYDaily</string>
+			<string>TYDailyNews</string>
 		</dict>
 	</array>
 </dict>

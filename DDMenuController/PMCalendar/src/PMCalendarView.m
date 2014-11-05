@@ -149,8 +149,8 @@
         [[UIColor whiteColor] setFill];
         [((NSString *)[dayTitles objectAtIndex:index]) drawInRect: dayHeaderFrame 
                                                          withFont: calendarFont 
-                                                    lineBreakMode: UILineBreakModeWordWrap
-                                                        alignment: UITextAlignmentCenter];
+                                                    lineBreakMode: NSLineBreakByWordWrapping
+                                                        alignment: NSTextAlignmentCenter];
         CGContextRestoreGState(context);
     }
     

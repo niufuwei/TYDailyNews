@@ -14,6 +14,7 @@
     UILabel * textType;
     UIScrollView *backGroundScrollview;
     TYHttpRequest * httpRequest;
+    NSInteger xingbie ;
 }
 
 @end
@@ -25,6 +26,7 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
+    xingbie = -1;
     myNavcustom = [[NavCustom alloc] init];
     
     backGroundScrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -140,12 +142,16 @@
     UIButton * nanButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nanButton.frame = CGRectMake(self.view.frame.size.width/2-60, touxiangset.frame.size.height+touxiangset.frame.origin.y+10, 60, 60);
     [nanButton setBackgroundImage:[UIImage imageNamed:@"nan"] forState:UIControlStateNormal];
+    nanButton.tag = 10086;
+    [nanButton addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
     [backGroundScrollview addSubview:nanButton];
     
     
     UIButton * nvButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nvButton.frame = CGRectMake(nanButton.frame.size.width+nanButton.frame.origin.x+20, touxiangset.frame.size.height+touxiangset.frame.origin.y+10, 60, 60);
     [nvButton setBackgroundImage:[UIImage imageNamed:@"nv"] forState:UIControlStateNormal];
+    nvButton.tag = 10010;
+    [nvButton addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
     [backGroundScrollview addSubview:nvButton];
     
     UILabel * set = [[UILabel alloc] initWithFrame:CGRectMake(20, nvButton.frame.size.height+nvButton.frame.origin.y+10, self.view.frame.size.width, 20)];
@@ -246,9 +252,9 @@
             break;
         case 103:
         {
-            if([_Textfield.text length] ==0 ||[_password.text length] ==0 ||[_usename.text length] ==0)
+            if([_Textfield.text length] ==0 ||[_password.text length] ==0 ||[_usename.text length] ==0 || xingbie ==-1)
             {
-                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"" message:@"请检查您填写的信息是否正确" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"" message:@"请将您的信息填写完整." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 [alert show];
             }
             else
@@ -256,7 +262,9 @@
                 //注册
                 httpRequest = [[TYHttpRequest alloc] init];
                 
-                NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:_Textfield.text,_password.text,_usename, nil] forKeys:[NSArray arrayWithObjects:@"account",@"password",@"nick", nil]];
+                NSString * tb = [NSString stringWithFormat:@"%d",xingbie];
+                
+                NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:_Textfield.text,_password.text,_usename.text,tb, nil] forKeys:[NSArray arrayWithObjects:@"account",@"password",@"nick",@"sex", nil]];
                 
                 [httpRequest httpRequest:@"site/register" parameter:dic Success:^(id result) {
                     
@@ -273,8 +281,9 @@
                         [window addSubview:indicator];
                         
                         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isLogin"];
-                        [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"SessionId"] forKey:@"userID"];
-                        
+                        [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"account_id"] forKey:@"userID"];
+                        [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"nick"] forKey:@"userName"];
+
                         [indicator showAnimated:YES whileExecutingBlock:^{
                             sleep(1.2);
                         } completionBlock:^{
@@ -311,6 +320,19 @@
 
             }
             
+        }
+            break;
+        case 10086:
+        {
+            //男
+            xingbie = 1;
+        }
+            break;
+            
+        case 10010:
+        {
+            //女
+            xingbie = 0;
         }
             break;
         default:

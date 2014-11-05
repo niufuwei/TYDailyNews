@@ -33,7 +33,7 @@
     
     dataArray = [[NSMutableArray alloc] init];
     httpRequest = [[TYHttpRequest alloc] init];
-    _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64)];
+    _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64-50)];
     _table.delegate =self;
     _table.dataSource = self;
     _table.tableFooterView = [[UIView alloc] init];

@@ -45,8 +45,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
 
     dataDic=  [[NSMutableDictionary alloc] init];
-    _urlArray = [[NSMutableArray alloc] initWithObjects:@"qx/list",@"ds/list",@"jj/list",@"gn/list",@"gj/list",@"wt/list",nil];
-    _menuArray = [NSMutableArray arrayWithObjects:@"区县",@"都市",@"经济",@"国内",@"国际",@"文娱", nil];
+    _urlArray = [[NSMutableArray alloc] initWithObjects:@"yw/list",@"jj/list",@"sh/list",@"sy/list",@"gj/list",@"wt/list",nil];
+    _menuArray = [NSMutableArray arrayWithObjects:@"要闻",@"经济",@"社会",@"声音",@"国际",@"文体", nil];
     
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"_urlArray"])
     {

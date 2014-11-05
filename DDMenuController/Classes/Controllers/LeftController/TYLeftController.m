@@ -52,7 +52,7 @@
     
     selectIconArray = [[NSArray alloc] initWithObjects:@"HOME-s",@"NEW-S",@"zhuanti-s",@"long-s",@"baoliao-s",@"WB-S",@"OLD-S", nil];
     iconArray = [[NSArray alloc] initWithObjects:@"HOME-n",@"NEW-N",@"zhuanti-n",@"long-n",@"baoliao-n",@"WB-N",@"OLD-N", nil];
-    dataArray = [[NSArray alloc] initWithObjects:@"太原日报",@"新闻资讯",@"专题速递",@"龙城纵览",@"我要爆料",@"微博互动",@"往期回顾",nil];
+    dataArray = [[NSArray alloc] initWithObjects:@"太原日报",@"新闻资讯",@"专题速递",@"龙城纵览",@"我要报料",@"微博互动",@"往期回顾",nil];
     if (!_tableView) {
         UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

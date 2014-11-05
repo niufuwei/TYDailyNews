@@ -66,23 +66,27 @@
         idArray = [[NSMutableArray alloc] init];
         titleArray = [[NSMutableArray alloc] init];
         
-        for(int i=0;i<[[dic objectForKey:@"Imgs"] count];i++)
+        for(int i=0;i<[[dic objectForKey:@"imgs"] count];i++)
         {
-            [imageArray addObject:[[[dic objectForKey:@"Imgs"] objectAtIndex:i] objectForKey:@"url"]];
-            [idArray addObject:[[[dic objectForKey:@"Imgs"] objectAtIndex:i] objectForKey:@"Articleid"]];
-            [titleArray addObject:[CS DealWithString:[[[dic objectForKey:@"Imgs"] objectAtIndex:i] objectForKey:@"Title"]]];
+            [imageArray addObject:[[[dic objectForKey:@"imgs"] objectAtIndex:i] objectForKey:@"url"]];
+            [idArray addObject:[[[dic objectForKey:@"imgs"] objectAtIndex:i] objectForKey:@"article_id"]];
+            [titleArray addObject:[CS DealWithString:[[[dic objectForKey:@"imgs"] objectAtIndex:i] objectForKey:@"title"]]];
 
         }
         
-        if(adView)
+        if([[dic objectForKey:@"imgs"] count] !=0)
         {
-            [adView removeFromSuperview];
+            if(adView)
+            {
+                [adView removeFromSuperview];
+            }
+            
+            adView = [[BMAdScrollView alloc] initWithNameArr:imageArray titleArr:titleArray height:190 offsetY:0];
+            adView.vDelegate = self;
+            adView.pageCenter = CGPointMake(280, 145);
         }
-        
-        adView = [[BMAdScrollView alloc] initWithNameArr:imageArray titleArr:titleArray height:190 offsetY:0];
-        adView.vDelegate = self;
-        adView.pageCenter = CGPointMake(280, 145);
         [self addSubview:adView];
+
 
     } Failure:^(NSError *error) {
         UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];

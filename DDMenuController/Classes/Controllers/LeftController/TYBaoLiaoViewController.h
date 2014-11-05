@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TYBaoLiaoViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,NavCustomDelegate>
+@interface TYBaoLiaoViewController : UIViewController<UIScrollViewDelegate,NavCustomDelegate>
 
-@property (nonatomic,strong) UITableView * table;
-
+@property (nonatomic,strong) UIScrollView * bgScrollview;
+@property (nonatomic,strong) UIButton * leftButton;
+@property (nonatomic,strong) UIButton * rightButton;
 @end
