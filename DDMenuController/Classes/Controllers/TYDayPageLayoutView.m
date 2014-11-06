@@ -229,17 +229,25 @@
         myWebView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 30, self.frame.size.width, self.frame.size.height-64-30-20)];
         myWebView.delegate = self;
         
-        NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.17.124/epaper/index.php?r=article/paper&date=%@&pageNo=%@",[self timeDealWith],[dataArray objectAtIndex:0]]]];
-        NSLog(@"%@",request);
-        [myWebView loadRequest:request];
-        [myWebView setScalesPageToFit:YES];
-        
-        [scrollview addSubview:myWebView];
-        
-        pageController.numberOfPages = [dataArray count];
-        [RecordPage setObject:@"ok" forKey:[dataArray objectAtIndex:0]];
-        
-        [self loadInformation];
+        if([dataArray count] ==0)
+        {
+            
+        }
+        else
+        {
+            NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.17.124/epaper/index.php?r=article/paper&date=%@&pageNo=%@",[self timeDealWith],[dataArray objectAtIndex:0]]]];
+            NSLog(@"%@",request);
+            [myWebView loadRequest:request];
+            [myWebView setScalesPageToFit:YES];
+            
+            [scrollview addSubview:myWebView];
+            
+            pageController.numberOfPages = [dataArray count];
+            [RecordPage setObject:@"ok" forKey:[dataArray objectAtIndex:0]];
+            
+            [self loadInformation];
+        }
+       
         
     } Failure:^(NSError *error) {
         NSLog(@"失败==>%@",error);

@@ -37,7 +37,7 @@
         image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 15, 50, 50)];
         [self.contentView addSubview:image];
         
-        title = [[UILabel alloc] initWithFrame:CGRectMake(image.frame.size.width+image.frame.origin.x+10, 20, self.frame.size.width-120, 60)];
+        title = [[UILabel alloc] initWithFrame:CGRectMake(image.frame.size.width+image.frame.origin.x+10, 30, self.frame.size.width-120, 60)];
         title.backgroundColor =[ UIColor clearColor];
         title.textColor =myBlackColor;
         title.font = [UIFont systemFontOfSize:15];

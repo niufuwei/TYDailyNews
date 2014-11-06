@@ -226,7 +226,7 @@
 //            }
 //            else if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"imgs"] count] == 1)
 //            {
-                return 80;
+                return 90;
 //            }
 //            else
 //            {

@@ -11,6 +11,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "NCMusicEngine.h"
 #import "Mp3PlayerButton.h"
+#import "RTLabel.h"
 
 @interface TYNewsView ()<NCMusicEngineDelegate>
 {
@@ -239,36 +240,37 @@
 
     }
     
-    UILabel * content = [[UILabel alloc] initWithFrame:CGRectMake(10,myYY+5, self.frame.size.width-20, 100)];
+    RTLabel * content = [[RTLabel alloc] initWithFrame:CGRectMake(10,myYY+5, self.frame.size.width-20, 100)];
 
     content.textAlignment = NSTextAlignmentLeft;
     content.textColor =[UIColor grayColor];
     content.backgroundColor = [UIColor clearColor];
-    content.font = [UIFont systemFontOfSize:textFont];
+    content.font = [UIFont fontWithName:@"HelveticaNeue" size:textFont];
     [backScrollview addSubview:content];
 
     
-    content.numberOfLines =0;
-    CGSize labelSize = {0, 0};
+//    content.numberOfLines =0;
     
-    
-    NSString * strContent = [[dic objectForKey:@"content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
-    strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
-    strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
+    NSString * strContent = [dic objectForKey:@"content"];
+//    strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
+//    strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
     
 //    NSData* jsonData = [[dic objectForKey:@"Content"] dataUsingEncoding:NSUTF8StringEncoding];
 //    content.text = [jsonData objectFromJSONData];
     
 //    NSLog(@"%@",content.text);
-    labelSize = [strContent sizeWithFont:[UIFont systemFontOfSize:textFont]
-                 
-                  constrainedToSize:CGSizeMake(self.frame.size.width-20, 5000)
-                 
-                      lineBreakMode:NSLineBreakByWordWrapping];
+//    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:textFont]};
+//    // NSString class method: boundingRectWithSize:options:attributes:context is
+//    // available only on ios7.0 sdk.
+//    CGRect rect = [strContent boundingRectWithSize:CGSizeMake(content.frame.size.width, MAXFLOAT)
+//                                     options:NSStringDrawingUsesLineFragmentOrigin
+//                                  attributes:attributes
+//                                     context:nil];
     
     content.text = strContent;
-    content.frame =CGRectMake(content.frame.origin.x, content.frame.origin.y, content.frame.size.width, labelSize.height+50);
-
+    content.lineSpacing = 10;
+    CGSize opt = [content optimumSize];
+    content.frame =CGRectMake(content.frame.origin.x, content.frame.origin.y, content.frame.size.width,opt.height+20);
     
     
     UIImageView * leftImage2 =[[UIImageView alloc] initWithFrame:CGRectMake(10, content.frame.size.height+content.frame.origin.y+50, 5, 5)];

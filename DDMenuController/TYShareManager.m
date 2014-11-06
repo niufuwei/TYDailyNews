@@ -225,6 +225,12 @@ static TYShareManager *share = nil;
         data = UIImagePNGRepresentation(self.shareImage);
     }
     
+    if([description length]>15)
+    {
+        description = [description substringToIndex:15];
+        description = [description stringByAppendingString:@"..."];
+    }
+    
     QQApiNewsObject * newsObj = [QQApiNewsObject objectWithURL:[NSURL URLWithString:utf8String] title:title description:description previewImageData:data];
     
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:newsObj];
@@ -239,6 +245,13 @@ static TYShareManager *share = nil;
     NSString *utf8String =self.urlString;
     NSString *title = self.shareTitle;
     NSString *description = self.shareText;
+    
+    if([description length]>15)
+    {
+        description = [description substringToIndex:15];
+        description = [description stringByAppendingString:@"..."];
+    }
+    
     //    NSString *previewImageUrl = @"http://cdni.wired.co.uk/620x413/k_n/NewsForecast%20copy_620x413.jpg";
     //    QQApiNewsObject *newsObj = [QQApiNewsObject
     //                                objectWithURL:[NSURL URLWithString:utf8String]
@@ -283,11 +296,17 @@ static TYShareManager *share = nil;
     
     
     message.title = self.shareTitle;
-    message.description = self.shareText;
+    NSString * description = self.shareText;
+    if([description length]>15)
+    {
+        description = [description substringToIndex:15];
+        description = [description stringByAppendingString:@"..."];
+    }
+    message.description = description;
     [message setThumbImage:self.shareImage];
     
     if (way == 1) {
-        message.title = [NSString stringWithFormat:@"%@ %@",self.shareTitle,self.shareText];
+        message.title = [NSString stringWithFormat:@"%@",self.shareTitle];
     }
     
     

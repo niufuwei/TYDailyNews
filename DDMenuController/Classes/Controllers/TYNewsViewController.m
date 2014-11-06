@@ -450,13 +450,13 @@
     
     NSLog(@"%@",dataDictionary);
     TYShareManager * share = [TYShareManager currentShare];
-    NSString * strContent = [[dataDictionary objectForKey:@"content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
+    NSString * strContent = [[[dataDictionary objectForKey:@"article"]objectForKey:@"content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
     
   
     
-    [share shareContentString:strContent title:[dataDictionary objectForKey:@"title"] image:[UIImage imageNamed:@"Icon.png"] url:@"www.baidu.com"];
+    [share shareContentString:strContent title:[[dataDictionary objectForKey:@"article"] objectForKey:@"title"] image:[UIImage imageNamed:@"Icon.png"] url:@"www.baidu.com"];
     
     NSString *name = shareImte.name;
     
@@ -467,7 +467,7 @@
             strContent = [strContent substringToIndex:135];
             strContent = [strContent stringByAppendingString:@"..."];
         }
-        [share shareContentString:strContent title:[dataDictionary objectForKey:@"title"] image:[UIImage imageNamed:@"Icon.png"] url:@"www.baidu.com"];
+        [share shareContentString:strContent title:[[dataDictionary objectForKey:@"article"] objectForKey:@"title"] image:[UIImage imageNamed:@"Icon.png"] url:@"www.baidu.com"];
 
         [share shareWithWeiBo];
         

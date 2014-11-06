@@ -98,8 +98,17 @@
     self.locationManager.distanceFilter = 1000.0f;
     [self.locationManager startUpdatingLocation];
     self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [self.locationManager requestAlwaysAuthorization];        //NSLocationAlwaysUsageDescription
-    [self.locationManager requestWhenInUseAuthorization];     //NSLocationWhenInUseDescription
+    
+    if(IOS_VERSION < 8.0)
+    {
+        
+    }
+    else
+    {
+        [self.locationManager requestAlwaysAuthorization];        //NSLocationAlwaysUsageDescription
+        [self.locationManager requestWhenInUseAuthorization];     //NSLocationWhenInUseDescription
+    }
+   
     
     self.locationManager.desiredAccuracy =kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = kCLDistanceFilterNone;

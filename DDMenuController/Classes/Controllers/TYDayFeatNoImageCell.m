@@ -35,7 +35,7 @@
         }
 
         
-        mytitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, self.frame.size.width-80, 60)];
+        mytitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, self.frame.size.width-80, 60)];
         mytitle.backgroundColor =[ UIColor clearColor];
         mytitle.textColor = myBlackColor;
         mytitle.font = [UIFont systemFontOfSize:14];

@@ -24,6 +24,8 @@
 		1800912319DFEB1B00164033 /* SUNSlideSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1800911E19DFEB1B00164033 /* SUNSlideSwitchView.m */; };
 		1800912919DFED2000164033 /* DDMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1800912819DFED2000164033 /* DDMenuController.m */; };
 		1800912E19E030F800164033 /* more.png in Resources */ = {isa = PBXBuildFile; fileRef = 1800912D19E030F800164033 /* more.png */; };
+		180BF80B1A0B135B005EB728 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 180BF80A1A0B135B005EB728 /* CoreText.framework */; };
+		180BF80E1A0B13F6005EB728 /* RTLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 180BF80D1A0B13F6005EB728 /* RTLabel.m */; };
 		180EDF1F1A07326700F1B54D /* QQ@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180EDF1A1A07326700F1B54D /* QQ@2x.png */; };
 		180EDF201A07326700F1B54D /* QZone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180EDF1B1A07326700F1B54D /* QZone@2x.png */; };
 		180EDF211A07326700F1B54D /* share_pengyouquan@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 180EDF1C1A07326700F1B54D /* share_pengyouquan@2x.png */; };
@@ -330,6 +332,9 @@
 		1800912719DFED2000164033 /* DDMenuController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDMenuController.h; sourceTree = "<group>"; };
 		1800912819DFED2000164033 /* DDMenuController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDMenuController.m; sourceTree = "<group>"; };
 		1800912D19E030F800164033 /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
+		180BF80A1A0B135B005EB728 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		180BF80C1A0B13F6005EB728 /* RTLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTLabel.h; sourceTree = "<group>"; };
+		180BF80D1A0B13F6005EB728 /* RTLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTLabel.m; sourceTree = "<group>"; };
 		180EDF1A1A07326700F1B54D /* QQ@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QQ@2x.png"; sourceTree = "<group>"; };
 		180EDF1B1A07326700F1B54D /* QZone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "QZone@2x.png"; sourceTree = "<group>"; };
 		180EDF1C1A07326700F1B54D /* share_pengyouquan@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_pengyouquan@2x.png"; sourceTree = "<group>"; };
@@ -763,6 +768,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				180BF80B1A0B135B005EB728 /* CoreText.framework in Frameworks */,
 				18C9D86E1A0884F3005FB1D0 /* libsqlite3.0.dylib in Frameworks */,
 				1815F6A61A07C4C30032B388 /* CoreLocation.framework in Frameworks */,
 				18E21BE619DEE4D600CA182D /* SystemConfiguration.framework in Frameworks */,
@@ -817,6 +823,7 @@
 		033A4624148691F6002014C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				180BF80A1A0B135B005EB728 /* CoreText.framework */,
 				18C9D86D1A0884F3005FB1D0 /* libsqlite3.0.dylib */,
 				1815F6A51A07C4C30032B388 /* CoreLocation.framework */,
 				18DAF25019F6B29B00013953 /* AVFoundation.framework */,
@@ -1143,6 +1150,8 @@
 		1886446119DD20C40041BC63 /* itool */ = {
 			isa = PBXGroup;
 			children = (
+				180BF80C1A0B13F6005EB728 /* RTLabel.h */,
+				180BF80D1A0B13F6005EB728 /* RTLabel.m */,
 				18352A4B1A0718CB005DF047 /* shares */,
 				18DAF21E19F6AFB000013953 /* av */,
 				180FED0719EF9B0F0074A2CF /* MJRefresh */,
@@ -1885,6 +1894,7 @@
 				18E21BCD19DEE3D600CA182D /* ASICloudFilesObject.m in Sources */,
 				18649A6319F0B4540081B730 /* TYNews.m in Sources */,
 				1886449619DD384A0041BC63 /* TYLeftMenuItemNewsViewController.m in Sources */,
+				180BF80E1A0B13F6005EB728 /* RTLabel.m in Sources */,
 				1860E3AE19ECFC8D0022DDB0 /* TYBaoLiaoCell.m in Sources */,
 				1800912919DFED2000164033 /* DDMenuController.m in Sources */,
 				1860E3B319ED2C3D0022DDB0 /* TYBaoLiaoInformationViewController.m in Sources */,
@@ -1999,7 +2009,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos8.0;
 			};
 			name = Debug;
@@ -2026,7 +2036,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos8.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2063,7 +2073,7 @@
 				);
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_NAME = TYDaily;
-				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -2101,7 +2111,7 @@
 				);
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_NAME = TYDaily;
-				PROVISIONING_PROFILE = "a213c68f-2f55-4035-8611-07a43e5093e6";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = /usr/include/libxml2;

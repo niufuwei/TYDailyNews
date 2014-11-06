@@ -83,11 +83,13 @@
         wendu =[[dic objectForKey:@"weatherinfo"] objectForKey:@"temp1"];
         
         [mytable reloadData];
+
     } Failure:^(NSError *error) {
         
         NSLog(@"%@",error);
         
     } view:self.view isPost:NO];
+    
 }
 
 - (void)viewDidUnload {
@@ -98,6 +100,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [mytable deselectRowAtIndexPath:mytable.indexPathForSelectedRow animated:YES];
+    
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"cityNumber"])
     {
         //去获取当前位置天气
@@ -107,6 +110,7 @@
     {
         
     }
+    [mytable reloadData];
 }
 
 
