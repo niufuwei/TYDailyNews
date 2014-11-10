@@ -212,10 +212,17 @@
 
         if(indexPath.row -2 ==0)
         {
-            [cell.number setTitle:@"2" forState:UIControlStateNormal];
+            NSString * numberStr = (NSString*)[[NSUserDefaults standardUserDefaults] objectForKey:@"downloadNumer"];
+            if([numberStr intValue] ==0)
+            {
+                cell.number.hidden = YES;
+            }
+            else
+            {
+                cell.number.hidden = NO;
+                [cell.number setTitle:[NSString stringWithFormat:@"%d",[numberStr intValue]]  forState:UIControlStateNormal];
 
-            cell.number.hidden = NO;
-
+            }
         }
         else
         {
@@ -274,6 +281,8 @@
         if(indexPath.row ==2)
         {
             TYRightMenuDownloadViewController *download = [[TYRightMenuDownloadViewController alloc] init];
+            NSArray * arr = [[NSArray alloc] init];
+            [[NSUserDefaults standardUserDefaults] setObject:@"0" forKey:@"downloadNumer"];
             [menuController pushViewController:download animated:YES];
         }
         else if(indexPath.row ==3)

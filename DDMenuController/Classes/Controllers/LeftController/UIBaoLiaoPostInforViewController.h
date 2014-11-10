@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIBaoLiaoPostInforViewController : UIViewController<UITextViewDelegate,UIImagePickerControllerDelegate,UIScrollViewDelegate,UIActionSheetDelegate>
+@interface UIBaoLiaoPostInforViewController : UIViewController<UITextViewDelegate,UIImagePickerControllerDelegate,UITextViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate>
 
 @end

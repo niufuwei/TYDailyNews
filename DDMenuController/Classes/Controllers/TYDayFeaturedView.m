@@ -113,6 +113,9 @@
         }
         
     } Failure:^(NSError *error) {
+        
+        [_table headerEndRefreshing];
+
         NSLog(@"%@",error);
         UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
         CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];

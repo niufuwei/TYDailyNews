@@ -24,7 +24,8 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     httpRequest = [[TYHttpRequest alloc] init];
-    [httpRequest httpRequest:@"bl/view" parameter:[NSString stringWithFormat:@"id=%@",_newsID] Success:^(id result) {
+    NSLog(@"%@",_newsID);
+    [httpRequest httpRequest:_requestUrl parameter:[NSString stringWithFormat:@"id=%@",_newsID] Success:^(id result) {
         
         
         NSLog(@"%@",result);
@@ -89,7 +90,7 @@
     
   
     UILabel * PageTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width-20, 20)];
-    PageTitle.text = [CS DealWithString: [dic objectForKey:@"Title"]];
+    PageTitle.text = [CS DealWithString: [dic objectForKey:@"title"]];
     PageTitle.textAlignment = NSTextAlignmentLeft;
     PageTitle.textColor =[UIColor blackColor];
     PageTitle.backgroundColor = [UIColor clearColor];
@@ -106,7 +107,7 @@
     [backScrollview addSubview:create_time];
     
     UILabel * type = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width-150, PageTitle.frame.size.height+PageTitle.frame.origin.y+5, 130, 20)];
-    type.text = [NSString stringWithFormat:@"爆料来源:%@",[dic objectForKey:@"author"]];
+    type.text = [NSString stringWithFormat:@"爆料来源:%@",[dic objectForKey:@"name"]];
     type.textAlignment = NSTextAlignmentRight;
     type.textColor =[UIColor grayColor];
     type.backgroundColor = [UIColor clearColor];
@@ -120,10 +121,11 @@
     //加载图片
     
     NSInteger myYY = imageHeng.frame.size.height+imageHeng.frame.origin.y+10;
-    for(int i = 0; i < [[dic objectForKey:@"Images"] count];i++)
+//    for(int i = 0; i < [[dic objectForKey:@"Images"] count];i++)
+    if([[dic objectForKey:@"img1"] length] !=0)
     {
         UIImageView * image =[[ UIImageView alloc] initWithFrame:CGRectMake(40, myYY, self.view.frame.size.width-80, (self.view.frame.size.width-80)/2)];
-        [image setImageWithURL:[NSURL URLWithString:[[[dic objectForKey:@"Images"] objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
+        [image setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
         [backScrollview addSubview:image];
         
         myYY = image.frame.size.height+image.frame.origin.y+10;
@@ -140,7 +142,7 @@
     CGSize labelSize = {0, 0};
     
     NSString * strT = @"    ";
-    NSString * strContent = [[dic objectForKey:@"Content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@"  "];
+    NSString * strContent = [[dic objectForKey:@"content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@"  "];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
     

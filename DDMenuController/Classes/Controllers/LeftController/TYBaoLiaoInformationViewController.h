@@ -11,4 +11,5 @@
 @interface TYBaoLiaoInformationViewController : UIViewController<UIScrollViewDelegate>
 
 @property (nonatomic,strong) NSString * newsID;
+@property (nonatomic,strong) NSString * requestUrl;
 @end

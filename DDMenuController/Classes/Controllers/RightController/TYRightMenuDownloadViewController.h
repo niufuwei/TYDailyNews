@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TYRightMenuDownloadViewController : UIViewController
+@interface TYRightMenuDownloadViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,NavCustomDelegate>
+
+@property (nonatomic,strong) UITableView * myTable;
 
 @end

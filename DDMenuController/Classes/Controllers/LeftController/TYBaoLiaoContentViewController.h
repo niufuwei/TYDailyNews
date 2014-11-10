@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface TYBaoLiaoContentViewController : UIView<UITableViewDataSource,UITableViewDelegate>
-
+{
+    NSString * url;
+}
 @property (nonatomic,strong) UITableView * table;
 
 -(id)initWithFrame:(CGRect)frame withUrl:(NSString*)withUrl;

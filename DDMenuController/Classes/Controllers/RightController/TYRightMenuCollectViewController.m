@@ -8,6 +8,7 @@
 
 #import "TYRightMenuCollectViewController.h"
 #import "TYCollectCell.h"
+#import "TYNewsViewController.h"
 
 @interface TYRightMenuCollectViewController ()
 {
@@ -37,15 +38,15 @@
     isManager = FALSE;
     
     dataArray = [[NSMutableArray alloc] init];
+    dataArray = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"];
     
-    for(int i = 0;i<15;i++)
-    {
-        [dataArray addObject:@"0"];
-    }
+    NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"]);
+    NSLog(@"%@",dataArray);
     
     _myTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64)];
     _myTable.delegate =self;
     _myTable.dataSource =self;
+    _myTable.tableFooterView = [[UIView alloc] init];
     [self.view addSubview:_myTable];
     
     buttomView= [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
@@ -106,11 +107,45 @@
         cell = [[TYCollectCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
     }
     
-    [cell.ICON setImageWithURL:[NSURL URLWithString:@"http://ww4.sinaimg.cn/thumbnail/50be8358jw1elezgzsxnaj20c80850tc.jpg"] placeholderImage:[UIImage imageNamed:@""]];
+    NSString * key ;
+    for(NSString * str in [[dataArray objectAtIndex:indexPath.row] allKeys])
+    {
+        if([str isEqualToString:@"isNews"])
+        {
+            
+        }
+        else if([str isEqualToString:@"address"])
+        {
+            
+        }
+        else
+        {
+            key = str;
+        }
+    }
+    NSDictionary * tempDic = [[NSDictionary alloc] init];
+    tempDic  = [dataArray objectAtIndex:indexPath.row];
     
-    cell.titleLabel.text = @"坚持公平正义建设平安山西法治山西";
-    cell.contentLabel.text = @"坚持公平正义建设平安山西法治山西222222222222222222221";
-    cell.buttomLabel.text = @"收藏时间:2014年7月31日       A1版 要闻";
+    [cell.ICON setImageWithURL:[NSURL URLWithString:[[[[tempDic objectForKey:key] objectForKey:@"imgs"] objectAtIndex:0] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
+    
+    NSString * title = [[[tempDic objectForKey:key] objectForKey:@"article"] objectForKey:@"title"];
+    title =[title stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    title =[title stringByReplacingOccurrencesOfString:@"  " withString:@""];
+    cell.titleLabel.text = title;
+
+    NSString * strContent =[[[tempDic objectForKey:key] objectForKey:@"article"] objectForKey:@"content"];
+    strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@""];
+    strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
+    strContent =[strContent stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    strContent =[strContent stringByReplacingOccurrencesOfString:@"  " withString:@""];
+    strContent =[strContent stringByReplacingOccurrencesOfString:@"?" withString:@""];
+
+
+    cell.contentLabel.text = strContent;
+
+    cell.buttomLabel.text = [[[tempDic objectForKey:key] objectForKey:@"article"] objectForKey:@"create_time"];
+
+    cell.buttomLabel.textAlignment = NSTextAlignmentRight;
 
     if([[selectDictionary objectForKey:[NSString stringWithFormat:@"%d",indexPath.row+1]] isEqualToString:@"ok"])
     {
@@ -145,7 +180,7 @@
     
     if([[selectDictionary objectForKey:[NSString stringWithFormat:@"%d",button.tag]] isEqualToString:@"ok"])
     {
-        [selectDictionary setObject:@"no" forKey:[NSString stringWithFormat:@"%d",button.tag]];
+        [selectDictionary removeObjectForKey:[NSString stringWithFormat:@"%d",button.tag]];
         [cell.selectButton setBackgroundImage:[UIImage imageNamed:@"noselect"] forState:UIControlStateNormal];
 
     }
@@ -167,7 +202,7 @@
         
         if([[selectDictionary objectForKey:[NSString stringWithFormat:@"%d",indexPath.row+1]] isEqualToString:@"ok"])
         {
-            [selectDictionary setObject:@"no" forKey:[NSString stringWithFormat:@"%d",indexPath.row+1]];
+            [selectDictionary removeObjectForKey:[NSString stringWithFormat:@"%d",indexPath.row+1]];
             [cell.selectButton setBackgroundImage:[UIImage imageNamed:@"noselect"] forState:UIControlStateNormal];
             
         }
@@ -181,7 +216,31 @@
     }
     else
     {
+        TYNewsViewController * news = [[TYNewsViewController alloc] init];
         
+        for(NSString * str in [[dataArray objectAtIndex:indexPath.row] allKeys])
+        {
+            if([str isEqualToString:@"isNews"])
+            {
+                
+            }
+            else if([str isEqualToString:@"address"])
+            {
+                
+            }
+            else
+            {
+                news.newsID = str;
+            }
+        }
+
+
+//        NSString * str = [[_urlArray objectAtIndex:indexPage] stringByReplacingOccurrencesOfString:@"list" withString:@"view"];
+        news.isNewsCenter = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"isNews"] isEqualToString:@"1"]?TRUE:FALSE;;
+        
+        news.address =[[dataArray objectAtIndex:indexPath.row] objectForKey:@"address"];
+        
+        [self.navigationController pushViewController:news animated:YES];
     }
 }
 
@@ -190,7 +249,7 @@
     isManager = !isManager;
     if(isManager)
     {
-        [myCustom setNavRightBtnTitle:@"全选" mySelf:self width:40 height:40];
+        [myCustom setNavRightBtnTitle:@"取消" mySelf:self width:40 height:40];
         
         [UIView animateWithDuration:0.5 animations:^{
             CGRect yy = buttomView.frame;
@@ -232,6 +291,10 @@
     
     NSLog(@"%@",dataArray);
 
+    NSLog(@"%@",[selectDictionary allKeys]);
+    
+    NSMutableArray * tempArr = [[NSMutableArray alloc] init];
+
     
     for(int i =0;i<[[selectDictionary allKeys] count];i++)
     {
@@ -240,15 +303,68 @@
         NSIndexPath * index = [NSIndexPath indexPathForRow:[strKey intValue]-1 inSection:0];
         [tempArray addObject:index];
         
-        [dataArray removeObjectAtIndex:[strKey intValue]-1];
+        NSLog(@"%@",[[dataArray objectAtIndex:[strKey intValue]-1] allKeys]);
+        for(NSString * str in [[dataArray objectAtIndex:[strKey intValue]-1] allKeys])
+        {
+            NSLog(@"%@",str);
+            if([str isEqualToString:@"isNews"])
+            {
+                
+            }
+            else if([str isEqualToString:@"address"])
+            {
+                
+            }
+            else
+            {
+                [tempArr addObject:str];
+            }
+        }
+
+        
+//        [dataArray removeObjectAtIndex:[strKey intValue]-1];
         //清除dataarray中的数据
         
     }
     
+    NSLog(@"%@",tempArr);
+    NSLog(@"%@",dataArray);
+
+    NSMutableArray * tempDataArray = dataArray;
+    for(int i=0;i<[dataArray count];i++)
+    {
+        NSDictionary * dic = [dataArray objectAtIndex:i];
+        
+        for(int j = 0; j<[[dic allKeys] count];j++)
+        {
+            if([[[dic allKeys] objectAtIndex:j] isEqualToString:@"isNews"])
+            {
+                
+            }
+            else if([[[dic allKeys] objectAtIndex:j] isEqualToString:@"address"])
+            {
+                
+            }
+            else
+            {
+                NSLog(@"%@",[[dic allKeys] objectAtIndex:j]);
+                if([tempArr indexOfObject:[[dic allKeys] objectAtIndex:j]] != NSNotFound)
+                {
+                    [tempDataArray removeObject:dic];
+                    i=i-1;
+                    NSLog(@"%@",dataArray);
+                    break;
+                }
+            }
+        }
+    }
+    
+    dataArray = tempDataArray;
+    [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:@"newsid"];
+    NSLog(@"%@",dataArray);
     [selectDictionary removeAllObjects];
     [_myTable deleteRowsAtIndexPaths:tempArray withRowAnimation:UITableViewRowAnimationLeft];
-    [_myTable reloadData];
-    
+
 }
 
 - (void)didReceiveMemoryWarning {

@@ -225,9 +225,9 @@ static TYShareManager *share = nil;
         data = UIImagePNGRepresentation(self.shareImage);
     }
     
-    if([description length]>15)
+    if([description length]>100)
     {
-        description = [description substringToIndex:15];
+        description = [description substringToIndex:95];
         description = [description stringByAppendingString:@"..."];
     }
     
@@ -246,9 +246,9 @@ static TYShareManager *share = nil;
     NSString *title = self.shareTitle;
     NSString *description = self.shareText;
     
-    if([description length]>15)
+    if([description length]>110)
     {
-        description = [description substringToIndex:15];
+        description = [description substringToIndex:100];
         description = [description stringByAppendingString:@"..."];
     }
     
@@ -297,9 +297,9 @@ static TYShareManager *share = nil;
     
     message.title = self.shareTitle;
     NSString * description = self.shareText;
-    if([description length]>15)
+    if([description length]>110)
     {
-        description = [description substringToIndex:15];
+        description = [description substringToIndex:100];
         description = [description stringByAppendingString:@"..."];
     }
     message.description = description;

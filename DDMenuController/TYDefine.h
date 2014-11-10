@@ -24,7 +24,7 @@
 
 #define kRedirectURI    @"http://www.sina.com"
 #define kAppkey @"540853013"
-#define kWXAppkey @"wx2f150bddeaa7369c"
+#define kWXAppkey @"wxd8b80d4b611ff2e8"
 #define SERVICEADDR @"http://123.57.17.124/epaper/index.php?r="
 #define RedColor [UIColor colorWithRed:165.0/255.0 green:0/255.0 blue:0/255.0 alpha:1]
 #endif

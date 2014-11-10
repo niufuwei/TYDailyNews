@@ -145,6 +145,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
 //            cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
+            cell.mytitle.frame = CGRectMake(cell.mytitle.frame.origin.x, 0, cell.mytitle.frame.size.width, cell.frame.size.height);
             [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
             cell.type.hidden = YES;
             
@@ -175,8 +176,10 @@
                 [cell.type setFrame:CGRectMake(self.view.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
             }
 
-            
+
             cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+            cell.title.frame = CGRectMake(cell.title.frame.origin.x, 0, cell.title.frame.size.width, 80);
+
             [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
             
 //            cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];

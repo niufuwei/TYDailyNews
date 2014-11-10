@@ -26,9 +26,9 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
-    imageArray= [NSMutableArray arrayWithObjects:@"晋韵.jpg",@"美食.jpg",@"生活.jpg",@"娱乐.jpg",@"交通.jpg",nil];
-    urlArray = [[NSMutableArray alloc] initWithObjects:@"jy/list",@"jy/list",@"sh/list",@"wt/list",@"ds/list", nil];
-    dataArray = [[NSMutableArray alloc] initWithObjects:@"晋韵",@"美食",@"生活",@"娱乐",@"交通", nil];
+    imageArray= [NSMutableArray arrayWithObjects:@"zt1",@"zt2",nil];
+    urlArray = [[NSMutableArray alloc] initWithObjects:@"zt/list",@"zt2/list", nil];
+    dataArray = [[NSMutableArray alloc] initWithObjects:@"专题一",@"专题二", nil];
     myNavCustom = [[NavCustom alloc] init];
     [myNavCustom setNavWithText:@"龙城专栏" mySelf:self];
     [myNavCustom setNavLeftBtnImage:@"left_ios.png" LeftBtnSelectedImage:@"" mySelf:self width:18 height:15];

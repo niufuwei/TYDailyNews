@@ -16,6 +16,7 @@
     TYHttpRequest * httpRequest;
     NSMutableArray * dataArray;
     NSInteger indexPage;
+    
 }
 
 @end
@@ -27,6 +28,8 @@
     if(self = [super initWithFrame:frame])
     {
         [self setBackgroundColor:[UIColor whiteColor]];
+     
+        url = withUrl;
         
         _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         _table.delegate =self;
@@ -62,12 +65,52 @@
     {
         cell = [[TYBaoLiaoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
     }
-    
-    cell.titleLabel.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"Title"];
-    
-    cell.nameWithTimer.text = [[[[dataArray objectAtIndex:indexPath.row] objectForKey:@"author"] stringByAppendingString:@"   "] stringByAppendingString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"Create_time"]];
-    
-    return cell;
+    if([dataArray count] ==0)
+    {
+        
+    }
+    else
+    {
+        [cell.icon setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
+        if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] length] ==0)
+        {
+            cell.type.hidden = YES;
+            CGRect height = cell.titleLabel.frame;
+            height.size.height = 80;
+            cell.titleLabel.frame = height;
+            cell.titleLabel.textAlignment = NSTextAlignmentCenter;
+            cell.titleLabel.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+        }
+        else
+        {
+            cell.titleLabel.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"];
+            //        cell.contentLabel.text = [[dataArray objectAtIndex:indexPath.row]  objectForKey:@"title"];
+            CGRect height = cell.titleLabel.frame;
+            height.size.height = 40;
+            height.origin.y= 20;
+            cell.titleLabel.frame = height;
+            cell.titleLabel.textAlignment = NSTextAlignmentCenter;
+            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
+            
+            NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
+            CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
+            //根据计算结果重新设置UILabel的尺寸
+            if(size.width > 40)
+            {
+                [cell.type setFrame:CGRectMake(self.frame.size.width-size.width - 20, cell.type.frame.origin.y, size.width+10, cell.type.frame.size.height)];
+                
+            }
+            else
+            {
+                [cell.type setFrame:CGRectMake(self.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
+            }
+            
+        }
+        cell.bottomLabel.text = [[[[dataArray objectAtIndex:indexPath.row] objectForKey:@"name"] stringByAppendingString:@"   "] stringByAppendingString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"create_time"]];
+        
+
+    }
+       return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -84,21 +127,22 @@
 -(void)loadlayoutView
 {
     httpRequest = [[TYHttpRequest alloc] init];
-    [httpRequest httpRequest:@"bl/list" parameter:[NSString stringWithFormat:@"pageSize=%@&pageNo=%d",@"14",indexPage] Success:^(id result) {
+    [httpRequest httpRequest:url parameter:[NSString stringWithFormat:@"pageSize=%@&pageNo=%d",@"14",indexPage] Success:^(id result) {
         
         NSLog(@"result===>%@",result);
         NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dic = (NSDictionary*)[jsonData objectFromJSONData];
-        NSArray * arr =  [dic objectForKey:@"bls"];
+        NSArray * arr =  [dic objectForKey:@"articles"];
         
         for(int i= 0;i<[arr count];i++)
         {
             [dataArray addObject:[arr objectAtIndex:i]];
         }
-        
+      
         [_table reloadData];
         [_table headerEndRefreshing];
         [_table footerEndRefreshing];
+        
         
     } Failure:^(NSError *error) {
         NSLog(@"error==>%@",error);

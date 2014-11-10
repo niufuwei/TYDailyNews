@@ -14,5 +14,7 @@
 -(NSDate*)DateFormString:(NSString *)string;
 -(NSString*)getWeakInfor:(NSDate*)date;
 -(NSString*)getYMDInfor:(NSDate*)date;
-
+-(NSString*)getYear:(NSDate*)date;
+-(NSString*)getMon:(NSDate*)date;
+-(NSString*)getDay:(NSDate*)date;
 @end

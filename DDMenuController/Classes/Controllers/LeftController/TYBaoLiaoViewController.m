@@ -11,6 +11,9 @@
 #import "TYBaoLiaoInformationViewController.h"
 #import "UIBaoLiaoPostInforViewController.h"
 #import "MJRefresh.h"
+#import "TYBaoLiaoContentViewController.h"
+#import "TYJDViewController.h"
+#import "TYNewsViewController.h"
 
 @interface TYBaoLiaoViewController ()
 {
@@ -19,10 +22,12 @@
     NSInteger indexPage;
     NavCustom * custom;
     
-    TYBaoLiaoInformationViewController * contenV;
+    TYBaoLiaoContentViewController * contenV;
     NSMutableDictionary * selectDic;
     NSInteger indexRecord;
     
+    NSString * requestInforUrl;
+    NSInteger currentPage;
 }
 
 @end
@@ -72,10 +77,11 @@
     [self.view addSubview:_bgScrollview];
     
     //添加首页内容
-//    contenV = [[TYBaoLiaoInformationViewController alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, _bgScrollview.frame.size.height)];
-//    [_bgScrollview addSubview:contenV];
+    contenV = [[TYBaoLiaoContentViewController alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, _bgScrollview.frame.size.height) withUrl:@"bl/list"];
+    requestInforUrl = @"bl/view";
+    [_bgScrollview addSubview:contenV];
 
-    
+    currentPage = 0;
     [self loadBottomView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotifaction:) name:@"baoliaoinfo" object:nil];
@@ -84,9 +90,11 @@
 
 -(void)onNotifaction:(NSNotification*)noti
 {
-    TYBaoLiaoInformationViewController * infor = [[TYBaoLiaoInformationViewController alloc] init];
-    infor.newsID = noti.object;
-    [self.navigationController pushViewController:infor animated:YES];
+    TYNewsViewController * news  = [[TYNewsViewController alloc] init];
+    news.newsID = noti.object;
+    news.address = requestInforUrl;
+    news.isNewsCenter = TRUE;
+    [self.navigationController pushViewController:news animated:YES];
 }
 
 -(void)loadBottomView{
@@ -135,6 +143,15 @@
     }
     NSInteger xx = scrollView.contentOffset.x;
     NSInteger dd = self.view.frame.size.width;
+    currentPage = xx/dd;
+    if(currentPage ==0)
+    {
+         requestInforUrl =@"bl/view";
+    }
+    else
+    {
+         requestInforUrl =@"sr/view";
+    }
     if( xx% dd ==0)
     {
         NSInteger index = scrollView.contentOffset.x/self.view.frame.size.width;
@@ -146,8 +163,8 @@
         {
             [selectDic setObject:@"ok" forKey:[NSString stringWithFormat:@"%d",index]];
             //添加内容
-            //        contenV = [[EMContentView alloc] initWithFrame:CGRectMake(index*self.view.frame.size.width, 0, self.view.frame.size.width, _bgScrollview.frame.size.height) withContent:@"我要睡觉"];
-            //        [_bgScrollview addSubview:contenV];
+            contenV = [[TYBaoLiaoContentViewController alloc] initWithFrame:CGRectMake(index*self.view.frame.size.width, 0, self.view.frame.size.width, _bgScrollview.frame.size.height) withUrl:@"sr/list"];
+            [_bgScrollview addSubview:contenV];
         }
         
         [self modifyButtonType:index+1];
@@ -184,8 +201,17 @@
 
 -(void)onBaoliao:(id)sender
 {
-    UIBaoLiaoPostInforViewController * baoliao = [[UIBaoLiaoPostInforViewController alloc] init];
-    [self.navigationController pushViewController:baoliao animated:YES];
+    if(currentPage ==0)
+    {
+        UIBaoLiaoPostInforViewController * baoliao = [[UIBaoLiaoPostInforViewController alloc] init];
+        [self.navigationController pushViewController:baoliao animated:YES];
+    }
+    else
+    {
+        TYJDViewController * baoliao = [[TYJDViewController alloc] init];
+        [self.navigationController pushViewController:baoliao animated:YES];
+    }
+    
 }
 
 

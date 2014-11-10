@@ -9,9 +9,10 @@
 #import "TYLeftMenuItemOldViewController.h"
 #import "TYLoginViewController.h"
 #import "PMCalendar.h"
+#import "ASINetworkQueue.h"
 
 
-@interface TYLeftMenuItemOldViewController ()
+@interface TYLeftMenuItemOldViewController ()<ASIHTTPRequestDelegate>
 {
     UIWebView * myWebView;
     NavCustom * myNavCustom ;
@@ -27,8 +28,14 @@
     NSInteger indexPath;
     UIButton * buttonDate;
     UIView * bgView;
+    CBMBProgressHUD *myindicator;
+    NSString *savePath;
+    
+    PMPeriod * tempPMPeriod;
 }
 @property (nonatomic, strong) PMCalendarController *pmCC;
+@property (nonatomic,assign) ASINetworkQueue * netWorkQueue;
+
 
 @end
 
@@ -69,8 +76,6 @@
 -(void)loadLayotView
 {
     
-    
-    
     //获取当前日期
     
     Date * date =[[Date alloc] init];
@@ -103,7 +108,23 @@
     
     [backGroundScrollview addSubview:myWebView];
 
+    [self httpRequest:0];
     
+    //设置
+    
+    pageController = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-64-20, self.view.frame.size.width, 20)];
+    pageController.currentPage=0; //初始页码为 0
+    pageController.userInteractionEnabled=NO; //pagecontroller不响应点击操作
+    pageController.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:pageController];
+    [pageController bringSubviewToFront:self.view];
+    
+    [self loadBottomView];
+
+}
+
+-(void)httpRequest:(NSInteger)index
+{
     myHttp  = [[TYHttpRequest alloc] init];
     [myHttp httpRequest:@"pagecount/view" parameter:[NSString stringWithFormat:@"date=%@",yesterday] Success:^(id result) {
         
@@ -118,6 +139,53 @@
         
         pageController.numberOfPages=[dataArray count]; //设置页数为2
         backGroundScrollview.contentSize = CGSizeMake(self.view.frame.size.width*[dataArray count], self.view.frame.size.height-30-64-20);
+        
+        if(index ==0)
+        {
+            
+        }
+        else
+        {
+            if(!isDisplay)
+            {
+                isDisplay = TRUE;
+            }
+            else
+            {
+                if([dataArray count] ==0)
+                {
+                    
+                }
+                else
+                {
+                    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.17.124/epaper/index.php?r=article/paper&date=%@&pageNo=%@",yesterday,[dataArray objectAtIndex:indexPath]]]];
+                    NSLog(@"%@",request);
+                    
+                    
+                    NSMutableString * string = [[NSMutableString alloc] initWithString:yesterday];
+                    [string insertString:@"年" atIndex:4];
+                    [string insertString:@"月" atIndex:7];
+                    [string insertString:@"日" atIndex:10];
+                    
+                    [buttonDate setTitle:[string stringByAppendingString:@"  v"] forState:UIControlStateNormal];
+                    for(UIWebView * view in backGroundScrollview.subviews)
+                    {
+                        if(view.tag-100 == indexPath)
+                        {
+                            [view loadRequest:request];
+                        }
+                    }
+                    [dataDic removeAllObjects];
+                    
+                }
+                isDisplay = FALSE;
+                
+                [self.pmCC dismissCalendarAnimated:YES];
+                
+            }
+
+        }
+        
     } Failure:^(NSError *error) {
         NSLog(@"失败==>%@",error);
         UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
@@ -126,26 +194,15 @@
         
         indicator.mode = MBProgressHUDModeText;
         [window addSubview:indicator];
-                
+        
         [indicator showAnimated:YES whileExecutingBlock:^{
             sleep(1.2);
         } completionBlock:^{
             [indicator removeFromSuperview];
             
         }];
-
+        
     } view:self.view isPost:FALSE];
-    
-    //设置
-    
-    pageController = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-64-20, self.view.frame.size.width, 20)];
-    pageController.currentPage=0; //初始页码为 0
-    pageController.userInteractionEnabled=NO; //pagecontroller不响应点击操作
-    pageController.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:pageController];
-    [pageController bringSubviewToFront:self.view];
-    
-    [self loadBottomView];
 
 }
 
@@ -212,6 +269,127 @@
                 [self hideBottom];
                 bgView.hidden = YES;
                 isClick = FALSE;
+                
+                
+                UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                myindicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                myindicator.labelText = @"已经加入后台下载任务列表...";
+                
+                myindicator.mode = MBProgressHUDModeText;
+                [window addSubview:myindicator];
+                [myindicator showAnimated:YES whileExecutingBlock:^{
+                    sleep(1.2);
+                } completionBlock:^{
+                    [myindicator removeFromSuperview];
+                    
+                }];
+                
+                
+                ASINetworkQueue   *que = [[ASINetworkQueue alloc] init];
+                
+                self.netWorkQueue = que;
+                [self.netWorkQueue reset];
+                [self.netWorkQueue setShowAccurateProgress:YES];
+                [self.netWorkQueue go];
+                
+                NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+                
+                //初始化临时文件路径
+                
+                NSString *folderPath = [path stringByAppendingPathComponent:@"download"];
+                NSLog(@"%@",folderPath);
+                //创建文件管理器
+                
+                NSFileManager *fileManager = [NSFileManager defaultManager];
+                
+                //判断temp文件夹是否存在
+                
+                BOOL fileExists = [fileManager fileExistsAtPath:folderPath];
+                
+                if (!fileExists) {//如果不存在说创建,因为下载时,不会自动创建文件夹
+                    
+                    [fileManager createDirectoryAtPath:folderPath 
+                     
+                           withIntermediateDirectories:YES 
+                     
+                                            attributes:nil
+                     
+                                                 error:nil];
+                    
+                }
+                
+                NSString * filePath = [NSString stringWithFormat:@"http://123.57.17.124/epaper/assets/pdf/%@.pdf",yesterday];
+                NSURL *url = [NSURL URLWithString:filePath];
+                
+                //设置下载路径
+                
+                ASIHTTPRequest *request = [[ASIHTTPRequest alloc] initWithURL:url];
+                
+                //设置ASIHTTPRequest代理
+                
+                request.delegate = self;
+                
+                //初始化保存ZIP文件路径
+                
+                savePath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"download/%@.pdf",yesterday]];
+                
+                //初始化临时文件路径
+                
+                NSString *tempPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"download/%@d.pdf.temp",yesterday]];
+                
+                //设置文件保存路径
+                [request setDownloadDestinationPath:savePath];
+                
+                //设置临时文件路径
+                
+                [request setTemporaryFileDownloadPath:tempPath];
+                
+                
+                
+                //设置进度条的代理,
+                
+                [request setDownloadProgressDelegate:self];
+                
+                //设置是是否支持断点下载
+                
+                [request setAllowResumeForFileDownloads:YES];
+                
+                //设置基本信息
+                
+                [request setUserInfo:[NSDictionary dictionaryWithObjectsAndKeys:yesterday,@"PdfID",nil]];
+                
+                NSLog(@"UserInfo=%@",request.userInfo);
+                
+                //添加到ASINetworkQueue队列去下载
+                
+                [self.netWorkQueue addOperation:request];
+                
+                
+                
+                
+                NSMutableArray * tempArr =[[NSMutableArray alloc] init];
+                tempArr = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"download"];
+                
+                NSMutableArray * arr = [[NSMutableArray alloc] init];
+                
+                for(int i= 0;i<[tempArr count];i++)
+                {
+                    NSDictionary * dic = [tempArr objectAtIndex:i];
+                    
+                    if([[[dic allKeys]objectAtIndex:0] isEqualToString:yesterday])
+                    {
+                        [tempArr removeObjectAtIndex:i];
+                    }
+                    
+                    [arr addObject:dic];
+                }
+                
+            
+                
+                NSDictionary * dic = [NSDictionary dictionaryWithObject:savePath forKey:yesterday];
+                
+                [arr addObject:dic];
+                [[NSUserDefaults standardUserDefaults] setObject:arr forKey:@"download"];
             }
         }
             break;
@@ -237,45 +415,65 @@
         
     
 }
+#pragma mark --
+#pragma mark asiHttpRequestDownload
+- (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders {
+    
+    NSLog(@"didReceiveResponseHeaders-%@",[responseHeaders valueForKey:@"Content-Length"]);
+    
+    
+    NSLog(@"contentlength=%f",request.contentLength/1024.0/1024.0);
+    
+    NSLog(@"%@",[request.userInfo objectForKey:@"PdfID"]);
+    
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    
+//    float tempConLen = [[userDefaults objectForKey:[NSString stringWithFormat:@"book_%d_contentLength",bookid]] floatValue];
+//    
+//    NSLog(@"tempConLen=%f",tempConLen);
+//    
+//    //如果没有保存,则持久化他的内容大小
+//    
+//    if (tempConLen == 0 ) {//如果没有保存,则持久化他的内容大小
+//        
+//        [userDefaults setObject:[NSNumber numberWithFloat:request.contentLength/1024.0/1024.0] forKey:[NSString stringWithFormat:@"book_%d_contentLength",bookid]];
+//        
+//    }
+    
+    
+}
+
+//ASIHTTPRequestDelegate,下载完成时,执行的方法
+
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    
+    
+    
+    NSLog(@"%@",[request.userInfo objectForKey:@"PdfID"]);
+    
+    NSLog(@">>>>>>>>>>>>>>>>>>");
+
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"downloadNumer"])
+    {
+        
+        [[NSUserDefaults standardUserDefaults] setObject:[NSString stringWithFormat:@"%d",[[[NSUserDefaults standardUserDefaults] objectForKey:@"downloadNumber"] intValue]+1] forKey:@"downloadNumer"];
+    }
+    
+}
+
+
 #pragma mark PMCalendarControllerDelegate methods
 
 - (void)calendarController:(PMCalendarController *)calendarController didChangePeriod:(PMPeriod *)newPeriod
 {
-    
+    tempPMPeriod = newPeriod;
+    yesterday = [tempPMPeriod.endDate dateStringWithFormat:@"yyyyMMdd"];
+    [self httpRequest:1];
+
 //    NSString* str = [NSString stringWithFormat:@"%@ - %@"
 //                        , [newPeriod.startDate dateStringWithFormat:@"dd-MM-yyyy"]
 //                        , [newPeriod.endDate dateStringWithFormat:@"yyyyMMdd"]];
     
-    if(!isDisplay)
-    {
-        isDisplay = TRUE;
-    }
-    else
-    {
-        yesterday = [newPeriod.endDate dateStringWithFormat:@"yyyyMMdd"];
-
-        NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://123.57.17.124/epaper/index.php?r=article/paper&date=%@&pageNo=%@",yesterday,[dataArray objectAtIndex:indexPath]]]];
-        NSLog(@"%@",request);
-        
-        
-        NSMutableString * string = [[NSMutableString alloc] initWithString:yesterday];
-        [string insertString:@"年" atIndex:4];
-        [string insertString:@"月" atIndex:7];
-        [string insertString:@"日" atIndex:10];
-        
-        [buttonDate setTitle:[string stringByAppendingString:@"  v"] forState:UIControlStateNormal];
-        for(UIWebView * view in backGroundScrollview.subviews)
-        {
-            if(view.tag-100 == indexPath)
-            {
-                [view loadRequest:request];
-            }
-        }
-        [dataDic removeAllObjects];
-        isDisplay = FALSE;
-        [self.pmCC dismissCalendarAnimated:YES];
-        
-    }
 }
 
 -(void)NavLeftButtononClick

@@ -235,24 +235,39 @@
             
             [button setBackgroundImage:[UIImage imageNamed:@"collect"] forState:UIControlStateNormal];
             
-            NSDictionary  * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:newsIDTT,string, nil] forKeys:[NSArray arrayWithObjects:@"id",@"type", nil]];
-            NSLog(@"%@",dic);
-            [httpRequest httpRequest:@"site/collect" parameter:dic Success:^(id result) {
-                
-                NSData * data = [result dataUsingEncoding:NSUTF8StringEncoding];
-                NSDictionary * dic = [data objectFromJSONData];
-                
-                NSLog(@"%@",result);
-                if([[dic objectForKey:@"code"] isEqualToString:@"1"])
+            
+            NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"]);
+            
+            if([[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"])
+            {
+                NSMutableArray * arrID = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"];
+
+                NSArray * arr = (NSArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"];
+                if([arr count] == 0)
                 {
+                    NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObject:dataDictionary forKey:newsIDTT];
+                    [dic setObject:_address forKey:@"address"];
+                    if(_isNewsCenter)
+                    {
+                        [dic setObject:@"1" forKey:@"isNews"];
+
+                    }
+                    else
+                    {
+                        [dic setObject:@"0" forKey:@"isNews"];
+
+                    }
+                    [arrID addObject:dic];
+                    
+                    
+                    
                     UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
                     CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
                     indicator.labelText = @"收藏成功";
                     
                     indicator.mode = MBProgressHUDModeText;
                     [window addSubview:indicator];
-                    
-                    [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
+                    [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
                     
                     [indicator showAnimated:YES whileExecutingBlock:^{
                         sleep(1.2);
@@ -260,44 +275,194 @@
                         [indicator removeFromSuperview];
                         
                     }];
-                }
-                else if([[dic objectForKey:@"code"] isEqualToString:@"2"])
-                {
-                    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
-                    CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
-                    indicator.labelText = @"已经收藏，不能重复收藏";
                     
-                    indicator.mode = MBProgressHUDModeText;
-                    [window addSubview:indicator];
-                    [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
+                    [[NSUserDefaults standardUserDefaults] setObject:arrID forKey:@"newsid"];
 
-                    [indicator showAnimated:YES whileExecutingBlock:^{
-                        sleep(1.2);
-                    } completionBlock:^{
-                        [indicator removeFromSuperview];
-                        
-                    }];
+
                 }
                 else
                 {
-                    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
-                    CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
-                    indicator.labelText = @"收藏失败";
-                    
-                    indicator.mode = MBProgressHUDModeText;
-                    [window addSubview:indicator];
-                    [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+                    NSMutableArray * tempArray = [[NSMutableArray alloc] init];
 
-                    [indicator showAnimated:YES whileExecutingBlock:^{
-                        sleep(1.2);
-                    } completionBlock:^{
-                        [indicator removeFromSuperview];
+                    for(NSDictionary * strDic in arr)
+                    {
+                        for(NSString * str in [strDic allKeys])
+                        {
+                            if([str isEqualToString:@"isNews"])
+                            {
+                                
+                            }else if([str isEqualToString:@"address"])
+                            {
+                                
+                            }
+                            else
+                            {
+                                [tempArray addObject:str];
+
+                            }
+                        }
                         
-                    }];
+                    }
+                    
+                    NSLog(@"%@",arr);
+                    NSLog(@"%@",tempArray);
+                    
+                    if([tempArray indexOfObject:newsIDTT] != NSNotFound)
+                    {
+                        UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                        CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                        indicator.labelText = @"已经收藏，不能重复收藏";
+                        
+                        indicator.mode = MBProgressHUDModeText;
+                        [window addSubview:indicator];
+                        [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
+                        
+                        [indicator showAnimated:YES whileExecutingBlock:^{
+                            sleep(1.2);
+                        } completionBlock:^{
+                            [indicator removeFromSuperview];
+                            
+                        }];
+                        
+                    }
+                    else
+                    {
+                        NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObject:dataDictionary forKey:newsIDTT];
+                        [dic setObject:_address forKey:@"address"];
+                        if(_isNewsCenter)
+                        {
+                            [dic setObject:@"1" forKey:@"isNews"];
+                            
+                        }
+                        else
+                        {
+                            [dic setObject:@"0" forKey:@"isNews"];
+                            
+                        }
+                        [arrID addObject:dic];
+                        
+
+                        UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                        CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                        indicator.labelText = @"收藏成功";
+                        
+                        indicator.mode = MBProgressHUDModeText;
+                        [window addSubview:indicator];
+                        [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+                        
+                        [indicator showAnimated:YES whileExecutingBlock:^{
+                            sleep(1.2);
+                        } completionBlock:^{
+                            [indicator removeFromSuperview];
+                            
+                        }];
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:arrID forKey:@"newsid"];
+                        
+                    }
+
+
                 }
-            } Failure:^(NSError *error) {
-                NSLog(@"%@",error);
-            } view:self.view isPost:YES];
+            }
+            else
+            {
+                NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObject:dataDictionary forKey:newsIDTT];
+                [dic setObject:_address forKey:@"address"];
+                NSMutableArray * arrrr = [[NSMutableArray alloc] init];
+                if(_isNewsCenter)
+                {
+                    [dic setObject:@"1" forKey:@"isNews"];
+                    
+                }
+                else
+                {
+                    [dic setObject:@"0" forKey:@"isNews"];
+                    
+                }
+                [arrrr addObject:dic];
+
+                UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+                CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+                indicator.labelText = @"收藏成功";
+
+                indicator.mode = MBProgressHUDModeText;
+                [window addSubview:indicator];
+                [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+
+                [indicator showAnimated:YES whileExecutingBlock:^{
+                    sleep(1.2);
+                } completionBlock:^{
+                    [indicator removeFromSuperview];
+                    
+                }];
+                [[NSUserDefaults standardUserDefaults] setObject:arrrr forKey:@"newsid"];
+
+            }
+        
+            
+//            NSDictionary  * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:newsIDTT,string, nil] forKeys:[NSArray arrayWithObjects:@"id",@"type", nil]];
+//            NSLog(@"%@",dic);
+//            [httpRequest httpRequest:@"site/collect" parameter:dic Success:^(id result) {
+//                
+//                NSData * data = [result dataUsingEncoding:NSUTF8StringEncoding];
+//                NSDictionary * dic = [data objectFromJSONData];
+//                
+//                NSLog(@"%@",result);
+//                if([[dic objectForKey:@"code"] isEqualToString:@"1"])
+//                {
+//                    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+//                    CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+//                    indicator.labelText = @"收藏成功";
+//                    
+//                    indicator.mode = MBProgressHUDModeText;
+//                    [window addSubview:indicator];
+//                    
+//                    [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
+//                    
+//                    [indicator showAnimated:YES whileExecutingBlock:^{
+//                        sleep(1.2);
+//                    } completionBlock:^{
+//                        [indicator removeFromSuperview];
+//                        
+//                    }];
+//                }
+//                else if([[dic objectForKey:@"code"] isEqualToString:@"2"])
+//                {
+//                    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+//                    CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+//                    indicator.labelText = @"已经收藏，不能重复收藏";
+//                    
+//                    indicator.mode = MBProgressHUDModeText;
+//                    [window addSubview:indicator];
+//                    [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
+//
+//                    [indicator showAnimated:YES whileExecutingBlock:^{
+//                        sleep(1.2);
+//                    } completionBlock:^{
+//                        [indicator removeFromSuperview];
+//                        
+//                    }];
+//                }
+//                else
+//                {
+//                    UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
+//                    CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
+//                    indicator.labelText = @"收藏失败";
+//                    
+//                    indicator.mode = MBProgressHUDModeText;
+//                    [window addSubview:indicator];
+//                    [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+//
+//                    [indicator showAnimated:YES whileExecutingBlock:^{
+//                        sleep(1.2);
+//                    } completionBlock:^{
+//                        [indicator removeFromSuperview];
+//                        
+//                    }];
+//                }
+//            } Failure:^(NSError *error) {
+//                NSLog(@"%@",error);
+//            } view:self.view isPost:YES];
         }
             break;
         case 102:
@@ -448,7 +613,7 @@
 //                                       delegate:nil];
 
     
-    NSLog(@"%@",dataDictionary);
+    NSLog(@"%@",[dataDictionary objectForKey:@"share"]);
     TYShareManager * share = [TYShareManager currentShare];
     NSString * strContent = [[[dataDictionary objectForKey:@"article"]objectForKey:@"content"] stringByReplacingOccurrencesOfString:@"<p>" withString:@""];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
@@ -456,7 +621,7 @@
     
   
     
-    [share shareContentString:strContent title:[[dataDictionary objectForKey:@"article"] objectForKey:@"title"] image:[UIImage imageNamed:@"Icon.png"] url:@"www.baidu.com"];
+    [share shareContentString:strContent title:[[dataDictionary objectForKey:@"article"] objectForKey:@"title"] image:[UIImage imageNamed:@"Icon.png"] url:[dataDictionary objectForKey:@"share"]];
     
     NSString *name = shareImte.name;
     

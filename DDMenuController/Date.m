@@ -42,6 +42,89 @@
     return [NSString stringWithFormat:@"%d年%d月%d日",year,month,day];
 }
 
+-(NSString*)getYear:(NSDate*)date
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    
+    NSInteger unitFlags = NSYearCalendarUnit |
+    
+    NSMonthCalendarUnit |
+    
+    NSDayCalendarUnit |
+    
+    NSWeekdayCalendarUnit |
+    
+    NSHourCalendarUnit |
+    
+    NSMinuteCalendarUnit |
+    
+    NSSecondCalendarUnit;
+    
+    comps = [calendar components:unitFlags fromDate:date];
+    
+    //    int week = [comps weekday];
+    
+    int year=[comps year];
+    return [NSString stringWithFormat:@"%d",year];
+}
+
+-(NSString*)getMon:(NSDate*)date
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    
+    NSInteger unitFlags = NSYearCalendarUnit |
+    
+    NSMonthCalendarUnit |
+    
+    NSDayCalendarUnit |
+    
+    NSWeekdayCalendarUnit |
+    
+    NSHourCalendarUnit |
+    
+    NSMinuteCalendarUnit |
+    
+    NSSecondCalendarUnit;
+    
+    comps = [calendar components:unitFlags fromDate:date];
+    
+    //    int week = [comps weekday];
+    
+    int month=[comps month];
+    return [NSString stringWithFormat:@"%d",month];
+}
+-(NSString*)getDay:(NSDate*)date
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    
+    NSInteger unitFlags = NSYearCalendarUnit |
+    
+    NSMonthCalendarUnit |
+    
+    NSDayCalendarUnit |
+    
+    NSWeekdayCalendarUnit |
+    
+    NSHourCalendarUnit |
+    
+    NSMinuteCalendarUnit |
+    
+    NSSecondCalendarUnit;
+    
+    comps = [calendar components:unitFlags fromDate:date];
+    
+    //    int week = [comps weekday];
+    
+    int day=[comps day];
+    return [NSString stringWithFormat:@"%d",day];
+}
+
 -(NSString *)stringFormDate:(NSDate *)date isHorLine:(BOOL)isHorLine
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

@@ -34,7 +34,6 @@
 
 -(void)fillDataWithView:(NSDictionary *)dic
 {
-    NSLog(@"%@",dic);
     NSDictionary * tempDic =[[NSDictionary alloc] init];
     tempDic = dic;
     dic = [dic objectForKey:@"article"];
@@ -252,7 +251,7 @@
 //    content.numberOfLines =0;
     
     NSString * strContent = [dic objectForKey:@"content"];
-//    strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@"\n"];
+    strContent =[strContent stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
 //    strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
     
 //    NSData* jsonData = [[dic objectForKey:@"Content"] dataUsingEncoding:NSUTF8StringEncoding];
@@ -267,7 +266,7 @@
 //                                  attributes:attributes
 //                                     context:nil];
     
-    content.text = strContent;
+    content.text = strContent ;
     content.lineSpacing = 10;
     CGSize opt = [content optimumSize];
     content.frame =CGRectMake(content.frame.origin.x, content.frame.origin.y, content.frame.size.width,opt.height+20);

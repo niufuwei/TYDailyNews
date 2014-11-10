@@ -208,6 +208,8 @@
         
     } Failure:^(NSError *error) {
         NSLog(@"%@",error);
+        [table headerEndRefreshing];
+
         UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
         CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
         indicator.labelText = @"请求失败";
