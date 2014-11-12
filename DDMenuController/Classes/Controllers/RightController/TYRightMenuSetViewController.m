@@ -17,6 +17,8 @@
     NSMutableArray * dataArray;
     UISwitch *switchButton;
     NSMutableArray * fontArray;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -25,6 +27,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     myCustom = [[NavCustom alloc] init];
@@ -38,6 +51,7 @@
     _table.delegate =self;
     _table.dataSource =self;
     _table.tableFooterView = [[UIView alloc] init];
+    _table.backgroundColor = myWhiteColor;
     [self.view addSubview:_table];
 
     // Do any additional setup after loading the view.
@@ -97,7 +111,7 @@
         }
         daxiao.textAlignment = NSTextAlignmentRight;
         daxiao.backgroundColor = [UIColor clearColor];
-        daxiao.textColor = [UIColor grayColor];
+        daxiao.textColor = myBlackColor;
         daxiao.font = [UIFont systemFontOfSize:15];
         daxiao.tag = 10086;
         [cell addSubview:daxiao];
@@ -144,22 +158,22 @@
     {
         switchButton = [[UISwitch alloc] initWithFrame:CGRectMake(self.view.frame.size.width-60, 10, 20, 10)];
         [switchButton setOn:YES];
-        if([[NSUserDefaults standardUserDefaults] objectForKey:@"wutu"])
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"])
         {
-            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"wutu"] isEqualToString:@"ok"])
+            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"ok"])
             {
-                [switchButton setOn:YES];
+                [switchButton setOn:NO];
                 
             }
             else
             {
-                [switchButton setOn:NO];
+                [switchButton setOn:YES];
                 
             }
         }
         else
         {
-            [switchButton setOn:NO];
+            [switchButton setOn:YES];
             
         }
 
@@ -171,7 +185,9 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = [dataArray objectAtIndex:indexPath.row];
     cell.textLabel.font = [UIFont systemFontOfSize:15];
+    cell.textLabel.textColor = myBlackColor;
     
+    cell.backgroundColor = myWhiteColor;
     return cell;
 }
 
@@ -200,6 +216,8 @@
             [[NSUserDefaults standardUserDefaults]setObject:@"1" forKey:@"isDayShow"];
 
         }
+        [self days];
+
     }
     else
     {
@@ -207,13 +225,30 @@
         BOOL isButtonOn = [switchBT isOn];
         if (isButtonOn) {
             NSLog(@"打开");
-            [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"wutu"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"no" forKey:@"showImage"];
         }else {
             NSLog(@"关闭");
-            [[NSUserDefaults standardUserDefaults] setObject:@"no" forKey:@"wutu"];
+            [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"showImage"];
         }
 
     }
+    
+}
+
+-(void)days
+{
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    _table.backgroundColor = myWhiteColor;
+    [_table reloadData];
     
 }
 

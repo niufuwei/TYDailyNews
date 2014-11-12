@@ -16,4 +16,5 @@
 @property (nonatomic,strong) UILabel * userName;
 @property (nonatomic,strong) UILabel * money;
 @property (nonatomic,strong) UIButton * loginButton;
+@property (nonatomic,strong) UIImageView * imgDu;
 @end

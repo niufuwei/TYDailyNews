@@ -66,7 +66,7 @@
         if(rang.location != NSNotFound)
         {
 //            [imageView setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-            [imageView setImageWithURL:[NSURL URLWithString:imageName] placeholderImage:[UIImage imageNamed:@""]];
+            [imageView setImageWithURL:[NSURL URLWithString:imageName] placeholderImage:[UIImage imageNamed:@"noImage"]];
 
         }
         else

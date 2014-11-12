@@ -19,6 +19,8 @@
     NSInteger currentPage;
     TYCommentView * ButtomView;
     BOOL isHeadReload;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -29,7 +31,20 @@
     
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
+    [self.view setBackgroundColor:myWhiteColor];
+    
+    
     
     dataArray = [[NSMutableArray alloc] init];
     currentPage = 0;
@@ -37,10 +52,11 @@
     _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64-50)];
     _table.delegate = self;
     _table.dataSource =self;
+    _table.backgroundColor = myWhiteColor;
     [self.view addSubview:_table];
     
     ButtomView = [[TYCommentView alloc] initWithFrame:CGRectMake(0, _table.frame.size.height+_table.frame.origin.y, self.view.frame.size.width, 50) ID:_newsID];
-    [ButtomView setBackgroundColor:[UIColor whiteColor]];
+    [ButtomView setBackgroundColor:myWhiteColor];
     [ButtomView bringSubviewToFront:self.view];
     [self.view addSubview:ButtomView];
     
@@ -103,6 +119,9 @@
             
         }];
         
+        [self.table headerEndRefreshing];
+        [self.table footerEndRefreshing];
+        
     } view:self.view isPost:FALSE];
 }
 
@@ -139,9 +158,13 @@
         newsCell = [[TYNewsCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
     }
     
+    newsCell.backgroundColor = myWhiteColor;
     newsCell.addr.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"author"];
+    newsCell.addr.textColor = myBlackColor;
     newsCell.time.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"create_time"];
+    newsCell.time.textColor = myBlackColor;
     newsCell.TTcontent.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"content"];
+    newsCell.TTcontent.textColor = myBlackColor;
     return newsCell;
 }
 

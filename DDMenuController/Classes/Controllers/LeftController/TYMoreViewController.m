@@ -21,6 +21,8 @@
     NSMutableDictionary * tagDic;
     
     NavCustom * custom;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 @end
 
@@ -28,6 +30,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
     
     custom = [[NavCustom alloc] init];
     [custom setNavWithText:@"分类" mySelf:self];
@@ -42,7 +55,7 @@
     
     bgScrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     bgScrollview.tag = 2000;
-    [bgScrollview setBackgroundColor:[UIColor whiteColor]];
+    [bgScrollview setBackgroundColor:myWhiteColor];
     [self.view addSubview:bgScrollview];
     
     headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
@@ -72,7 +85,7 @@
     
     UILabel * tishi = [[UILabel alloc] initWithFrame:CGRectMake(30, delbutton.frame.size.height+delbutton.frame.origin.y+20, 100, 20)];
     tishi.backgroundColor = [UIColor clearColor];
-    tishi.textColor = [UIColor grayColor];
+    tishi.textColor = myBlackColor;
     tishi.text = @"点击添加";
     tishi.font =[ UIFont systemFontOfSize:12];
     tishi.tag = 4000;

@@ -15,6 +15,10 @@
 #import "Reachability.h"
 #import "WZGuideViewController.h"
 #import "db.h"
+#import "UMessage.h"
+
+#define UMSYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending) 
+#define _IPHONE80_ 80000
 
 @implementation AppDelegate
 {
@@ -30,7 +34,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
 
-//    [NSThread sleepForTimeInterval:1];
+    [NSThread sleepForTimeInterval:3];
     
     //如果未设置夜间模式，默认白天模式
     if(![[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"])
@@ -71,7 +75,7 @@
     
 //    [UMSocialData setAppKey:@"543de3e2fd98c5fc580036bd"];
     
-    [WZGuideViewController show];
+//    [WZGuideViewController show];
     
     // 监测网络情况
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -84,6 +88,50 @@
     
     //定位
     [self Loaction];
+    
+    //消息推送
+    
+    [UMessage startWithAppkey:@"5460dc31fd98c5c44f008860" launchOptions:launchOptions];
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= _IPHONE80_
+    if(UMSYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0"))
+    {
+        //register remoteNotification types
+        UIMutableUserNotificationAction *action1 = [[UIMutableUserNotificationAction alloc] init];
+        action1.identifier = @"action1_identifier";
+        action1.title=@"Accept";
+        action1.activationMode = UIUserNotificationActivationModeForeground;//当点击的时候启动程序
+        
+//        UIMutableUserNotificationAction *action2 = [[UIMutableUserNotificationAction alloc] init];  //第二按钮
+//        action2.identifier = @"action2_identifier";
+//        action2.title=@"Reject";
+//        action2.activationMode = UIUserNotificationActivationModeBackground;//当点击的时候不启动程序，在后台处理
+        action1.authenticationRequired = YES;//需要解锁才能处理，如果action.activationMode = UIUserNotificationActivationModeForeground;则这个属性被忽略；
+        action1.destructive = YES;
+        
+        UIMutableUserNotificationCategory *categorys = [[UIMutableUserNotificationCategory alloc] init];
+        categorys.identifier = @"category1";//这组动作的唯一标示
+        [categorys setActions:@[action1,action1] forContext:(UIUserNotificationActionContextDefault)];
+        
+        UIUserNotificationSettings *userSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeBadge|UIUserNotificationTypeSound|UIUserNotificationTypeAlert
+                                                                                     categories:[NSSet setWithObject:categorys]];
+        [UMessage registerRemoteNotificationAndUserNotificationSettings:userSettings];
+        
+    } else{
+        //register remoteNotification types
+        [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
+         |UIRemoteNotificationTypeSound
+         |UIRemoteNotificationTypeAlert];
+    }
+#else
+    //register remoteNotification types
+    [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
+     |UIRemoteNotificationTypeSound
+     |UIRemoteNotificationTypeAlert];
+#endif
+    
+    //for log
+    [UMessage setLogEnabled:YES];
     
     return YES;
 }
@@ -196,12 +244,6 @@
     NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
     NetworkStatus status = [curReach currentReachabilityStatus];
     
-    //设置默认无图模式
-    if(![[NSUserDefaults standardUserDefaults] objectForKey:@"wutu"])
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"wutu"];
-    }
-    
     if (status == NotReachable) {
        
       
@@ -214,16 +256,10 @@
     }
     else
     {
-        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"wutu"] isEqualToString:@"ok"])
+        if(![[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"])
         {
             [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"showImage"];
         }
-        else
-        {
-            [[NSUserDefaults standardUserDefaults] setObject:@"no" forKey:@"showImage"];
-            
-        }
-
     }
 }
 
@@ -372,6 +408,19 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"request" object:arr];
     }
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [UMessage registerDeviceToken:deviceToken];
+    NSLog(@"%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                  stringByReplacingOccurrencesOfString: @">" withString: @""]
+                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [UMessage didReceiveRemoteNotification:userInfo];
 }
 
 

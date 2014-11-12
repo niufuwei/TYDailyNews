@@ -17,13 +17,11 @@
         
         _addr = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 70, 20)];
         _addr.textAlignment = NSTextAlignmentLeft;
-        _addr.textColor = [UIColor grayColor];
         _addr.font = [UIFont systemFontOfSize:13];
         [self.contentView addSubview:_addr];
         
         _time = [[UILabel alloc] initWithFrame:CGRectMake(_addr.frame.size.width+_addr.frame.origin.x+10, 10, 150, 20)];
         _time.textAlignment = NSTextAlignmentLeft;
-        _time.textColor = [UIColor grayColor];
         _time.font = [UIFont systemFontOfSize:13];
         [self.contentView addSubview:_time];
         
@@ -36,7 +34,6 @@
         
         _TTcontent = [[UILabel alloc] initWithFrame:CGRectMake(30, _addr.frame.size.height+_addr.frame.origin.y+10, self.frame.size.width-60, 45)];
         _TTcontent.textAlignment = NSTextAlignmentLeft;
-        _TTcontent.textColor = [UIColor grayColor];
         _TTcontent.font = [UIFont systemFontOfSize:14];
         _TTcontent.lineBreakMode = NSLineBreakByCharWrapping;
         _TTcontent.numberOfLines = 0;

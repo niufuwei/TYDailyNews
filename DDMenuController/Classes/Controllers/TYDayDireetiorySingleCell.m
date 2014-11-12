@@ -9,10 +9,6 @@
 #import "TYDayDireetiorySingleCell.h"
 
 @implementation TYDayDireetiorySingleCell
-{
-    UIColor * myBlackColor;
-    UIColor * myWhiteColor;
-}
 
 /*
 // Only override drawRect: if you perform custom drawing.
@@ -26,22 +22,10 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        
-        if(_isDayShow)
-        {
-            myBlackColor = [UIColor whiteColor];
-            myWhiteColor = [UIColor blackColor];
-        }
-        else
-        {
-            myWhiteColor = [UIColor whiteColor];
-            myBlackColor = [UIColor blackColor];
-        }
-
+    
         
         _myTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width-70, 70)];
         _myTitle.backgroundColor =[ UIColor clearColor];
-        _myTitle.textColor = myBlackColor;
         _myTitle.font = [UIFont systemFontOfSize:14];
         _myTitle.textAlignment = NSTextAlignmentLeft;
         _myTitle.textAlignment = NSTextAlignmentCenter;
@@ -55,16 +39,7 @@
         
         _num = [[UILabel alloc] initWithFrame:CGRectMake(message.frame.size.width+message.frame.origin.x+5, 70-30, 40, 15)];
         _num.backgroundColor =[ UIColor clearColor];
-        if(_isDayShow)
-        {
-            _num.textColor = [UIColor whiteColor];
-            
-        }
-        else
-        {
-            _num.textColor = [UIColor grayColor];
-            
-        }        _num.font = [UIFont systemFontOfSize:12];
+        _num.font = [UIFont systemFontOfSize:12];
         _num.textAlignment = NSTextAlignmentLeft;
         [self.contentView addSubview:_num];
 

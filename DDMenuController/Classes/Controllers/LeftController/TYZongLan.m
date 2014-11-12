@@ -23,7 +23,6 @@
         _titleLabel =[[UILabel alloc] initWithFrame:CGRectMake(0, _button.frame.size.height+_button.frame.origin.y, self.frame.size.width, 20)];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.font = [UIFont systemFontOfSize:16];
-        _titleLabel.textColor = [UIColor blackColor];
         [self addSubview:_titleLabel];
         
     }

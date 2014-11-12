@@ -15,8 +15,11 @@
 {
     NavCustom * myNavCustom;
     NSMutableArray *dataArray;
-    NSMutableArray * imageArray;
-    NSMutableArray * urlArray;
+  
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
+    
+    TYHttpRequest * myHttp;
 }
 @end
 
@@ -25,10 +28,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    imageArray= [NSMutableArray arrayWithObjects:@"zt1",@"zt2",nil];
-    urlArray = [[NSMutableArray alloc] initWithObjects:@"zt/list",@"zt2/list", nil];
-    dataArray = [[NSMutableArray alloc] initWithObjects:@"专题一",@"专题二", nil];
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
+    [self.view setBackgroundColor:myWhiteColor];
+   
+    dataArray = [[NSMutableArray alloc] init];
+    
     myNavCustom = [[NavCustom alloc] init];
     [myNavCustom setNavWithText:@"龙城专栏" mySelf:self];
     [myNavCustom setNavLeftBtnImage:@"left_ios.png" LeftBtnSelectedImage:@"" mySelf:self width:18 height:15];
@@ -42,14 +57,41 @@
     _table.dataSource = self;
     _table.separatorStyle = UITableViewCellSeparatorStyleNone;
     _table.tableFooterView = [[UIView alloc] init];
+    _table.backgroundColor = myWhiteColor;
     [self.view addSubview:_table];
+    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"longcheng"])
+    {
+        dataArray = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"longcheng"]];
+        [_table reloadData];
+    }
+
+    [self loadRequest];
     
     // Do any additional setup after loading the view.
 }
 
+-(void)loadRequest
+{
+    myHttp = [[TYHttpRequest alloc] init];
+    [myHttp httpRequest:@"ztimg/view" parameter:@"type=ios&size=160" Success:^(id result) {
+        
+        NSLog(@"%@",result);
+        NSData * data = [result dataUsingEncoding:NSUTF8StringEncoding];
+        dataArray =(NSMutableArray *)[data objectFromJSONData];
+        
+        [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:@"longcheng"];
+        [_table reloadData];
+        
+    } Failure:^(NSError *error) {
+        
+        NSLog(@"%@",error);
+    } view:self.view isPost:NO];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [imageArray count];
+    return [dataArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -60,7 +102,9 @@
     {
         cell = [[TYLongCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
     }
-    [cell.image setImage:[UIImage imageNamed:[imageArray objectAtIndex:indexPath.row]]];
+    cell.backgroundColor = myWhiteColor;
+
+    [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
     
     return cell;
 }
@@ -85,8 +129,8 @@
 {
     
         TYLongInforViewController * infor = [[TYLongInforViewController alloc] init];
-        infor.titleStr = [dataArray objectAtIndex:indexPath.row];
-        infor.requestUrl = [urlArray objectAtIndex:indexPath.row];
+        infor.titleStr = @"专题报道";
+    infor.requestUrl = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"url"];
         [self.navigationController pushViewController:infor animated:YES];
     
     

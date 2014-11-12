@@ -125,7 +125,7 @@
     if([[dic objectForKey:@"img1"] length] !=0)
     {
         UIImageView * image =[[ UIImageView alloc] initWithFrame:CGRectMake(40, myYY, self.view.frame.size.width-80, (self.view.frame.size.width-80)/2)];
-        [image setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
+        [image setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
         [backScrollview addSubview:image];
         
         myYY = image.frame.size.height+image.frame.origin.y+10;

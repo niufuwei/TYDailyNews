@@ -24,6 +24,9 @@
     TencentOAuth *_tencentOAuth;
     NSArray *_permissions;
     TYHttpRequest * httpRequest;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -36,6 +39,19 @@ NSString * appid = @"1103377162";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
+    
     httpRequest = [[TYHttpRequest alloc] init];
     
     
@@ -43,8 +59,8 @@ NSString * appid = @"1103377162";
     backGroundScrollview.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height+1);
     [self.view addSubview:backGroundScrollview];
     backGroundScrollview.delegate =self;
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    backGroundScrollview.backgroundColor = [UIColor whiteColor];
+    [self.view setBackgroundColor:myWhiteColor];
+    backGroundScrollview.backgroundColor = myWhiteColor;
     
     custom = [[NavCustom alloc] init];
     [custom setNavWithText:@"登陆注册" mySelf:self];
@@ -100,7 +116,7 @@ NSString * appid = @"1103377162";
 {
     UILabel * text = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, self.view.frame.size.width, 20)];
     text.text = @"已有账户请登录:";
-    text.textColor = [UIColor grayColor];
+    text.textColor = myBlackColor;
     text.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:text];
     
@@ -126,7 +142,7 @@ NSString * appid = @"1103377162";
     _forgetPassword.frame=  CGRectMake(20, _passWord.frame.size.height+_passWord.frame.origin.y+20, 100, 20);
     _forgetPassword.titleLabel.font = [UIFont systemFontOfSize:13];
     [_forgetPassword setTitle:@"忘记密码" forState:UIControlStateNormal];
-    [_forgetPassword setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_forgetPassword setTitleColor:myBlackColor forState:UIControlStateNormal];
     _forgetPassword.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     _forgetPassword.tag = 101;
     [_forgetPassword addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -152,7 +168,7 @@ NSString * appid = @"1103377162";
     UILabel * text2 = [[UILabel alloc] initWithFrame:CGRectMake(20, imageHeng.frame.size.height+imageHeng.frame.origin.y+10,self.view.frame.size.width-40, 20)];
     text2.text = @"使用其他方式登录:";
     text2.font = [UIFont systemFontOfSize:14];
-    text2.textColor = [UIColor grayColor];
+    text2.textColor = myBlackColor;
     [backGroundScrollview addSubview:text2];
 
     _qq = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -180,7 +196,7 @@ NSString * appid = @"1103377162";
     UILabel * text3 = [[UILabel alloc] initWithFrame:CGRectMake(20, imageHeng2.frame.size.height+imageHeng2.frame.origin.y+10,self.view.frame.size.width-40, 20)];
     text3.text = @"选择注册方式:";
     text3.font = [UIFont systemFontOfSize:14];
-    text3.textColor = [UIColor grayColor];
+    text3.textColor =myBlackColor;
     [backGroundScrollview addSubview:text3];
     
     
@@ -291,8 +307,8 @@ NSString * appid = @"1103377162";
             indicator.mode = MBProgressHUDModeText;
             [window addSubview:indicator];
             [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:@"isLogin"];
-            [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"account_id"] forKey:@"userID"];
-            [[NSUserDefaults standardUserDefaults] setObject:[dic objectForKey:@"nick"] forKey:@"userName"];
+            [[NSUserDefaults standardUserDefaults] setObject:[dic2 objectForKey:@"account_id"] forKey:@"userID"];
+            [[NSUserDefaults standardUserDefaults] setObject:[dic2 objectForKey:@"nick"] forKey:@"userName"];
             
             [indicator showAnimated:YES whileExecutingBlock:^{
                 sleep(1.2);

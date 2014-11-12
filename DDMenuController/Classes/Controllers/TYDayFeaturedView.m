@@ -26,6 +26,8 @@
     UIColor * myBlackColor;
     UIColor * myWhiteColor;
     
+    BOOL isShowSection;
+    
 }
 
 @end
@@ -37,12 +39,12 @@
     if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
     {
         myBlackColor = [UIColor whiteColor];
-        myWhiteColor = [UIColor blackColor];
+        myWhiteColor = [UIColor grayColor];
     }
     else
     {
         myWhiteColor = [UIColor whiteColor];
-        myBlackColor = [UIColor blackColor];
+        myBlackColor = [UIColor grayColor];
     }
     self.backgroundColor = myWhiteColor;
     [self setupRefresh];
@@ -80,6 +82,14 @@
     _table.dataSource = self;
     _table.tableFooterView = [[UIView alloc] init];
     [self addSubview:_table];
+    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"jingxuan"])
+    {
+        dataArray = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"jingxuan"]];
+        isShowSection=  FALSE;
+        [_table reloadData];
+    }
+    
     [self setupRefresh];
 
     // Do any additional setup after loading the view.
@@ -106,11 +116,13 @@
         }
         else
         {
+            isShowSection=  TRUE;
+            [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:@"jingxuan"];
             [_table reloadData];
-            [_table headerEndRefreshing];
-          
 
         }
+        [_table headerEndRefreshing];
+
         
     } Failure:^(NSError *error) {
         
@@ -131,6 +143,7 @@
             [indicator removeFromSuperview];
             
         }];
+    
 
     } view:self isPost:FALSE];
     
@@ -177,6 +190,10 @@
 {
     if(section ==0)
     {
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"] || !isShowSection)
+        {
+            return 0;
+        }
         return 1;
     }
     else
@@ -204,14 +221,8 @@
         }
         else
         {
-            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
-            {
-                return 0;
-            }
-            else
-            {
-                return 160;
-            }
+            return 160;
+            
         }
        
     }
@@ -279,14 +290,15 @@
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+            if(isHeadViewLoad)
             {
-                
-            }
-            else
-            {
-                if(isHeadViewLoad)
+                if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
                 {
+                    
+                }
+                else
+                {
+                
                     cell.requestDateString = myDate;
                     NSLog(@"%@",myDate);
                     [cell sendRequestWithAppImgSlider:myDate];
@@ -299,79 +311,85 @@
         else
         {
             
+//            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+//            {
+//                static NSString * strID = @"cell2";
+//                TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
+//                if(!cell)
+//                {
+//                    cell = [[TYDayFeatNoImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+//                }
+//                
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                
+//                if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+//                {
+//                    cell.isDayShow = TRUE;
+//                }
+//                else
+//                {
+//                    cell.isDayShow = FALSE;
+//                }
+//                
+//                cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+////                cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+//                [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
+//                NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
+//                CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
+//                //根据计算结果重新设置UILabel的尺寸
+//                [cell.type setFrame:CGRectMake(cell.type.frame.origin.x, cell.type.frame.origin.y, size.width + 50, cell.type.frame.size.height)];
+//                cell.backgroundColor = myWhiteColor;
+//
+//                return cell;
+//                
+//            }
+//            else
+//            {
+            static NSString * strID = @"cell3";
+            TYDayFeatSingleImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
+            if(!cell)
+            {
+                cell = [[TYDayFeatSingleImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+            }
+            
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
+            [cell.type setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            
+            cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+            cell.title.textColor = myBlackColor;
+            cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"subTitle"]];
+            cell.content.textColor = myBlackColor;
             if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
             {
-                static NSString * strID = @"cell2";
-                TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
-                if(!cell)
-                {
-                    cell = [[TYDayFeatNoImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
-                }
-                
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                
-                if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
-                {
-                    cell.isDayShow = TRUE;
-                }
-                else
-                {
-                    cell.isDayShow = FALSE;
-                }
-                
-                cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-//                cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-                [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
-                NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
-                CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
-                //根据计算结果重新设置UILabel的尺寸
-                [cell.type setFrame:CGRectMake(cell.type.frame.origin.x, cell.type.frame.origin.y, size.width + 50, cell.type.frame.size.height)];
-                cell.backgroundColor = myWhiteColor;
+                [cell.image setImage:[UIImage imageNamed:@"noImage"]];
 
-                return cell;
-                
             }
             else
             {
-                static NSString * strID = @"cell3";
-                TYDayFeatSingleImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
-                if(!cell)
-                {
-                    cell = [[TYDayFeatSingleImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
-                }
-                
-                if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
-                {
-                    cell.isDayShow = TRUE;
-                }
-                else
-                {
-                    cell.isDayShow = FALSE;
-                }
-                
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
-                
-                cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-                [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
-                NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
-                CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
-                //根据计算结果重新设置UILabel的尺寸
-                if(size.width > 40)
-                {
-                    [cell.type setFrame:CGRectMake(self.frame.size.width-size.width - 20, cell.type.frame.origin.y, size.width+10, cell.type.frame.size.height)];
+                [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
 
-                }
-                else
-                {
-                    [cell.type setFrame:CGRectMake(self.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
-                }
-                
-//                cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-                cell.backgroundColor = myWhiteColor;
-
-                return cell;
             }
+            
+            NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
+            CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
+            //根据计算结果重新设置UILabel的尺寸
+            if(size.width > 40)
+            {
+                [cell.type setFrame:CGRectMake(self.frame.size.width-size.width - 20, cell.type.frame.origin.y, size.width+10, cell.type.frame.size.height)];
+
+            }
+            else
+            {
+                [cell.type setFrame:CGRectMake(self.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
+            }
+            
+//                cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+            cell.backgroundColor = myWhiteColor;
+
+            return cell;
+//            }
 //            else
 //            {
 //                static NSString * strID = @"cell4";

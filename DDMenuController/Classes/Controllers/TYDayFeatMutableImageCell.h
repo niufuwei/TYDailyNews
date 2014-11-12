@@ -15,7 +15,6 @@
 @property (nonatomic,strong) UIImageView * image1;
 @property (nonatomic,strong) UIImageView * image2;
 @property (nonatomic,strong) UIImageView * image3;
-@property (nonatomic) BOOL isDayShow;
 
 -(void)setImageArray:(NSArray*)imageArray;
 

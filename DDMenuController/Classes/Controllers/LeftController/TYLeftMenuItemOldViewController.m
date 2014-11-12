@@ -108,7 +108,6 @@
     
     [backGroundScrollview addSubview:myWebView];
 
-    [self httpRequest:0];
     
     //设置
     
@@ -120,6 +119,7 @@
     [pageController bringSubviewToFront:self.view];
     
     [self loadBottomView];
+    [self httpRequest:0];
 
 }
 
@@ -133,7 +133,15 @@
         NSLog(@"%d",[result intValue]);
         for(int i=0;i<[result intValue];i++)
         {
-            [dataArray addObject:[NSString stringWithFormat:@"0%d",i+1]];
+            if(i+1<10)
+            {
+                [dataArray addObject:[NSString stringWithFormat:@"0%d",i+1]];
+
+            }
+            else
+            {
+                [dataArray addObject:[NSString stringWithFormat:@"%d",i+1]];
+            }
         }
         NSLog(@"%@",dataArray);
         

@@ -18,6 +18,9 @@
     NSMutableArray * dataArray;
     
     UIView * buttomView;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -26,7 +29,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
+    [self.view setBackgroundColor:myWhiteColor];
 
     selectDictionary = [[NSMutableDictionary alloc] init];
     myCustom = [[NavCustom alloc] init];
@@ -47,6 +62,7 @@
     _myTable.delegate =self;
     _myTable.dataSource =self;
     _myTable.tableFooterView = [[UIView alloc] init];
+    _myTable.backgroundColor = myWhiteColor;
     [self.view addSubview:_myTable];
     
     buttomView= [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
@@ -126,13 +142,23 @@
     NSDictionary * tempDic = [[NSDictionary alloc] init];
     tempDic  = [dataArray objectAtIndex:indexPath.row];
     
-    [cell.ICON setImageWithURL:[NSURL URLWithString:[[[[tempDic objectForKey:key] objectForKey:@"imgs"] objectAtIndex:0] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+    {
+        [cell.ICON setImageWithURL:[NSURL URLWithString:[[[[tempDic objectForKey:key] objectForKey:@"imgs"] objectAtIndex:0] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
+    }
+    else
+    {
+        [cell.ICON setImage:[UIImage imageNamed:@"noImage"]];
+
+    }
     
     NSString * title = [[[tempDic objectForKey:key] objectForKey:@"article"] objectForKey:@"title"];
     title =[title stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     title =[title stringByReplacingOccurrencesOfString:@"  " withString:@""];
     cell.titleLabel.text = title;
-
+    cell.titleLabel.textColor = myBlackColor;
+    
     NSString * strContent =[[[tempDic objectForKey:key] objectForKey:@"article"] objectForKey:@"content"];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"</p>" withString:@""];
     strContent =[strContent stringByReplacingOccurrencesOfString:@"<br />" withString:@""];
@@ -142,9 +168,10 @@
 
 
     cell.contentLabel.text = strContent;
-
+    cell.contentLabel.textColor = myBlackColor;
+    
     cell.buttomLabel.text = [[[tempDic objectForKey:key] objectForKey:@"article"] objectForKey:@"create_time"];
-
+    cell.buttomLabel.textColor = myBlackColor;
     cell.buttomLabel.textAlignment = NSTextAlignmentRight;
 
     if([[selectDictionary objectForKey:[NSString stringWithFormat:@"%d",indexPath.row+1]] isEqualToString:@"ok"])
@@ -168,6 +195,8 @@
     {
         cell.selectButton.hidden = YES;
     }
+    
+    cell.backgroundColor = myWhiteColor;
     return cell;
 }
 
@@ -330,7 +359,9 @@
     NSLog(@"%@",tempArr);
     NSLog(@"%@",dataArray);
 
-    NSMutableArray * tempDataArray = dataArray;
+    NSMutableArray * tempDataArray =[[NSMutableArray alloc] initWithArray: dataArray];
+    NSLog(@"%d",[dataArray count]);
+    
     for(int i=0;i<[dataArray count];i++)
     {
         NSDictionary * dic = [dataArray objectAtIndex:i];
@@ -347,19 +378,16 @@
             }
             else
             {
-                NSLog(@"%@",[[dic allKeys] objectAtIndex:j]);
                 if([tempArr indexOfObject:[[dic allKeys] objectAtIndex:j]] != NSNotFound)
                 {
                     [tempDataArray removeObject:dic];
-                    i=i-1;
                     NSLog(@"%@",dataArray);
-                    break;
                 }
             }
         }
     }
     
-    dataArray = tempDataArray;
+    dataArray =tempDataArray;
     [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:@"newsid"];
     NSLog(@"%@",dataArray);
     [selectDictionary removeAllObjects];

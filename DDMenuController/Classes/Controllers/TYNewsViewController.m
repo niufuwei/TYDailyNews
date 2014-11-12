@@ -68,6 +68,8 @@
     TYNewsView * news;
     UIButton *collect;
     UIView * BGView;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @property (nonatomic, strong) UIView *contentView;
@@ -91,8 +93,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self.view setBackgroundColor:myWhiteColor];
     dataDictionary=[[NSDictionary alloc] init];
     
     news = [[TYNewsView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -126,7 +139,7 @@
     [BGView addGestureRecognizer:tap];
     
     contentView = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.bounds.size.width, 250)];
-    contentView.backgroundColor = [UIColor whiteColor];
+    contentView.backgroundColor = myWhiteColor;
     [BGView addSubview:contentView];
     
     UILabel *shareLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 77, 32)];
@@ -155,12 +168,12 @@
     
     dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [dismissButton setTitle:@"取消" forState:UIControlStateNormal];
-    [dismissButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [dismissButton setTitleColor:myBlackColor forState:UIControlStateNormal];
     dismissButton.layer.cornerRadius = 2.0f;
     dismissButton.layer.borderColor = [UIColor colorWithRed:180.0/255.0 green:180.0/255.0 blue:180.0/255.0 alpha:1].CGColor;
     dismissButton.layer.borderWidth = .5f;
     dismissButton.frame = CGRectMake(20, _QZone.frame.origin.y + _QZone.frame.size.height + 12, self.view.bounds.size.width - 40, 49);
-    dismissButton.backgroundColor = [UIColor whiteColor];
+    dismissButton.backgroundColor = myWhiteColor;
     [dismissButton addTarget:self action:@selector(dismissButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [contentView addSubview:dismissButton];
 
@@ -236,13 +249,11 @@
             [button setBackgroundImage:[UIImage imageNamed:@"collect"] forState:UIControlStateNormal];
             
             
-            NSLog(@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"]);
-            
             if([[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"])
             {
                 NSMutableArray * arrID = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"];
 
-                NSArray * arr = (NSArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"];
+                NSMutableArray * arr = (NSMutableArray*)[[NSUserDefaults standardUserDefaults] objectForKey:@"newsid"];
                 if([arr count] == 0)
                 {
                     NSMutableDictionary * dic = [NSMutableDictionary dictionaryWithObject:dataDictionary forKey:newsIDTT];
@@ -257,7 +268,10 @@
                         [dic setObject:@"0" forKey:@"isNews"];
 
                     }
-                    [arrID addObject:dic];
+                    
+                    NSMutableArray * IDIDIDIDIDIDIDI = [[NSMutableArray alloc] initWithArray:arrID];
+                    
+                    [IDIDIDIDIDIDIDI addObject:dic];
                     
                     
                     
@@ -267,7 +281,7 @@
                     
                     indicator.mode = MBProgressHUDModeText;
                     [window addSubview:indicator];
-                    [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+                    [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
                     
                     [indicator showAnimated:YES whileExecutingBlock:^{
                         sleep(1.2);
@@ -276,7 +290,7 @@
                         
                     }];
                     
-                    [[NSUserDefaults standardUserDefaults] setObject:arrID forKey:@"newsid"];
+                    [[NSUserDefaults standardUserDefaults] setObject:IDIDIDIDIDIDIDI forKey:@"newsid"];
 
 
                 }
@@ -304,8 +318,6 @@
                         
                     }
                     
-                    NSLog(@"%@",arr);
-                    NSLog(@"%@",tempArray);
                     
                     if([tempArray indexOfObject:newsIDTT] != NSNotFound)
                     {
@@ -339,7 +351,12 @@
                             [dic setObject:@"0" forKey:@"isNews"];
                             
                         }
-                        [arrID addObject:dic];
+                        
+                        NSLog(@"%@",dic);
+                        NSMutableArray * IDIDIDIDIDIDIDI = [[NSMutableArray alloc] initWithArray:arrID];
+                        
+                        [IDIDIDIDIDIDIDI addObject:dic];
+
                         
 
                         UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
@@ -348,7 +365,7 @@
                         
                         indicator.mode = MBProgressHUDModeText;
                         [window addSubview:indicator];
-                        [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+                        [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
                         
                         [indicator showAnimated:YES whileExecutingBlock:^{
                             sleep(1.2);
@@ -357,7 +374,7 @@
                             
                         }];
                         
-                        [[NSUserDefaults standardUserDefaults] setObject:arrID forKey:@"newsid"];
+                        [[NSUserDefaults standardUserDefaults] setObject:IDIDIDIDIDIDIDI forKey:@"newsid"];
                         
                     }
 
@@ -379,15 +396,16 @@
                     [dic setObject:@"0" forKey:@"isNews"];
                     
                 }
-                [arrrr addObject:dic];
-
+                NSMutableArray * IDIDIDIDIDIDIDI = [[NSMutableArray alloc] initWithArray:arrrr];
+                
+                [IDIDIDIDIDIDIDI addObject:dic];
                 UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
                 CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
                 indicator.labelText = @"收藏成功";
 
                 indicator.mode = MBProgressHUDModeText;
                 [window addSubview:indicator];
-                [collect setBackgroundImage:[UIImage imageNamed:@"nocollect.png"] forState:UIControlStateNormal];
+                [collect setBackgroundImage:[UIImage imageNamed:@"collect.png"] forState:UIControlStateNormal];
 
                 [indicator showAnimated:YES whileExecutingBlock:^{
                     sleep(1.2);
@@ -395,7 +413,7 @@
                     [indicator removeFromSuperview];
                     
                 }];
-                [[NSUserDefaults standardUserDefaults] setObject:arrrr forKey:@"newsid"];
+                [[NSUserDefaults standardUserDefaults] setObject:IDIDIDIDIDIDIDI forKey:@"newsid"];
 
             }
         

@@ -56,6 +56,17 @@
     
     indexPage = 1;
     
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
     //设置导航左右按钮
     myNavCustom = [[NavCustom alloc] init];
 //    [myNavCustom setNavWithImage:@"LOGO.png" mySelf:self width:10 height:25];
@@ -72,6 +83,7 @@
     myScrollview.delegate = self;
     myScrollview.contentSize = CGSizeMake(self.view.frame.size.width*3, self.view.frame.size.height);
     myScrollview.pagingEnabled = YES;
+    myScrollview.backgroundColor = myWhiteColor;
     [self.view addSubview:myScrollview];
 
     feat  = [[TYDayFeaturedView alloc] init];

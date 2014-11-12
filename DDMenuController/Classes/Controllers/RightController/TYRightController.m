@@ -22,6 +22,8 @@
     NSString * wendu;
     NSString * tianqi;
     NSArray * imageArr;
+    
+    NSMutableDictionary * dataDic;
 }
 
 @synthesize mytable;
@@ -50,7 +52,7 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:28.0/255.0 green:30.0/255.0 blue:37.0/255.0 alpha:1]];
     imageArr = [NSArray arrayWithObjects:@"多云",@"大雨",@"小雨",@"小雪",@"晴",@"阴",@"雪",@"雨夹雪",@"雷阵雨",@"雾", nil];
     
-
+    dataDic = [[NSMutableDictionary alloc] init];
     iconArray = [[NSArray alloc] initWithObjects:@"download",@"like",@"set", nil];
     dataArray = [[NSArray alloc] initWithObjects:@"我的下载",@"我的收藏",@"个人设置", nil];
    
@@ -80,7 +82,7 @@
         NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary * dic = (NSDictionary*)[jsonData objectFromJSONData];
         tianqi =  [[dic objectForKey:@"weatherinfo"] objectForKey:@"weather"];
-        wendu =[[dic objectForKey:@"weatherinfo"] objectForKey:@"temp1"];
+        wendu =[[dic objectForKey:@"weatherinfo"] objectForKey:@"temp2"];
         
         [mytable reloadData];
 
@@ -101,18 +103,35 @@
     [super viewWillAppear:animated];
     [mytable deselectRowAtIndexPath:mytable.indexPathForSelectedRow animated:YES];
     
-    if([[NSUserDefaults standardUserDefaults] objectForKey:@"cityNumber"])
-    {
-        //去获取当前位置天气
-        [self getWeather];
-    }
-    else
-    {
-        
-    }
-    [mytable reloadData];
+    [self getInforMation];
+    
 }
 
+-(void)getInforMation
+{
+    myHttp = [[TYHttpRequest alloc] init];
+    [myHttp httpRequest:@"site/info" parameter:[NSString stringWithFormat:@"id=%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"]] Success:^(id result) {
+        
+        NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableDictionary * dic = (NSMutableDictionary*)[jsonData objectFromJSONData];
+        dataDic = dic;
+        if([[NSUserDefaults standardUserDefaults] objectForKey:@"cityNumber"])
+        {
+            //去获取当前位置天气
+            [self getWeather];
+        }
+        else
+        {
+            
+        }
+    } Failure:^(NSError *error) {
+        
+        NSLog(@"%@",error);
+    } view:self.view isPost:NO];
+    
+    [mytable reloadData];
+
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -131,38 +150,61 @@
         }
         
         cell.backgroundColor = [UIColor clearColor];
-        [cell.Avatar setImage:[UIImage imageNamed:@"user.png"]];
-        if(!wendu)
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isLogin"] isEqualToString:@"1"])
         {
-            cell.weather.text = @"0";
-        }
-        else
-        {
-            wendu = [wendu substringToIndex:[wendu length]-1];
-            cell.weather.text = wendu;
-
-        }
-        if(!tianqi)
-        {
-            
-        }
-        else
-        {
-            for(NSString * str in imageArr)
+            if([[dataDic objectForKey:@"sex"] isEqualToString:@"1"])
             {
-                NSRange range = [str rangeOfString:tianqi];
-                if(range.location != NSNotFound)
+                //男
+                [cell.Avatar setImage:[UIImage imageNamed:@"nan2.png"]];
+                
+                
+            }
+            else
+            {
+                //女
+                [cell.Avatar setImage:[UIImage imageNamed:@"nv2.png"]];
+                
+            }
+            if(!wendu)
+            {
+                cell.weather.text = @"0";
+            }
+            else
+            {
+                wendu = [wendu substringToIndex:[wendu length]-1];
+                cell.weather.text = wendu;
+                
+            }
+            if(!tianqi)
+            {
+                
+            }
+            else
+            {
+                for(NSString * str in imageArr)
                 {
-                    [cell.weatherImage setImage:[UIImage imageNamed:str]];
+                    NSRange range = [str rangeOfString:tianqi];
+                    if(range.location != NSNotFound)
+                    {
+                        [cell.weatherImage setImage:[UIImage imageNamed:str]];
+                    }
                 }
             }
+            
+            cell.userName.text = [dataDic objectForKey:@"nick"];
+
         }
-       
-        cell.userName.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"userName"];
-        cell.money.text = @"我的资金 12009000元";
+        else
+        {
+            [cell.Avatar setImage:[UIImage imageNamed:@"user.png"]];
+
+        }
+        
+//        cell.money.text = @"我的资金 12009000元";
         
         if(![[[NSUserDefaults standardUserDefaults] objectForKey:@"isLogin"] isEqualToString:@"1"])
         {
+            cell.imgDu.hidden = YES;
             cell.userName.hidden = YES;
             cell.money.hidden = YES;
             cell.weather.hidden = YES;
@@ -174,6 +216,7 @@
         }
         else
         {
+            cell.imgDu.hidden = NO;
             cell.userName.hidden = NO;
             cell.money.hidden = NO;
             cell.weather.hidden = NO;

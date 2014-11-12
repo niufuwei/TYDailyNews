@@ -17,6 +17,8 @@
     TYWeiboCV * weiboCV;
     UILabel * noComment;
     NavCustom * myNavCustom;
+    UIColor * myWhiteColor;
+    UIColor * myBlackColor;
 }
 
 @end
@@ -26,7 +28,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
+    
+    [self.view setBackgroundColor:myWhiteColor];
     myNavCustom = [[NavCustom alloc] init];
     //    [myNavCustom setNavWithImage:@"LOGO.png" mySelf:self width:10 height:25];
     [myNavCustom setNavWithText:@"评论" mySelf:self];
@@ -37,10 +51,11 @@
     _table.delegate =self;
     _table.dataSource = self;
     _table.tableFooterView = [[UIView alloc] init];
+    _table.backgroundColor = myWhiteColor;
     [self.view addSubview:_table];
 
     weiboCV = [[TYWeiboCV alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-64-50, self.view.frame.size.width, 50) ID:_WeiboID];
-    [weiboCV setBackgroundColor:[UIColor whiteColor]];
+    [weiboCV setBackgroundColor:myWhiteColor];
     [self.view addSubview:weiboCV];
     [weiboCV bringSubviewToFront:self.view];
     
@@ -87,7 +102,7 @@
         {
             noComment = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
             noComment.backgroundColor = [UIColor clearColor];
-            noComment.textColor = [UIColor blackColor];
+            noComment.textColor = myBlackColor;
             noComment.text = @"暂无评论";
             noComment.textAlignment = NSTextAlignmentCenter;
             noComment.font = [UIFont systemFontOfSize:16];
@@ -125,8 +140,12 @@
         cell = [[TYWeiboCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
     }
     
+    cell.backgroundColor = myWhiteColor;
+
     cell.content.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"text"];
+    cell.content.textColor = myBlackColor;
     cell.buttomLabel.text = [NSString stringWithFormat:@"回帖日期:%@",[[dataArray objectAtIndex:indexPath.row] objectForKey:@"created_at"]] ;
+    cell.buttomLabel.textColor = myBlackColor;
   
     return cell;
 }

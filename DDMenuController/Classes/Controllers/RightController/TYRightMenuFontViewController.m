@@ -15,6 +15,8 @@
     NSArray * dataArr;
     NSMutableDictionary * dic;
     NSInteger indexButton;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -29,15 +31,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
     NavCustom * cus = [[NavCustom alloc] init];
     [cus setNavWithText:@"字体" mySelf:self];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor =myWhiteColor;
     
     _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64)];
     _table.delegate =self;
     _table.dataSource= self;
     _table.tableFooterView = [[UIView alloc] init];
+    _table.backgroundColor = myWhiteColor;
     [self.view addSubview:_table];
     
     dic = [[NSMutableDictionary alloc] init];
@@ -98,6 +112,8 @@
 
     }
     
+    cell.font.textColor = myBlackColor;
+    cell.backgroundColor = myWhiteColor;
     cell.selectbBtton.tag = indexPath.row+1;
     [cell.selectbBtton addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
     return cell;

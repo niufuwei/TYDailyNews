@@ -20,6 +20,8 @@
     TYHttpRequest * httpRequest;
     NavCustom * custom;
     NSString *  myDate;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 @end
 
@@ -28,8 +30,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = myWhiteColor;
     
     custom = [[NavCustom alloc] init];
     [custom setNavWithText:_titleStr mySelf:self];
@@ -82,6 +94,8 @@
         
     } Failure:^(NSError *error) {
         NSLog(@"%@",error);
+        [_table headerEndRefreshing];
+        [_table footerEndRefreshing];
     } view:self.view isPost:FALSE];
     
 }
@@ -133,33 +147,35 @@
     }
     else
     {
-        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
-        {
-            static NSString * strID = @"cell1";
-            TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
-            if(!cell)
-            {
-                cell = [[TYDayFeatNoImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
-            }
-            
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-//            cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
-            cell.mytitle.frame = CGRectMake(cell.mytitle.frame.origin.x, 0, cell.mytitle.frame.size.width, cell.frame.size.height);
-            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
-            cell.type.hidden = YES;
-            
-            return cell;
-            
-        }
-        else
-        {
+//        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+//        {
+//            static NSString * strID = @"cell1";
+//            TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
+//            if(!cell)
+//            {
+//                cell = [[TYDayFeatNoImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+//            }
+//            
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+////            cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
+//            cell.mytitle.frame = CGRectMake(cell.mytitle.frame.origin.x, 0, cell.mytitle.frame.size.width, cell.frame.size.height);
+//            [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
+//            cell.type.hidden = YES;
+//            
+//            return cell;
+//            
+//        }
+//        else
+//        {
             static NSString * strID = @"cell2";
             TYDayFeatSingleImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
             if(!cell)
             {
                 cell = [[TYDayFeatSingleImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
             }
+            cell.backgroundColor = myWhiteColor;
+
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
             
@@ -179,15 +195,23 @@
 
             cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
             cell.title.frame = CGRectMake(cell.title.frame.origin.x, 0, cell.title.frame.size.width, 80);
-
-            [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
+        cell.title.textColor = myBlackColor;
+        
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+        {
+            [cell.image setImage:[UIImage imageNamed:@"noImage"]];
             
+        }
+        else
+        {
+            [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
+        }
 //            cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"SubTitle"]];
            
 //            cell.type.hidden = YES;
             
             return cell;
-        }
+//        }
 //        else
 //        {
 //            static NSString * strID = @"cell3";

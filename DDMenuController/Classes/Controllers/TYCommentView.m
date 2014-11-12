@@ -12,6 +12,8 @@
 {
     NSString * NEWSID;
     TYHttpRequest * httpRequest;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 /*
@@ -30,6 +32,18 @@
     {
         NEWSID = ID;
         
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+        {
+            myBlackColor = [UIColor whiteColor];
+            myWhiteColor = [UIColor grayColor];
+        }
+        else
+        {
+            myWhiteColor = [UIColor whiteColor];
+            myBlackColor = [UIColor grayColor];
+        }
+        
+        
         UIImageView * heng = [[UIImageView alloc] initWithFrame:CGRectMake(10, 1, self.frame.size.width-20, 1)];
         [heng setBackgroundColor:[UIColor grayColor]];
         heng.alpha = 0.5;
@@ -38,7 +52,7 @@
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, self.frame.size.width-100, 30)];
         _textField.delegate = self;
         _textField.placeholder=@"请输入评论内容";
-        _textField.layer.borderColor = [UIColor grayColor].CGColor;
+        _textField.layer.borderColor = myBlackColor.CGColor;
         _textField.layer.borderWidth = 0.3;
         [_textField.layer setCornerRadius:5];
         [self addSubview:_textField];
@@ -83,7 +97,7 @@
         {
             httpRequest = [[TYHttpRequest alloc] init];
             
-            NSDictionary * dic = [NSDictionary dictionaryWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"userName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],NEWSID,_textField.text, nil] forKeys:[NSArray arrayWithObjects:@"nick",@"author_id",@"article_id",@"content", nil]];
+            NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"userName"],[[NSUserDefaults standardUserDefaults] objectForKey:@"userID"],NEWSID,_textField.text, nil] forKeys:[NSArray arrayWithObjects:@"nick",@"author_id",@"article_id",@"content", nil]];
             
             NSString * strURL = @"";
             if(_isNesCenter)

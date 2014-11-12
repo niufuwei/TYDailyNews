@@ -18,6 +18,9 @@
     NSMutableArray * dataArray;
     
     UIView * buttomView;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -27,7 +30,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
+    [self.view setBackgroundColor:myWhiteColor];
     myCustom = [[NavCustom alloc] init];
     [myCustom setNavWithText:@"我的下载" mySelf:self];
     [myCustom setNavRightBtnTitle:@"管理" mySelf:self width:40 height:40];
@@ -48,6 +62,7 @@
     _myTable.delegate =self;
     _myTable.dataSource =self;
     _myTable.tableFooterView = [[UIView alloc] init];
+    _myTable.backgroundColor = myWhiteColor;
     [self.view addSubview:_myTable];
     
     buttomView= [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 40)];
@@ -115,7 +130,7 @@
         cell = [[TYCollectCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
     }
     
-    [cell.ICON setImageWithURL:[NSURL URLWithString:@"http://ww4.sinaimg.cn/thumbnail/50be8358jw1elezgzsxnaj20c80850tc.jpg"] placeholderImage:[UIImage imageNamed:@""]];
+    [cell.ICON setImageWithURL:[NSURL URLWithString:@"http://ww4.sinaimg.cn/thumbnail/50be8358jw1elezgzsxnaj20c80850tc.jpg"] placeholderImage:[UIImage imageNamed:@"noImage"]];
     
     NSMutableString * string = [[NSMutableString alloc] initWithString:[[[dataArray objectAtIndex:indexPath.row] allKeys] objectAtIndex:0]];
     [string insertString:@"-" atIndex:4];
@@ -123,9 +138,12 @@
 
     
     cell.contentLabel.text = [string stringByAppendingString:@" 点击打开PDF报纸"];
+    cell.contentLabel.textColor = myBlackColor;
     cell.contentLabel.textAlignment = NSTextAlignmentCenter;
     cell.titleLabel.hidden = YES;
+    cell.titleLabel.textColor = myBlackColor;
     cell.buttomLabel.hidden = YES;
+    cell.buttomLabel.textColor = myBlackColor;
     
     if([[selectDictionary objectForKey:[NSString stringWithFormat:@"%d",indexPath.row+1]] isEqualToString:@"ok"])
     {
@@ -148,6 +166,7 @@
     {
         cell.selectButton.hidden = YES;
     }
+    cell.backgroundColor = myWhiteColor;
     return cell;
 }
 

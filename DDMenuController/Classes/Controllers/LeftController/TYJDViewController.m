@@ -26,7 +26,11 @@
     UIButton * buttonPic;
     NSString * photoUrl;
     UIView * backGroundView;
+
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
+
 
 @end
 
@@ -35,13 +39,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
     NavCustom * custom = [[NavCustom alloc] init];
     [custom setNavWithText:@"我要报料" mySelf:self];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = myWhiteColor;
     
     backGroundScrollview= [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     backGroundScrollview.delegate =self;
+    backGroundScrollview.backgroundColor = myWhiteColor;
     [self.view addSubview:backGroundScrollview];
     
     //    backGroundScrollview.contentSize = CGSizeMake(self.view.frame.size.width, self.view.frame.size.height+1);
@@ -56,7 +72,7 @@
 {
     UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 20, 200, 20)];
     titleLabel.text = @"姓名: *";
-    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.textColor = myBlackColor;
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel];
@@ -72,7 +88,7 @@
     
     UILabel * titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(15, nameField.frame.size.height+nameField.frame.origin.y+10, 200, 20)];
     titleLabel2.text = @"电话: *";
-    titleLabel2.textColor = [UIColor blackColor];
+    titleLabel2.textColor = myBlackColor;
     titleLabel2.backgroundColor = [UIColor clearColor];
     titleLabel2.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel2];
@@ -91,7 +107,7 @@
     
     UILabel * titleLabel6 = [[UILabel alloc] initWithFrame:CGRectMake(15, phoneField.frame.size.height+phoneField.frame.origin.y+10, 200, 20)];
     titleLabel6.text = @"事件时间: *";
-    titleLabel6.textColor = [UIColor blackColor];
+    titleLabel6.textColor = myBlackColor;
     titleLabel6.backgroundColor = [UIColor clearColor];
     titleLabel6.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel6];
@@ -110,7 +126,7 @@
     
     UILabel * titleLabel7 = [[UILabel alloc] initWithFrame:CGRectMake(yearButton.frame.size.width+yearButton.frame.origin.x+5, titleLabel6.frame.size.height+titleLabel6.frame.origin.y+10, 20, 40)];
     titleLabel7.text = @"年";
-    titleLabel7.textColor = [UIColor blackColor];
+    titleLabel7.textColor = myBlackColor;
     titleLabel7.backgroundColor = [UIColor clearColor];
     titleLabel7.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel7];
@@ -127,7 +143,7 @@
     
     UILabel * titleLabel8 = [[UILabel alloc] initWithFrame:CGRectMake(monButton.frame.size.width+monButton.frame.origin.x+5, titleLabel6.frame.size.height+titleLabel6.frame.origin.y+10, 20, 40)];
     titleLabel8.text = @"月";
-    titleLabel8.textColor = [UIColor blackColor];
+    titleLabel8.textColor = myBlackColor;
     titleLabel8.backgroundColor = [UIColor clearColor];
     titleLabel8.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel8];
@@ -142,7 +158,7 @@
     
     UILabel * titleLabel9 = [[UILabel alloc] initWithFrame:CGRectMake(dayButton.frame.size.width+dayButton.frame.origin.x+5, titleLabel6.frame.size.height+titleLabel6.frame.origin.y+10, 20, 40)];
     titleLabel9.text = @"日";
-    titleLabel9.textColor = [UIColor blackColor];
+    titleLabel9.textColor =myBlackColor;
     titleLabel9.backgroundColor = [UIColor clearColor];
     titleLabel9.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel9];
@@ -152,7 +168,7 @@
     
     UILabel * titleLabel5 = [[UILabel alloc] initWithFrame:CGRectMake(15, titleLabel9.frame.size.height+titleLabel9.frame.origin.y+10, 200, 20)];
     titleLabel5.text = @"事件地点: *";
-    titleLabel5.textColor = [UIColor blackColor];
+    titleLabel5.textColor = myBlackColor;
     titleLabel5.backgroundColor = [UIColor clearColor];
     titleLabel5.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel5];
@@ -168,7 +184,7 @@
     
     UILabel * titleLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(15, address.frame.size.height+address.frame.origin.y+10, 200, 20)];
     titleLabel3.text = @"爆料标题: *";
-    titleLabel3.textColor = [UIColor blackColor];
+    titleLabel3.textColor = myBlackColor;
     titleLabel3.backgroundColor = [UIColor clearColor];
     titleLabel3.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel3];
@@ -185,7 +201,7 @@
     
     UILabel * titleLabel4 = [[UILabel alloc] initWithFrame:CGRectMake(15, titleField.frame.size.height+titleField.frame.origin.y+10, 200, 20)];
     titleLabel4.text = @"爆料标题: *";
-    titleLabel4.textColor = [UIColor blackColor];
+    titleLabel4.textColor = myBlackColor;
     titleLabel4.backgroundColor = [UIColor clearColor];
     titleLabel4.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:titleLabel4];

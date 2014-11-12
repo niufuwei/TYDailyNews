@@ -28,6 +28,9 @@
     NSMutableDictionary * dataDic;
     NSString * requestURL;
     NSInteger topIndex;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -44,6 +47,17 @@
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
 
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
     dataDic=  [[NSMutableDictionary alloc] init];
     _urlArray = [[NSMutableArray alloc] initWithObjects:@"yw/list",@"jj/list",@"sh/list",@"sy/list",@"gj/list",@"wt/list",nil];
     _menuArray = [NSMutableArray arrayWithObjects:@"要闻",@"经济",@"社会",@"声音",@"国际",@"文体", nil];

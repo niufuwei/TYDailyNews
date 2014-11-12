@@ -35,12 +35,12 @@
     if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
     {
         myBlackColor = [UIColor whiteColor];
-        myWhiteColor = [UIColor blackColor];
+        myWhiteColor = [UIColor grayColor];
     }
     else
     {
         myWhiteColor = [UIColor whiteColor];
-        myBlackColor = [UIColor blackColor];
+        myBlackColor = [UIColor grayColor];
     }
     self.backgroundColor = myWhiteColor;
     [self setupRefresh];
@@ -74,6 +74,15 @@
         myDate = requestDateString;
     }
     
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"mulu"])
+    {
+        dataArray = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"mulu"]];
+        [table reloadData];
+    }
+    else
+    {
+        
+    }
  
     [self setupRefresh];
 
@@ -114,22 +123,12 @@
             cell = [[TYDayDireetiorySingleCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
         }
         
-        NSLog(@"%@",[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"title"]);
-    
-        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
-        {
-            cell.isDayShow = TRUE;
-        }
-        else
-        {
-            cell.isDayShow = false;
-        }
     
         cell.myTitle.text = [CS DealWithString:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"title"]];
-        
-        NSNumberFormatter* numberFormatter = [[NSNumberFormatter alloc] init];
-        
-        cell.num.text = [numberFormatter stringFromNumber:[[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"ccount"]];
+        cell.myTitle.textColor = myBlackColor;
+    
+        cell.num.text = [[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"articles"] objectAtIndex:indexPath.row] objectForKey:@"ccount"];
+        cell.num.textColor = myBlackColor;
 //        cell.num.text = [[[[dataArray objectAtIndex:indexPath.section] objectForKey:@"Articles"] objectAtIndex:indexPath.row] objectForKey:@"Ccount"];
     
         cell.backgroundColor = myWhiteColor;
@@ -160,6 +159,7 @@
     
     view.value.text = [[dataArray objectAtIndex:section] objectForKey:@"pageNo"];
     view.type.text =[[dataArray objectAtIndex:section] objectForKey:@"pageName"];
+    
     return view;
 }
 
@@ -203,6 +203,7 @@
 //            [dataArray addObject:[arr objectAtIndex:i]];
 //        }
 //
+        [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:@"mulu"];
         [table reloadData];
         [table headerEndRefreshing];
         
@@ -223,6 +224,7 @@
             [indicator removeFromSuperview];
             
         }];
+        
         
     } view:self isPost:FALSE];
 

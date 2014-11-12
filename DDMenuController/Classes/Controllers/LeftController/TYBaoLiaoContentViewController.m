@@ -17,6 +17,8 @@
     NSMutableArray * dataArray;
     NSInteger indexPage;
     
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -27,20 +29,38 @@
 {
     if(self = [super initWithFrame:frame])
     {
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+        {
+            myBlackColor = [UIColor whiteColor];
+            myWhiteColor = [UIColor grayColor];
+        }
+        else
+        {
+            myWhiteColor = [UIColor whiteColor];
+            myBlackColor = [UIColor grayColor];
+        }
+        
         [self setBackgroundColor:[UIColor whiteColor]];
-     
         url = withUrl;
         
         _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
         _table.delegate =self;
         _table.dataSource =self;
         _table.tableFooterView = [[UIView alloc] init];
+        _table.backgroundColor = myWhiteColor;
         [self addSubview:_table];
         
         dataArray = [[NSMutableArray alloc] init];
         
         //加载数据
         //    [self loadlayoutView];
+        
+        
+        if([[NSUserDefaults standardUserDefaults] objectForKey:url])
+        {
+            dataArray = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:url]];
+            [_table reloadData];
+        }
         
         [self setupRefresh];
 
@@ -71,7 +91,15 @@
     }
     else
     {
-        [cell.icon setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+        {
+            [cell.icon setImage:[UIImage imageNamed:@"noImage"]];
+        }
+        else
+        {
+            [cell.icon setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
+
+        }
         if([[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] length] ==0)
         {
             cell.type.hidden = YES;
@@ -106,10 +134,12 @@
             }
             
         }
+        cell.titleLabel.textColor = myBlackColor;
         cell.bottomLabel.text = [[[[dataArray objectAtIndex:indexPath.row] objectForKey:@"name"] stringByAppendingString:@"   "] stringByAppendingString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"create_time"]];
-        
+        cell.bottomLabel.textColor = myBlackColor;
 
     }
+        cell.backgroundColor = myWhiteColor;
        return cell;
 }
 
@@ -139,6 +169,7 @@
             [dataArray addObject:[arr objectAtIndex:i]];
         }
       
+        [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:url];
         [_table reloadData];
         [_table headerEndRefreshing];
         [_table footerEndRefreshing];
@@ -147,6 +178,8 @@
     } Failure:^(NSError *error) {
         NSLog(@"error==>%@",error);
         
+        [_table headerEndRefreshing];
+        [_table footerEndRefreshing];
     } view:self isPost:NO];
 }
 

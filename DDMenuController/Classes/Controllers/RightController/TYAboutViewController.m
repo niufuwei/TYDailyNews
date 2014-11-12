@@ -11,6 +11,8 @@
 @interface TYAboutViewController ()
 {
     UIScrollView * bgScrollview;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -20,12 +22,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
+    
     NavCustom * cus = [[NavCustom alloc] init];
     [cus setNavWithText:@"关于我们" mySelf:self];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = myWhiteColor;
     
     bgScrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    bgScrollview.backgroundColor = myWhiteColor;
     [self.view addSubview:bgScrollview];
     
     UIImageView * Icon = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-40, 50, 80, 80)];
@@ -38,7 +53,7 @@
     
     UILabel * label = [[UILabel alloc] initWithFrame:CGRectMake(0, Icon2.frame.size.height+Icon2.frame.origin.y+5, self.view.frame.size.width, 15)];
     label.backgroundColor = [UIColor clearColor];
-    label.textColor = [UIColor grayColor];
+    label.textColor = myBlackColor;
     label.font = [UIFont systemFontOfSize:11];
     label.textAlignment = NSTextAlignmentCenter;
     label.text = @"V1.212";
@@ -50,7 +65,7 @@
     
     UILabel * label2 = [[UILabel alloc] initWithFrame:CGRectMake(0, label.frame.size.height+label.frame.origin.y+10, self.view.frame.size.width, 50)];
     label2.backgroundColor = [UIColor clearColor];
-    label2.textColor = [UIColor grayColor];
+    label2.textColor = [UIColor blackColor];
     label2.font = [UIFont systemFontOfSize:14];
     label2.textAlignment = NSTextAlignmentCenter;
     label2.text = @"传递太原信息，助力龙城发展";
@@ -60,14 +75,14 @@
     label3.backgroundColor = [UIColor clearColor];
     [label3 setTitle:@"版本更新" forState:UIControlStateNormal];
     label3.titleLabel.font = [UIFont systemFontOfSize:14];
-    [label3 setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [label3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     label3.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [label3 addTarget:self action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
     [bgScrollview addSubview:label3];
     
     UILabel * label4 = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-80-64, self.view.frame.size.width, 20)];
     label4.backgroundColor = [UIColor clearColor];
-    label4.textColor = [UIColor grayColor];
+    label4.textColor = myBlackColor;
     label4.font = [UIFont systemFontOfSize:13];
     label4.textAlignment = NSTextAlignmentCenter;
     label4.text = @"官网  微博";
@@ -75,7 +90,7 @@
     
     UILabel * label5 = [[UILabel alloc] initWithFrame:CGRectMake(0, label4.frame.size.height+label4.frame.origin.y, self.view.frame.size.width, 20)];
     label5.backgroundColor = [UIColor clearColor];
-    label5.textColor = [UIColor grayColor];
+    label5.textColor = myBlackColor;
     label5.font = [UIFont systemFontOfSize:13];
     label5.textAlignment = NSTextAlignmentCenter;
     label5.text = @"Copyright 20XX-20XX.TYRB";
@@ -90,7 +105,7 @@
     UIWindow *window = [[UIApplication sharedApplication].windows objectAtIndex:[[UIApplication sharedApplication].windows count]-1];
     CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
     indicator.labelText = @"已是最新版本";
-    
+    indicator.color = myBlackColor;
     indicator.mode = MBProgressHUDModeText;
     [window addSubview:indicator];
     

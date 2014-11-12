@@ -15,6 +15,12 @@
     UIScrollView *backGroundScrollview;
     TYHttpRequest * httpRequest;
     NSInteger xingbie ;
+    
+    UIButton * nvButton;
+    UIButton * nanButton;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -24,9 +30,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    xingbie = -1;
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
+    
+    
+    [self.view setBackgroundColor:myWhiteColor];
+    
+    xingbie = 1;
     myNavcustom = [[NavCustom alloc] init];
     
     backGroundScrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -74,7 +94,7 @@
 
 //    }
     textType.text = tempType;
-    textType.textColor = [UIColor grayColor];
+    textType.textColor = myBlackColor;
     textType.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:textType];
     
@@ -133,21 +153,21 @@
     
     UILabel * touxiangset = [[UILabel alloc] initWithFrame:CGRectMake(20, imageHeng.frame.size.height+imageHeng.frame.origin.y+10, self.view.frame.size.width, 20)];
     
-    touxiangset.text = @"账户设置:";
-    touxiangset.textColor = [UIColor grayColor];
+    touxiangset.text = @"性别:";
+    touxiangset.textColor = myBlackColor;
     touxiangset.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:touxiangset];
     
     
-    UIButton * nanButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    nanButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nanButton.frame = CGRectMake(self.view.frame.size.width/2-60, touxiangset.frame.size.height+touxiangset.frame.origin.y+10, 60, 60);
-    [nanButton setBackgroundImage:[UIImage imageNamed:@"nan"] forState:UIControlStateNormal];
+    [nanButton setBackgroundImage:[UIImage imageNamed:@"nan2"] forState:UIControlStateNormal];
     nanButton.tag = 10086;
     [nanButton addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
     [backGroundScrollview addSubview:nanButton];
     
     
-    UIButton * nvButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    nvButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nvButton.frame = CGRectMake(nanButton.frame.size.width+nanButton.frame.origin.x+20, touxiangset.frame.size.height+touxiangset.frame.origin.y+10, 60, 60);
     [nvButton setBackgroundImage:[UIImage imageNamed:@"nv"] forState:UIControlStateNormal];
     nvButton.tag = 10010;
@@ -157,7 +177,7 @@
     UILabel * set = [[UILabel alloc] initWithFrame:CGRectMake(20, nvButton.frame.size.height+nvButton.frame.origin.y+10, self.view.frame.size.width, 20)];
     
     set.text = @"账户设置:";
-    set.textColor = [UIColor grayColor];
+    set.textColor = myBlackColor;
     set.font = [UIFont systemFontOfSize:14];
     [backGroundScrollview addSubview:set];
     
@@ -252,7 +272,7 @@
             break;
         case 103:
         {
-            if([_Textfield.text length] ==0 ||[_password.text length] ==0 ||[_usename.text length] ==0 || xingbie ==-1)
+            if([_Textfield.text length] ==0 ||[_password.text length] ==0 ||[_usename.text length] ==0 )
             {
                 UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"" message:@"请将您的信息填写完整." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                 [alert show];
@@ -326,6 +346,8 @@
         {
             //男
             xingbie = 1;
+            [nanButton setBackgroundImage:[UIImage imageNamed:@"nan2"] forState:UIControlStateNormal];
+            [nvButton setBackgroundImage:[UIImage imageNamed:@"nv"] forState:UIControlStateNormal];
         }
             break;
             
@@ -333,6 +355,8 @@
         {
             //女
             xingbie = 0;
+            [nanButton setBackgroundImage:[UIImage imageNamed:@"nan"] forState:UIControlStateNormal];
+            [nvButton setBackgroundImage:[UIImage imageNamed:@"nv2"] forState:UIControlStateNormal];
         }
             break;
         default:

@@ -20,6 +20,9 @@
     TYZongLan * zonglan;
     NSArray * titleArr;
     NSArray * urlArray;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 
@@ -30,14 +33,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
+    
     buttonIndex = -1;
     
     myScrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     myScrollview.showsHorizontalScrollIndicator = NO;
     myScrollview.showsVerticalScrollIndicator = NO;
+    myScrollview.backgroundColor = myWhiteColor;
     [self.view addSubview:myScrollview];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = myWhiteColor;
     myNavCustom = [[NavCustom alloc] init];
     [myNavCustom setNavWithText:@"龙城纵览" mySelf:self];
     [myNavCustom setNavLeftBtnImage:@"left_ios.png" LeftBtnSelectedImage:@"" mySelf:self width:18 height:15];
@@ -66,6 +83,8 @@
         [zonglan.button setBackgroundImage:[UIImage imageNamed:[imageNoSelectArr objectAtIndex:i]] forState:UIControlStateNormal];
         
         zonglan.titleLabel.text = [titleArr objectAtIndex:i];
+        zonglan.titleLabel.textColor = myBlackColor;
+        zonglan.backgroundColor = myWhiteColor;
         myXX =zonglan.frame.size.width+zonglan.frame.origin.x+20;
         if(myXX>self.view.frame.size.width/2+100)
         {
@@ -83,33 +102,33 @@
     UIButton * button = (UIButton*)sender;
     NSLog(@"%d",button.tag);
     
-    if(buttonIndex ==-1)
-    {
+//    if(buttonIndex ==-1)
+//    {
         [button setBackgroundImage:[UIImage imageNamed:[imageSelectedArr objectAtIndex:button.tag-100]] forState:UIControlStateNormal];
-    }
-    else
-    {
-        if(buttonIndex ==button.tag)
-        {
-            
-        }
-        else
-        {
-            [button setBackgroundImage:[UIImage imageNamed:[imageSelectedArr objectAtIndex:button.tag-100]] forState:UIControlStateNormal];
-
-            
-            for(UIView * view in myScrollview.subviews)
-            {
-                if(view.tag ==  buttonIndex)
-                {
-                    TYZongLan * temp = (TYZongLan*)view;
-                    [temp.button setBackgroundImage:[UIImage imageNamed:[imageNoSelectArr objectAtIndex:buttonIndex-100]] forState:UIControlStateNormal];
-                }
-            }
-        }
-
-    }
-    
+//    }
+//    else
+//    {
+//        if(buttonIndex ==button.tag)
+//        {
+//            
+//        }
+//        else
+//        {
+//            [button setBackgroundImage:[UIImage imageNamed:[imageSelectedArr objectAtIndex:button.tag-100]] forState:UIControlStateNormal];
+//
+//            
+//            for(UIView * view in myScrollview.subviews)
+//            {
+//                if(view.tag ==  buttonIndex)
+//                {
+//                    TYZongLan * temp = (TYZongLan*)view;
+//                    [temp.button setBackgroundImage:[UIImage imageNamed:[imageNoSelectArr objectAtIndex:buttonIndex-100]] forState:UIControlStateNormal];
+//                }
+//            }
+//        }
+//
+//    }
+//    
     TYLongInforViewController * infor = [[TYLongInforViewController alloc] init];
     infor.titleStr = [titleArr objectAtIndex:button.tag-100];
     infor.requestUrl = [urlArray objectAtIndex:button.tag-100];

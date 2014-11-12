@@ -12,5 +12,4 @@
 
 @property (nonatomic,strong) UILabel * myTitle;
 @property (nonatomic,strong) UILabel * num;
-@property (nonatomic) BOOL isDayShow;
 @end

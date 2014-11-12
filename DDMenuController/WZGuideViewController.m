@@ -10,9 +10,9 @@
 
 @interface WZGuideViewController ()
 {
-    UIImageView * imageTop;
     UIImageView * imageBG;
     BOOL isShow;
+    TYHttpRequest * myHttp;
 }
 
 @end
@@ -174,6 +174,7 @@
     
     NSArray *imageNameArray = [NSArray arrayWithObjects:@"bgDefault",nil];
     
+    __block  NSString * imageUrl ;
     
     _pageScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     self.pageScroll.pagingEnabled = YES;
@@ -181,56 +182,70 @@
     self.pageScroll.contentSize = CGSizeMake(self.view.frame.size.width * imageNameArray.count+1, self.view.frame.size.height);
     [self.view addSubview:self.pageScroll];
     
-    NSString *imgName = nil;
-    UIView *view;
-    for (int i = 0; i < imageNameArray.count; i++) {
-        imgName = [imageNameArray objectAtIndex:i];
-        view = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width * i), -20.f, self.view.frame.size.width, self.view.frame.size.height)];
-        view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:imgName]];
-        [self.pageScroll addSubview:view];
+    //获得图片
+    myHttp = [[TYHttpRequest alloc] init];
+    [myHttp httpRequest:@"welcome/view" parameter:[NSString stringWithFormat:@"type=ios&size=720"] Success:^(id result) {
+        NSLog(@"%@",result);
+        imageUrl = result;
         
-//        if (i == imageNameArray.count - 1) {            
-//            UIButton *checkButton = [[UIButton alloc] initWithFrame:CGRectMake(80.f, 355.f, 15.f, 15.f)];
-//            [checkButton setImage:[UIImage imageNamed:@"checkBox_selectCheck"] forState:UIControlStateSelected];
-//            [checkButton setImage:[UIImage imageNamed:@"checkBox_blankCheck"] forState:UIControlStateNormal];
-//            [checkButton addTarget:self action:@selector(pressCheckButton:) forControlEvents:UIControlEventTouchUpInside];
-//            [checkButton setSelected:YES];
-//            [view addSubview:checkButton];
-//            
-//            UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(0.f, 0.f, 175.f, 35.f)];
-//            [enterButton setTitle:@"开始使用" forState:UIControlStateNormal];
-//            [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//            [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-//            [enterButton setCenter:CGPointMake(self.view.center.x, 417.f)];
-//            [enterButton setBackgroundImage:[UIImage imageNamed:@"btn_nor"] forState:UIControlStateNormal];
-//            [enterButton setBackgroundImage:[UIImage imageNamed:@"btn_press"] forState:UIControlStateHighlighted];
-//            [enterButton addTarget:self action:@selector(pressEnterButton:) forControlEvents:UIControlEventTouchUpInside];
-//            [view addSubview:enterButton];
-//        }
+        [self performSelectorOnMainThread:@selector(onShowImage:) withObject:result waitUntilDone:NO];
         
+    } Failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        [self hideGuide];
+    } view:self.view isPost:NO];
     
-        
-        imageBG= [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-120)];
-        imageBG.alpha = 0;
-        [imageBG setImage:[UIImage imageNamed:@"top"]];
-        [self.pageScroll addSubview:imageBG];
-        
-        imageTop = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width-70, self.view.frame.size.height-150, 50, 50)];
-        [imageTop setImage:[UIImage imageNamed:@"NewIcon"]];
-        imageTop.alpha = 0;
-        [self.pageScroll addSubview:imageTop];
-    }
+   
     
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:NO];
+//    NSString *imgName = nil;
+//    UIImageView *view;
+//    for (int i = 0; i < imageNameArray.count; i++) {
+//        imgName = [imageNameArray objectAtIndex:i];
+//        view = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width * i), 0.f, self.view.frame.size.width, self.view.frame.size.height)];
+//    
+//        
+////        view.backgroundColor = [UIColor colorWithPatternImage:<#(UIImage *)#>];
+//        [self.pageScroll addSubview:view];
+//        
+////        if (i == imageNameArray.count - 1) {            
+////            UIButton *checkButton = [[UIButton alloc] initWithFrame:CGRectMake(80.f, 355.f, 15.f, 15.f)];
+////            [checkButton setImage:[UIImage imageNamed:@"checkBox_selectCheck"] forState:UIControlStateSelected];
+////            [checkButton setImage:[UIImage imageNamed:@"checkBox_blankCheck"] forState:UIControlStateNormal];
+////            [checkButton addTarget:self action:@selector(pressCheckButton:) forControlEvents:UIControlEventTouchUpInside];
+////            [checkButton setSelected:YES];
+////            [view addSubview:checkButton];
+////            
+////            UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(0.f, 0.f, 175.f, 35.f)];
+////            [enterButton setTitle:@"开始使用" forState:UIControlStateNormal];
+////            [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+////            [enterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
+////            [enterButton setCenter:CGPointMake(self.view.center.x, 417.f)];
+////            [enterButton setBackgroundImage:[UIImage imageNamed:@"btn_nor"] forState:UIControlStateNormal];
+////            [enterButton setBackgroundImage:[UIImage imageNamed:@"btn_press"] forState:UIControlStateHighlighted];
+////            [enterButton addTarget:self action:@selector(pressEnterButton:) forControlEvents:UIControlEventTouchUpInside];
+////            [view addSubview:enterButton];
+////        }
+//        
+//    }
+    
+    
+}
+
+-(void)onShowImage:(id)sender
+{
+    imageBG = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [imageBG setImageWithURL:[NSURL URLWithString:sender]];
+    [self.pageScroll addSubview:imageBG];
     
     [self showImage];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:NO];
+
 }
 
 -(void)showImage
 {
     [UIView animateWithDuration:0.6 animations:^{
         imageBG.alpha = 1;
-        imageTop.alpha = 1;
     }];
 }
 

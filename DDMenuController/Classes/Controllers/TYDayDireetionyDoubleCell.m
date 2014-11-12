@@ -9,10 +9,7 @@
 #import "TYDayDireetionyDoubleCell.h"
 
 @implementation TYDayDireetionyDoubleCell
-{
-    UIColor * myBlackColor;
-    UIColor * myWhiteColor;
-}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -26,16 +23,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         
-        if(_isDayShow)
-        {
-            myBlackColor = [UIColor whiteColor];
-            myWhiteColor = [UIColor blackColor];
-        }
-        else
-        {
-            myWhiteColor = [UIColor whiteColor];
-            myBlackColor = [UIColor blackColor];
-        }
         
         UIButton * leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [leftButton setBackgroundColor:[UIColor clearColor]];
@@ -53,7 +40,6 @@
         
         _myTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width/2-5, 60)];
         _myTitle.backgroundColor =[ UIColor clearColor];
-        _myTitle.textColor = myBlackColor;
         _myTitle.font = [UIFont systemFontOfSize:14];
         _myTitle.textAlignment = NSTextAlignmentCenter;
         _myTitle.numberOfLines = 0;//表示label可以多行显示
@@ -66,17 +52,7 @@
         
         _num = [[UILabel alloc] initWithFrame:CGRectMake(message.frame.size.width+message.frame.origin.x+5, _myTitle.frame.size.height+_myTitle.frame.origin.y+5, 40, 15)];
         _num.backgroundColor =[ UIColor clearColor];
-        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
-        {
-            _num.textColor = myBlackColor;
-
-        }
-        else
-        {
-            _num.textColor = [UIColor grayColor];
-
-        }
-        _num.font = [UIFont systemFontOfSize:12];
+               _num.font = [UIFont systemFontOfSize:12];
         _num.textAlignment = NSTextAlignmentLeft;
         [leftButton addSubview:_num];
         
@@ -86,7 +62,6 @@
         
         _myTitle2 = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2+5, 0, self.frame.size.width/2-5, 60)];
         _myTitle2.backgroundColor =[ UIColor clearColor];
-        _myTitle2.textColor = myBlackColor;
         _myTitle2.font = [UIFont systemFontOfSize:14];
         _myTitle2.textAlignment = NSTextAlignmentCenter;
         _myTitle2.numberOfLines = 0;//表示label可以多行显示
@@ -99,16 +74,7 @@
         
         _num2 = [[UILabel alloc] initWithFrame:CGRectMake(message2.frame.size.width+message2.frame.origin.x+5, 0, 40, 15)];
         _num2.backgroundColor =[ UIColor clearColor];
-        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
-        {
-            _num2.textColor = myBlackColor;
-            
-        }
-        else
-        {
-            _num2.textColor = [UIColor grayColor];
-            
-        }
+       
         _num2.font = [UIFont systemFontOfSize:12];
         _num2.textAlignment = NSTextAlignmentLeft;
         [rightButton addSubview:_num2];

@@ -10,7 +10,7 @@
 #import "TYDayFeatSingleImageCell.h"
 #import "TYDayFeatMutableImageCell.h"
 #import "TYDayFeatNoImageCell.h"
-#import "TYHeadCell.h"
+#import "TYNewsHeadCell.h"
 #import "MJRefresh.h"
 
 
@@ -19,17 +19,36 @@
     TYHttpRequest * httpRequest;
     __block NSMutableArray * dataArray;
     __block NSMutableArray * imageArray;
-    BOOL isHeadViewLoad;
+//    BOOL isHeadViewLoad;
     
     NSInteger pageIndex;
     
     NSString * myDate;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
     
+    NSString * imageRequestUrl;
+    BOOL isShowSection;
 }
 
 - (void)viewLayout:(NSString *)requestDateString{
+
+    NSRange range = [_newsRequest rangeOfString:@"/"];
+    imageRequestUrl =  [_newsRequest substringToIndex:range.location];
+    imageRequestUrl = [imageRequestUrl stringByAppendingString:@"/selimgs"];
     
-    self.backgroundColor = [UIColor whiteColor];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
+    self.backgroundColor = myWhiteColor;
 
     //    scroller=[[EScrollerView alloc] initWithFrameRect:CGRectMake(0, 0, self.frame.size.width, 160)
     //                                                          ImageArray:[NSArray arrayWithObjects:@"temp.jpg",@"KV图片.png", nil]
@@ -56,9 +75,19 @@
     _table.delegate = self;
     _table.dataSource = self;
     _table.tableFooterView = [[UIView alloc] init];
+    _table.backgroundColor = myWhiteColor;
     [self addSubview:_table];
     
+    NSLog(@"%@",_newsRequest);
     [self setupRefresh];
+
+    if([[NSUserDefaults standardUserDefaults] objectForKey:_newsRequest])
+    {
+        dataArray = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:_newsRequest]];
+        isShowSection=  FALSE;
+        [_table reloadData];
+    }
+    
     // Do any additional setup after loading the view.
 }
 
@@ -84,20 +113,23 @@
             // 刷新表格UI
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 // 刷新表格
+                
+                isShowSection = TRUE;
+                [[NSUserDefaults standardUserDefaults] setObject:dataArray forKey:_newsRequest];
                 [self.table reloadData];
-                
-                [self.table headerEndRefreshing];
-                [self.table footerEndRefreshing];
-                
+            
             });
             
         }
-        
+        [self.table headerEndRefreshing];
+        [self.table footerEndRefreshing];
+
         
         
     } Failure:^(NSError *error) {
         NSLog(@"%@",error);
-        
+        [self.table headerEndRefreshing];
+        [self.table footerEndRefreshing];
     } view:self isPost:FALSE];
     
 }
@@ -143,6 +175,10 @@
 {
     if(section ==0)
     {
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"] || !isShowSection)
+        {
+            return 0;
+        }
         return 1;
     }
     else
@@ -169,16 +205,8 @@
         }
         else
         {
-            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
-            {
-                return 0;
-            }
-            else
-            {
-                return 160;
-                
-            }
-
+            return 160;
+            
         }
     }
     else
@@ -235,78 +263,82 @@
         if(indexPath.section ==0)
         {
             static NSString * strID = @"cell1";
-            TYHeadCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
+            TYNewsHeadCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
             if(!cell)
             {
-                cell = [[TYHeadCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+                cell = [[TYNewsHeadCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
            
-            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"] )
-            {
-                
-            }
-            else
-            {
-                if(isHeadViewLoad)
-                {
-                    cell.requestDateString = myDate;
-                    NSLog(@"%@",myDate);
-                    [cell sendRequestWithAppImgSlider:myDate];
-                }
-            }
+          
+            [cell sendRequestWithAppImgSlider:imageRequestUrl];
             
             
             return cell;
         }
         else
         {
-            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
-            {
-                static NSString * strID = @"cell2";
-                TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
-                if(!cell)
-                {
-                    cell = [[TYDayFeatNoImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
-                }
-                
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                
-                cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-//                cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-                [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
-                
-                NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
-                CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
-                //根据计算结果重新设置UILabel的尺寸
-                if(size.width > 40)
-                {
-                    [cell.type setFrame:CGRectMake(self.frame.size.width-size.width - 20, cell.type.frame.origin.y, size.width+10, cell.type.frame.size.height)];
-                    
-                }
-                else
-                {
-                    [cell.type setFrame:CGRectMake(self.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
-                }
-
-                return cell;
-                
-            }
-            else
-            {
+//            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+//            {
+//                static NSString * strID = @"cell2";
+//                TYDayFeatNoImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
+//                if(!cell)
+//                {
+//                    cell = [[TYDayFeatNoImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
+//                }
+//                
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                
+//                cell.mytitle.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+////                cell.content.text = [CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
+//                [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
+//                
+//                NSDictionary *attribute = @{NSFontAttributeName: [UIFont systemFontOfSize:13]};
+//                CGSize size = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] boundingRectWithSize:CGSizeMake(MAXFLOAT, cell.type.frame.size.height) options:NSStringDrawingTruncatesLastVisibleLine attributes:attribute context:nil].size;
+//                //根据计算结果重新设置UILabel的尺寸
+//                if(size.width > 40)
+//                {
+//                    [cell.type setFrame:CGRectMake(self.frame.size.width-size.width - 20, cell.type.frame.origin.y, size.width+10, cell.type.frame.size.height)];
+//                    
+//                }
+//                else
+//                {
+//                    [cell.type setFrame:CGRectMake(self.frame.size.width-50, cell.type.frame.origin.y, 40, cell.type.frame.size.height)];
+//                }
+//
+//                return cell;
+//                
+//            }
+//            else
+//            {
                 static NSString * strID = @"cell3";
                 TYDayFeatSingleImageCell * cell = [tableView dequeueReusableCellWithIdentifier:strID];
                 if(!cell)
                 {
                     cell = [[TYDayFeatSingleImageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
                 }
+            cell.backgroundColor = myWhiteColor;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
 //                [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"PageName"] forState:UIControlStateNormal];
                 
                 cell.title.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"title"]];
-                [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@""]];
-                
+                cell.title.textColor = myBlackColor;
+            
+            cell.content.text =[CS DealWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"subTitle"]];
+            cell.content.textColor = myBlackColor;
+            
+            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+            {
+                [cell.image setImage:[UIImage imageNamed:@"noImage"]];
+
+            }
+            else
+            {
+                [cell.image setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"img1"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
+
+            }
+            
 //                cell.content.text = [CS DealWithString: [[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"]];
                 
                 [cell.type setTitle:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"label"] forState:UIControlStateNormal];
@@ -325,7 +357,7 @@
 
                 
                 return cell;
-            }
+//            }
 //            else
 //            {
 //                static NSString * strID = @"cell4";
@@ -368,13 +400,13 @@
     NSLog(@"index--%d",index);
 }
 
--(void)requestLoadData{
-   
-    //新闻页请求数据
-    [self NewshttpRequest:_newsRequest];
-
-    
-}
+//-(void)requestLoadData{
+//   
+//    //新闻页请求数据
+//    [self NewshttpRequest:_newsRequest];
+//
+//    
+//}
 
 /**
  *  集成刷新控件
@@ -406,13 +438,13 @@
 {
     pageIndex = 0;
     [dataArray removeAllObjects];
-    [self requestLoadData];
+    [self NewshttpRequest:_newsRequest];
 }
 
 - (void)footerRereshing
 {
     pageIndex ++;
-    [self requestLoadData];
+    [self NewshttpRequest:_newsRequest];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

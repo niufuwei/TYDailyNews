@@ -28,6 +28,8 @@
     
     NSString * requestInforUrl;
     NSInteger currentPage;
+    
+    UIView * backGroundView;
 }
 
 @end
@@ -201,17 +203,72 @@
 
 -(void)onBaoliao:(id)sender
 {
-    if(currentPage ==0)
-    {
-        UIBaoLiaoPostInforViewController * baoliao = [[UIBaoLiaoPostInforViewController alloc] init];
-        [self.navigationController pushViewController:baoliao animated:YES];
-    }
-    else
-    {
-        TYJDViewController * baoliao = [[TYJDViewController alloc] init];
-        [self.navigationController pushViewController:baoliao animated:YES];
-    }
+    backGroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [backGroundView setBackgroundColor:[UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:0.5]];
+    [self.view addSubview:backGroundView];
     
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTap:)];
+    [backGroundView addGestureRecognizer:tap];
+    backGroundView.userInteractionEnabled = YES;
+    [backGroundView bringSubviewToFront: self.view];
+    
+    UIButton * wenti = [UIButton buttonWithType:UIButtonTypeCustom];
+    wenti.frame = CGRectMake(self.view.frame.size.width - 80, 40, 50, 40);
+    [wenti setBackgroundImage:[UIImage imageNamed:@"wenti"] forState:UIControlStateNormal];
+    [wenti addTarget:self action:@selector(onWenti:) forControlEvents:UIControlEventTouchUpInside];
+    [backGroundView addSubview:wenti];
+    
+    UIButton * jizhe = [UIButton buttonWithType:UIButtonTypeCustom];
+    jizhe.frame = CGRectMake(40, 100, self.view.frame.size.width-80, 60);
+    [jizhe setTitle:@"我要当记者" forState:UIControlStateNormal];
+    [jizhe setBackgroundColor:[UIColor redColor]];
+    [jizhe setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [jizhe setBackgroundImage:[UIImage imageNamed:@"jizhe"] forState:UIControlStateNormal];
+    [jizhe addTarget:self action:@selector(onJizhe:) forControlEvents:UIControlEventTouchUpInside];
+    [jizhe.layer setCornerRadius:10];
+    [backGroundView addSubview:jizhe];
+    
+    UIButton * chengguan = [UIButton buttonWithType:UIButtonTypeCustom];
+    chengguan.frame = CGRectMake(40, jizhe.frame.size.height+jizhe.frame.origin.y+50, self.view.frame.size.width-80, 60);
+    [chengguan setBackgroundImage:[UIImage imageNamed:@"jizhe"] forState:UIControlStateNormal];
+    [chengguan setTitle:@"我要当城管" forState:UIControlStateNormal];
+    [chengguan setBackgroundColor:[UIColor redColor]];
+    [chengguan setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [chengguan.layer setCornerRadius:10];
+    [chengguan addTarget:self action:@selector(chengguan:) forControlEvents:UIControlEventTouchUpInside];
+
+    [backGroundView addSubview:chengguan];
+//    if(currentPage ==0)
+//    {
+//        UIBaoLiaoPostInforViewController * baoliao = [[UIBaoLiaoPostInforViewController alloc] init];
+//        [self.navigationController pushViewController:baoliao animated:YES];
+//    }
+//    else
+//    {
+//        TYJDViewController * baoliao = [[TYJDViewController alloc] init];
+//        [self.navigationController pushViewController:baoliao animated:YES];
+//    }
+    
+}
+-(void)onWenti:(id)sender
+{
+    
+}
+
+-(void)onJizhe:(id)sender
+{
+    UIBaoLiaoPostInforViewController * baoliao = [[UIBaoLiaoPostInforViewController alloc] init];
+    [self.navigationController pushViewController:baoliao animated:YES];
+}
+
+-(void)chengguan:(id)sender
+{
+    TYJDViewController * baoliao = [[TYJDViewController alloc] init];
+    [self.navigationController pushViewController:baoliao animated:YES];
+}
+-(void)onTap:(UITapGestureRecognizer*)tap
+{
+    [backGroundView removeFromSuperview];
 }
 
 

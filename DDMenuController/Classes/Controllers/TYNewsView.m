@@ -26,6 +26,8 @@
     NSString * strURL;
     NSURL * videoURL;
     UIImageView * imageVdieo;
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 @end
 
@@ -34,6 +36,18 @@
 
 -(void)fillDataWithView:(NSDictionary *)dic
 {
+    
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+
     NSDictionary * tempDic =[[NSDictionary alloc] init];
     tempDic = dic;
     dic = [dic objectForKey:@"article"];
@@ -128,7 +142,7 @@
     UILabel * PageTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, yyyy, self.frame.size.width-20, 20)];
     PageTitle.text = [CS DealWithString: [dic objectForKey:@"title"]];
     PageTitle.textAlignment = NSTextAlignmentLeft;
-    PageTitle.textColor =[UIColor blackColor];
+    PageTitle.textColor =myBlackColor;
     PageTitle.backgroundColor = [UIColor clearColor];
     PageTitle.font = [UIFont systemFontOfSize:14];
     [backScrollview addSubview:PageTitle];
@@ -149,7 +163,7 @@
     UILabel * SubTitle = [[UILabel alloc] initWithFrame:CGRectMake(10, PageTitle.frame.size.height+PageTitle.frame.origin.y+yy, self.frame.size.width-20, height)];
     SubTitle.text = [CS DealWithString: [dic objectForKey:@"SubTitle"]];
     SubTitle.textAlignment = NSTextAlignmentLeft;
-    SubTitle.textColor =[UIColor grayColor];
+    SubTitle.textColor =myBlackColor;
     SubTitle.backgroundColor = [UIColor clearColor];
     SubTitle.font = [UIFont systemFontOfSize:13];
     SubTitle.numberOfLines = 0;//表示label可以多行显
@@ -160,7 +174,7 @@
     UILabel * create_time = [[UILabel alloc] initWithFrame:CGRectMake(10, SubTitle.frame.size.height+SubTitle.frame.origin.y+5, self.frame.size.width-120, 20)];
     create_time.text = [CS DealWithString: [dic objectForKey:@"create_time"]];
     create_time.textAlignment = NSTextAlignmentLeft;
-    create_time.textColor =[UIColor grayColor];
+    create_time.textColor =myBlackColor;
     create_time.backgroundColor = [UIColor clearColor];
     create_time.lineBreakMode = NSLineBreakByCharWrapping;
     create_time.font = [UIFont systemFontOfSize:12];
@@ -169,7 +183,7 @@
     UILabel * type = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width-150, SubTitle.frame.size.height+SubTitle.frame.origin.y+5, 130, 20)];
     type.text = [NSString stringWithFormat:@"%@",[dic objectForKey:@"src"]];
     type.textAlignment = NSTextAlignmentRight;
-    type.textColor =[UIColor grayColor];
+    type.textColor =myBlackColor;
     type.backgroundColor = [UIColor clearColor];
     type.font = [UIFont systemFontOfSize:12];
     if(_isNews)
@@ -193,7 +207,7 @@
         for(int i = 0; i < [[tempDic objectForKey:@"imgs"] count];i++)
         {
             UIImageView * image =[[ UIImageView alloc] initWithFrame:CGRectMake(20, myYY, self.frame.size.width-40, 200)];
-            [image setImageWithURL:[NSURL URLWithString:[[[tempDic objectForKey:@"imgs"] objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@""]];
+            [image setImageWithURL:[NSURL URLWithString:[[[tempDic objectForKey:@"imgs"] objectAtIndex:i] objectForKey:@"url"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
             [backScrollview addSubview:image];
             
             myYY = image.frame.size.height+image.frame.origin.y+10;
@@ -206,7 +220,7 @@
         if([dic objectForKey:@"Video"] && ![[dic objectForKey:@"Video"] isKindOfClass:[NSString class]])
         {
             imageVdieo =[[ UIImageView alloc] initWithFrame:CGRectMake(20, myYY, self.frame.size.width-40, 200)];
-            [imageVdieo setImageWithURL:[NSURL URLWithString:[[dic objectForKey:@"Video"] objectForKey:@"img"]] placeholderImage:[UIImage imageNamed:@""]];
+            [imageVdieo setImageWithURL:[NSURL URLWithString:[[dic objectForKey:@"Video"] objectForKey:@"img"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
             videoURL = [NSURL URLWithString:[[dic objectForKey:@"Video"] objectForKey:@"url"]];
             [backScrollview addSubview:imageVdieo];
             
@@ -242,7 +256,7 @@
     RTLabel * content = [[RTLabel alloc] initWithFrame:CGRectMake(10,myYY+5, self.frame.size.width-20, 100)];
 
     content.textAlignment = NSTextAlignmentLeft;
-    content.textColor =[UIColor grayColor];
+    content.textColor =myBlackColor;
     content.backgroundColor = [UIColor clearColor];
     content.font = [UIFont fontWithName:@"HelveticaNeue" size:textFont];
     [backScrollview addSubview:content];
@@ -291,14 +305,14 @@
  
     addr = [[UILabel alloc] initWithFrame:CGRectMake(20, my_yyyyy, 70, 20)];
     addr.textAlignment = NSTextAlignmentLeft;
-    addr.textColor = [UIColor grayColor];
+    addr.textColor = myBlackColor;
     addr.font = [UIFont systemFontOfSize:13];
     addr.text = [[tempDic objectForKey:@"comment"] objectForKey:@"nick"];
     [backScrollview addSubview:addr];
     
     time = [[UILabel alloc] initWithFrame:CGRectMake(addr.frame.size.width+addr.frame.origin.x+10, my_yyyyy, 150, 20)];
     time.textAlignment = NSTextAlignmentLeft;
-    time.textColor = [UIColor grayColor];
+    time.textColor = myBlackColor;
     time.font = [UIFont systemFontOfSize:13];
     time.text =  [[tempDic objectForKey:@"comment"] objectForKey:@"create_time"];
     [backScrollview addSubview:time];
@@ -312,7 +326,7 @@
     
     TTcontent = [[UILabel alloc] initWithFrame:CGRectMake(30, addr.frame.size.height+addr.frame.origin.y+10, self.frame.size.width-60, 45)];
     TTcontent.textAlignment = NSTextAlignmentLeft;
-    TTcontent.textColor = [UIColor grayColor];
+    TTcontent.textColor = myBlackColor;
     TTcontent.font = [UIFont systemFontOfSize:14];
     TTcontent.lineBreakMode = NSLineBreakByCharWrapping;
     TTcontent.numberOfLines = 0;
@@ -352,7 +366,7 @@
     ButtomView.newsID =[dic objectForKey:@"id"];
     ButtomView.isNesCenter = _isNews;
     ButtomView.address = _address;
-    [ButtomView setBackgroundColor:[UIColor whiteColor]];
+    [ButtomView setBackgroundColor:myWhiteColor];
     [self addSubview:ButtomView];
     [ButtomView bringSubviewToFront:self];
 

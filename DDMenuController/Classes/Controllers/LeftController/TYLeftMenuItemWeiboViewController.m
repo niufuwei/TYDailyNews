@@ -23,6 +23,9 @@
     NSMutableArray * dataArray;
     NSNumberFormatter* numberFormatter ;
     NSDictionary * topDic;
+    
+    UIColor * myBlackColor;
+    UIColor * myWhiteColor;
 }
 
 @end
@@ -32,7 +35,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
+    [self.view setBackgroundColor:myWhiteColor];
     numberFormatter = [[NSNumberFormatter alloc] init];
     topDic = [[NSDictionary alloc] init];
     
@@ -48,10 +62,19 @@
     _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-64)];
     _table.delegate =self;
     _table.dataSource =self;
+    _table.backgroundColor = myWhiteColor;
     [self.view addSubview:_table];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLogin:) name:@"login" object:nil];
 
+    
+//    if([[NSUserDefaults standardUserDefaults] objectForKey:@"weiboweibo"])
+//    {
+//        dataArray = [[NSMutableArray alloc] initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"weiboweibo"]];
+//    
+//        [_table reloadData];
+//    }
+    
     [self setupRefresh];
     
     //获取用户数和微博数，关注数
@@ -87,7 +110,7 @@
 
 -(void)httpRequest
 {
-    [httpRequest httpRequestWeiBo:@"http://123.57.17.124/weibo/weibo_list.php" parameter:[NSString stringWithFormat:@"page=%d&count=%@",indexPage,@"14"] Success:^(id result) {
+    [httpRequest httpRequestWeiBo:@"http://123.57.17.124/weibo/weibo_list.php" parameter:[NSString stringWithFormat:@"page=%d&count=%@",indexPage,@"8"] Success:^(id result) {
         
         NSLog(@"%@",result);
         NSData* jsonData = [result dataUsingEncoding:NSUTF8StringEncoding];
@@ -106,13 +129,15 @@
         else
         {
             [_table reloadData];
-            [_table headerEndRefreshing];
-            [_table footerEndRefreshing];
+           
         }
+        [_table headerEndRefreshing];
+        [_table footerEndRefreshing];
 //        [self getInfor];
 
     } Failure:^(NSError *error) {
-        
+        [_table headerEndRefreshing];
+        [_table footerEndRefreshing];
         NSLog(@"%@",error);
     } view:self.view isPost:NO];
 }
@@ -155,18 +180,22 @@
             {
                 cell = [[TYWeiboHeadCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
             }
-            
+            cell.backgroundColor = myWhiteColor;
+
 //            [cell.IconView setImageWithURL:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"profile_image_url"] placeholderImage:[UIImage imageNamed:@""]];
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell.IconView setImage:[UIImage imageNamed:@"weiboICon.jpg"]];
             
             cell.Content.text = [[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"description"];
+            cell.Content.textColor= myBlackColor;
             cell.URL.text = [[[dataArray objectAtIndex:indexPath.row] objectForKey:@"user"] objectForKey:@"url"];
+            cell.URL.textColor = myBlackColor;
             
             NSString * tempString = @"";
             
             cell.ButtomLabel.text = [NSString stringWithFormat:@"%@关注 | %@粉丝 | %@微博 ", [numberFormatter stringFromNumber:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"friends_count"] ],[numberFormatter stringFromNumber:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"followers_count"] ],[numberFormatter stringFromNumber:[[[dataArray objectAtIndex:0] objectForKey:@"user"] objectForKey:@"statuses_count"] ]];
+            cell.ButtomLabel.textColor= myBlackColor;
             [cell.btnAttention addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchUpInside];
            
             if([[[NSUserDefaults standardUserDefaults] objectForKey:@"guanzhu"] isEqualToString:@"ok"])
@@ -188,16 +217,32 @@
             {
                 cell = [[TYWeiboContentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strID];
             }
-            
+            cell.backgroundColor = myWhiteColor;
+
             cell.titleLabel.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"text"];
+            cell.titleLabel.textColor = myBlackColor;
             NSLog(@"%@",[[dataArray objectAtIndex:indexPath.row] objectForKey:@"thumbnail_pic"]);
             
-            [cell.imageContent setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"thumbnail_pic"]] placeholderImage:[UIImage imageNamed:@"WB.jpg"]];
+            
+            if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+            {
+                [cell.imageContent setImage:[UIImage imageNamed:@"WB.jpg"]];
+            }
+            else
+            {
+                [cell.imageContent setImageWithURL:[NSURL URLWithString:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"thumbnail_pic"]] placeholderImage:[UIImage imageNamed:@"WB.jpg"]];
+
+            }
+
         
             cell.timeLabel.text = [[dataArray objectAtIndex:indexPath.row] objectForKey:@"created_at"];
+            cell.timeLabel.textColor = myBlackColor;
             
             cell.pinglun.text = [numberFormatter stringFromNumber:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"comments_count"]];
+            cell.pinglun.textColor = myBlackColor;
+            
             cell.zhuanfa.text = [numberFormatter stringFromNumber:[[dataArray objectAtIndex:indexPath.row] objectForKey:@"reposts_count"]];
+            cell.zhuanfa.textColor = myBlackColor;
             return cell;
         }
     }
@@ -255,7 +300,7 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row == [dataArray count] -1 && [dataArray count]>13)
+    if(indexPath.row == [dataArray count] -1 && [dataArray count]>7)
     {
         [self.table footerBeginRefreshing];
     }
@@ -283,9 +328,9 @@
     }
     else
     {
-        [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"guanzhu"];
         if([[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"])
         {
+
             NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"],@"3766677022229351",@"太原日报",@"211.156.0.1", nil] forKeys:[NSArray arrayWithObjects:@"access_token",@"uid",@"screen_name",@"rip" ,nil]];
             
             [httpRequest httpRequestWeiBo:@"https://api.weibo.com/2/friendships/create.json" parameter:dic Success:^(id result) {
@@ -295,6 +340,8 @@
                 CBMBProgressHUD *indicator = [[CBMBProgressHUD alloc] initWithWindow:window];
                 indicator.labelText = @"关注成功";
                 
+                [[NSUserDefaults standardUserDefaults] setObject:@"ok" forKey:@"guanzhu"];
+
                 NSIndexPath * index = [NSIndexPath indexPathForRow:0 inSection:0];
                 TYWeiboHeadCell * head = (TYWeiboHeadCell*)[_table cellForRowAtIndexPath:index];
                 [head.btnAttention setTitle:@"已关注" forState:UIControlStateNormal];

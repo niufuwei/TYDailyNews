@@ -13,5 +13,4 @@
 @property (nonatomic,strong) UILabel * mytitle;
 @property (nonatomic,strong) UILabel * content;
 @property (nonatomic,strong) UIButton * type;
-@property (nonatomic) BOOL isDayShow;
 @end

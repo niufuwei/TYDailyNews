@@ -15,6 +15,9 @@
     UILabel * contentLabel;
     UIScrollView * bgScrollview;
     NavCustom * myNavCustom;
+    
+    UIColor * myWhiteColor;
+    UIColor * myBlackColor;
 
 }
 @end
@@ -24,7 +27,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
+    {
+        myBlackColor = [UIColor whiteColor];
+        myWhiteColor = [UIColor grayColor];
+    }
+    else
+    {
+        myWhiteColor = [UIColor whiteColor];
+        myBlackColor = [UIColor grayColor];
+    }
+    
+    self.view.backgroundColor =myWhiteColor;
     myNavCustom = [[NavCustom alloc] init];
     //    [myNavCustom setNavWithImage:@"LOGO.png" mySelf:self width:10 height:25];
     [myNavCustom setNavWithText:@"微博" mySelf:self];
@@ -33,6 +47,7 @@
     
     httpRequest = [[TYHttpRequest alloc] init];
     bgScrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    bgScrollview.backgroundColor = myWhiteColor;
     [self.view addSubview:bgScrollview];
     
     //加载内容
@@ -60,7 +75,7 @@
 {
     contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, self.view.frame.size.width-20, 0)];
     contentLabel.backgroundColor = [UIColor clearColor];
-    contentLabel.textColor = [UIColor blackColor];
+    contentLabel.textColor = myBlackColor;
     contentLabel.font =[UIFont systemFontOfSize:15];
     contentLabel.textAlignment = NSTextAlignmentLeft;
     [bgScrollview addSubview:contentLabel];
@@ -81,7 +96,15 @@
  
     
     UIImageView * imagev = [[UIImageView alloc] initWithFrame:CGRectMake(15, contentLabel.frame.size.height+contentLabel.frame.origin.y+10, self.view.frame.size.width-30, 200)];
-    [imagev setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"bmiddle_pic"]] placeholderImage:[UIImage imageNamed:@""]];
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"showImage"] isEqualToString:@"no"])
+    {
+        [imagev setImage:[UIImage imageNamed:@"noImage"]];
+    }
+    else
+    {
+        [imagev setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"bmiddle_pic"]] placeholderImage:[UIImage imageNamed:@"noImage"]];
+
+    }
     [bgScrollview addSubview:imagev];
     
     if(imagev.frame.size.height+imagev.frame.origin.y < self.view.frame.size.height-64)

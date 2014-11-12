@@ -37,12 +37,12 @@
     if([[[NSUserDefaults standardUserDefaults] objectForKey:@"isDayShow"] isEqualToString:@"0"])
     {
         myBlackColor = [UIColor whiteColor];
-        myWhiteColor = [UIColor blackColor];
+        myWhiteColor = [UIColor grayColor];
     }
     else
     {
         myWhiteColor = [UIColor whiteColor];
-        myBlackColor = [UIColor blackColor];
+        myBlackColor = [UIColor grayColor];
     }
     _centerInformation.textColor = myBlackColor;
     self.backgroundColor = myWhiteColor;
@@ -222,7 +222,16 @@
         NSLog(@"%d",[result intValue]);
         for(int i=0;i<[result intValue];i++)
         {
-            [dataArray addObject:[NSString stringWithFormat:@"0%d",i+1]];
+            if(i+1<10)
+            {
+                [dataArray addObject:[NSString stringWithFormat:@"0%d",i+1]];
+
+            }
+            else
+            {
+                [dataArray addObject:[NSString stringWithFormat:@"%d",i+1]];
+
+            }
         }
         scrollview.contentSize = CGSizeMake(self.frame.size.width*[dataArray count], self.frame.size.height);
         
@@ -345,10 +354,22 @@
 {
     //获取当前版面信息
     myHttp  = [[TYHttpRequest alloc] init];
-    [myHttp httpRequest:@"pname/view" parameter:[NSString stringWithFormat:@"date=%@&pageNo=0%d",[self timeDealWith],index+1] Success:^(id result) {
-        _leftInformation.text = [NSString stringWithFormat:@"0%d版 %@频道",index+1,result];
+    
+    NSString * indexStr = @"";
+    if(index+1 <10)
+    {
+        indexStr =[NSString stringWithFormat:@"0%d",index+1];
+    }
+    else
+    {
+        indexStr =[NSString stringWithFormat:@"%d",index+1];
+
+    }
+    
+    [myHttp httpRequest:@"pname/view" parameter:[NSString stringWithFormat:@"date=%@&pageNo=%@",[self timeDealWith],indexStr] Success:^(id result) {
+        _leftInformation.text = [NSString stringWithFormat:@"%@版 %@频道",indexStr,result];
         
-        [InforDic setObject:[NSString stringWithFormat:@"0%d版 %@频道",index+1,result] forKey:[NSString stringWithFormat:@"0%d",index+1]];
+        [InforDic setObject:[NSString stringWithFormat:@"%@版 %@频道",indexStr,result] forKey:[NSString stringWithFormat:@"%@",indexStr]];
         NSLog(@"请求成功，返回--->%@",result);
         
     } Failure:^(NSError *error) {
