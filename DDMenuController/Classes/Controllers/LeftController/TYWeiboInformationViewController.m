@@ -8,6 +8,7 @@
 
 #import "TYWeiboInformationViewController.h"
 #import "TYWeiboCommentViewController.h"
+#import "TYIPAddress.h"
 
 @interface TYWeiboInformationViewController ()
 {
@@ -18,6 +19,8 @@
     
     UIColor * myWhiteColor;
     UIColor * myBlackColor;
+    
+    NSString * IDAddress;
 
 }
 @end
@@ -54,7 +57,10 @@
     [self requestURL];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNotification:) name:@"request" object:nil];
-
+    
+    TYIPAddress * IP = [[TYIPAddress alloc] init];
+    IDAddress = [IP getIP];
+    
     // Do any additional setup after loading the view.
 }
 
@@ -141,7 +147,7 @@
 {
     if([[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"])
     {
-        NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"],_WeiboID,@"0",@"211.156.0.1", nil] forKeys:[NSArray arrayWithObjects:@"access_token",@"id",@"is_comment",@"rip" ,nil]];
+        NSDictionary * dic = [[NSDictionary alloc] initWithObjects:[NSArray arrayWithObjects:[[NSUserDefaults standardUserDefaults] objectForKey:@"accessToken"],_WeiboID,@"0",IDAddress?IDAddress:@"211.156.0.1", nil] forKeys:[NSArray arrayWithObjects:@"access_token",@"id",@"is_comment",@"rip" ,nil]];
         [httpRequest httpRequestWeiBo:@"https://api.weibo.com/2/statuses/repost.json" parameter:dic Success:^(id result) {
             
             NSLog(@"%@",result);

@@ -332,6 +332,9 @@
 		18E6716019E1392D00C523FD /* tag.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E6715F19E1392D00C523FD /* tag.png */; };
 		18E6716219E1397400C523FD /* KV图片.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E6716119E1397400C523FD /* KV图片.png */; };
 		18E6716519E13B0900C523FD /* TYDayFeatNoImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E6716419E13B0900C523FD /* TYDayFeatNoImageCell.m */; };
+		18F4A82B1A149FE000A9A69D /* TYIPAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4A82A1A149FE000A9A69D /* TYIPAddress.m */; };
+		18F4A82D1A14A08800A9A69D /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F4A82C1A14A08800A9A69D /* libicucore.dylib */; };
+		18F4A8331A14A35C00A9A69D /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F4A8321A14A35C00A9A69D /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		18FB081719F742AA00BF23E4 /* 支付宝ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FB081619F742AA00BF23E4 /* 支付宝ios.png */; };
 		18FB081919F74DB400BF23E4 /* 娱乐.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18FB081819F74DB400BF23E4 /* 娱乐.jpg */; };
 		18FD23D71A11056F00C9FF0E /* nan2.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FD23D51A11056F00C9FF0E /* nan2.png */; };
@@ -842,6 +845,11 @@
 		18E6716119E1397400C523FD /* KV图片.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "KV图片.png"; sourceTree = "<group>"; };
 		18E6716319E13B0900C523FD /* TYDayFeatNoImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDayFeatNoImageCell.h; sourceTree = "<group>"; };
 		18E6716419E13B0900C523FD /* TYDayFeatNoImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDayFeatNoImageCell.m; sourceTree = "<group>"; };
+		18F4A8291A149FE000A9A69D /* TYIPAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYIPAddress.h; sourceTree = "<group>"; };
+		18F4A82A1A149FE000A9A69D /* TYIPAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYIPAddress.m; sourceTree = "<group>"; };
+		18F4A82C1A14A08800A9A69D /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		18F4A8311A14A35C00A9A69D /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		18F4A8321A14A35C00A9A69D /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		18FB081619F742AA00BF23E4 /* 支付宝ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "支付宝ios.png"; sourceTree = "<group>"; };
 		18FB081819F74DB400BF23E4 /* 娱乐.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "娱乐.jpg"; sourceTree = "<group>"; };
 		18FD23D51A11056F00C9FF0E /* nan2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nan2.png; sourceTree = "<group>"; };
@@ -860,6 +868,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18F4A82D1A14A08800A9A69D /* libicucore.dylib in Frameworks */,
 				180BF80B1A0B135B005EB728 /* CoreText.framework in Frameworks */,
 				18C9D86E1A0884F3005FB1D0 /* libsqlite3.0.dylib in Frameworks */,
 				1815F6A61A07C4C30032B388 /* CoreLocation.framework in Frameworks */,
@@ -916,6 +925,7 @@
 		033A4624148691F6002014C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18F4A82C1A14A08800A9A69D /* libicucore.dylib */,
 				180BF80A1A0B135B005EB728 /* CoreText.framework */,
 				18C9D86D1A0884F3005FB1D0 /* libsqlite3.0.dylib */,
 				1815F6A51A07C4C30032B388 /* CoreLocation.framework */,
@@ -1332,6 +1342,10 @@
 				180EDF251A07569A00F1B54D /* TYShareManager.m */,
 				1815F6A71A07D7970032B388 /* TYGetCode.h */,
 				1815F6A81A07D7970032B388 /* TYGetCode.m */,
+				18F4A8291A149FE000A9A69D /* TYIPAddress.h */,
+				18F4A82A1A149FE000A9A69D /* TYIPAddress.m */,
+				18F4A8311A14A35C00A9A69D /* RegexKitLite.h */,
+				18F4A8321A14A35C00A9A69D /* RegexKitLite.m */,
 			);
 			name = itool;
 			sourceTree = "<group>";
@@ -2132,6 +2146,7 @@
 				18625BD519DE4BA20063C99E /* TYDayPageLayoutView.m in Sources */,
 				1814C3D419E2557D00CF1863 /* CS.m in Sources */,
 				183FD00F19F3FA4A002E915E /* TYAboutViewController.m in Sources */,
+				18F4A8331A14A35C00A9A69D /* RegexKitLite.m in Sources */,
 				18E21BC719DEE3D600CA182D /* ASINetworkQueue.m in Sources */,
 				188644B419DD50AF0041BC63 /* TYRightCenterTableViewCell.m in Sources */,
 				180FED1A19EF9B0F0074A2CF /* MJRefreshConst.m in Sources */,
@@ -2169,6 +2184,7 @@
 				18E21BD019DEE3D600CA182D /* ASIS3Bucket.m in Sources */,
 				1800912019DFEB1B00164033 /* MMDrawerController.m in Sources */,
 				18DAF24819F6B1FE00013953 /* AFImageRequestOperation.m in Sources */,
+				18F4A82B1A149FE000A9A69D /* TYIPAddress.m in Sources */,
 				18E6714019E1295500C523FD /* UIImage+GIF.m in Sources */,
 				180FED1C19EF9B0F0074A2CF /* MJRefreshHeaderView.m in Sources */,
 				1886448919DD33F20041BC63 /* TYLeftHeadCell.m in Sources */,
@@ -2217,7 +2233,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "694e8ee2-4f51-4de1-b15d-a873d65b1e2a";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos8.0;
 			};
 			name = Debug;
@@ -2244,7 +2260,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "694e8ee2-4f51-4de1-b15d-a873d65b1e2a";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos8.0;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2282,7 +2298,7 @@
 				);
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_NAME = TYDaily;
-				PROVISIONING_PROFILE = "694e8ee2-4f51-4de1-b15d-a873d65b1e2a";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -2321,7 +2337,7 @@
 				);
 				OTHER_LDFLAGS = "-Objc";
 				PRODUCT_NAME = TYDaily;
-				PROVISIONING_PROFILE = "694e8ee2-4f51-4de1-b15d-a873d65b1e2a";
+				PROVISIONING_PROFILE = "07CC622C-1AE2-45E6-9C54-71045F10E728";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = /usr/include/libxml2;
